@@ -1,0 +1,8 @@
+name: "coding_standards"
+root: "."
+attach: true
+
+windows:
+  - panes:
+      - command: "claude"
+  - panes:
