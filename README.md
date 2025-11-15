@@ -9,7 +9,7 @@ This directory contains shared coding standards for Unity projects.
 | When you need to... | Read this |
 |---------------------|-----------|
 | **Add a new feature** | `architecture/extension-patterns.md` → `architecture/scriptableobject.md` |
-| **Implement UI** | `ui/ui-toolkit/` (all files) → Start with `bem-naming.md` |
+| **Implement UI** | `ui/accessibility/font-size-guidelines.md` → `ui/ui-toolkit/` (all files) → Start with `bem-naming.md` |
 | **Write tests** | `testing/README.md` → `testing/principles.md` → `testing/patterns.md` |
 | **Name classes/variables** | `core/naming-conventions.md` |
 | **Handle errors/nulls** | `core/error-handling.md` |
@@ -17,6 +17,7 @@ This directory contains shared coding standards for Unity projects.
 | **Use events** | `architecture/event-channels.md` |
 | **Write documentation** | `documentation/README.md` |
 | **Setup multiplayer** | `networking/mirror/basics.md` → `networking/mirror/server-authority.md` |
+| **Ensure accessibility** | `ui/accessibility/font-size-guidelines.md` |
 
 ### Priority Reading Order
 
@@ -55,6 +56,12 @@ Architecture based on ScriptableObject and event-driven design. **The foundation
 | [extension-patterns.md](architecture/extension-patterns.md) | SpecKit workflow, feature additions | 🔴 Must Read |
 
 ### ui/ - UI Implementation Standards
+
+**accessibility/ - Accessibility Standards** (Cross-platform compliance)
+
+| File | Key Topics | Priority |
+|------|-----------|----------|
+| [font-size-guidelines.md](ui/accessibility/font-size-guidelines.md) | Platform-specific minimum font sizes, XAG compliance | 🔴 Must Read |
 
 **ui-toolkit/ - UI Toolkit Standards** (Primary UI system for this project)
 
@@ -146,6 +153,7 @@ Standards for Unity Test Framework and NUnit testing
 - [ ] `architecture/event-channels.md`
 
 **Phase 2: UI Implementation (20 min)**
+- [ ] `ui/accessibility/font-size-guidelines.md`
 - [ ] `ui/ui-toolkit/bem-naming.md`
 - [ ] `ui/ui-toolkit/design-tokens.md`
 - [ ] `ui/ui-toolkit/uxml-structure.md`

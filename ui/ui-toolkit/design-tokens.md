@@ -162,6 +162,15 @@ All design tokens must be defined in `Common.uss` within the `:root` section:
 }
 ```
 
+**IMPORTANT - Accessibility Compliance:**
+
+When defining font size tokens, ensure they meet [platform-specific minimum requirements](../accessibility/font-size-guidelines.md):
+- **Console (1080p)**: Minimum 26px
+- **PC/VR (1080p)**: Minimum 18px
+- **4K**: 2x the 1080p values
+
+See [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.md) for detailed requirements and platform detection patterns.
+
 ---
 
 ## Common Components with Tokens
@@ -380,10 +389,15 @@ Semantic naming makes intent clear and allows color changes without token renami
     --color-text: #FFFFFF;
     --color-text-muted: rgba(255, 255, 255, 0.5);
 
-    /* Font Size Tokens */
-    --font-size-large: 24px;
-    --font-size-medium: 18px;
-    --font-size-small: 14px;
+    /* Font Size Tokens - PC/VR (Accessibility Compliant) */
+    --font-size-large: 24px;          /* Exceeds 18px minimum ✅ */
+    --font-size-medium: 18px;         /* Meets 18px minimum ✅ */
+    --font-size-small: 18px;          /* Meets 18px minimum ✅ */
+
+    /* Font Size Tokens - Console (use with .platform-console class) */
+    --font-size-console-large: 32px;  /* Exceeds 26px minimum ✅ */
+    --font-size-console-medium: 28px; /* Exceeds 26px minimum ✅ */
+    --font-size-console-small: 26px;  /* Meets 26px minimum ✅ */
 
     /* Spacing Tokens */
     --padding-large: 16px;
@@ -442,6 +456,7 @@ Semantic naming makes intent clear and allows color changes without token renami
 
 ## References
 
+- [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.md)
 - [BEM Naming](bem-naming.md)
 - [UXML Structure](uxml-structure.md)
 - [USS Responsive Design](uss-responsive.md)
