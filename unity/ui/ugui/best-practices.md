@@ -19,9 +19,9 @@ Define performance optimization techniques and best practices for uGUI implement
 
 ---
 
-## EventChannel Integration - P1
+## EventChannel integration - P1
 
-### Always Use EventChannels
+### Always use EventChannels
 
 ```csharp
 // ✅ Good: EventChannel-driven updates
@@ -64,7 +64,7 @@ public class HealthUI : MonoBehaviour
 }
 ```
 
-### Always Unsubscribe in OnDisable
+### Always unsubscribe in OnDisable
 
 ```csharp
 // ✅ Good: Proper subscription management
@@ -88,9 +88,9 @@ private void Start()
 
 ---
 
-## Performance Optimization - P1
+## Performance optimization - P1
 
-### Avoid Update Loop UI Updates
+### Avoid update loop UI updates
 
 ```csharp
 // ✅ Good: EventChannel-driven (efficient)
@@ -112,7 +112,7 @@ private void Update()
 }
 ```
 
-### Cache Camera Reference
+### Cache camera reference
 
 ```csharp
 // ✅ Good: Cache in Start
@@ -137,7 +137,7 @@ private void LateUpdate()
 }
 ```
 
-### Use Canvas.enabled for Show/Hide
+### Use Canvas.enabled for show/hide
 
 ```csharp
 // ✅ Good: Enable/disable canvas
@@ -163,7 +163,7 @@ private void ShowUI()
 }
 ```
 
-### Minimize Canvas Rebuilds
+### Minimize Canvas rebuilds
 
 ```csharp
 // ✅ Good: Update only necessary elements
@@ -185,9 +185,9 @@ private void Update()
 
 ---
 
-## TextMeshPro Usage - P1
+## TextMeshPro usage - P1
 
-### Always Use TextMeshPro
+### Always use TextMeshPro
 
 ```csharp
 // ✅ Good: TextMeshPro
@@ -213,9 +213,9 @@ using UnityEngine.UI;
 
 ---
 
-## Canvas Configuration - P1
+## Canvas configuration - P1
 
-### World Space Setup
+### World Space setup
 
 ```csharp
 // ✅ Good: Proper World Space setup
@@ -236,7 +236,7 @@ private void Start()
 }
 ```
 
-### Canvas Scaler (Screen Space Only)
+### Canvas Scaler (Screen Space only)
 
 Canvas Scaler is only relevant for Screen Space UI (not World Space):
 
@@ -247,7 +247,7 @@ Canvas Scaler is only relevant for Screen Space UI (not World Space):
 
 ---
 
-## Inspector Validation - P1
+## Inspector validation - P1
 
 ### Use OnValidate
 
@@ -278,9 +278,9 @@ private void OnValidate()
 
 ---
 
-## EventSystem Requirements - P1
+## EventSystem requirements - P1
 
-### Ensure EventSystem Exists
+### Ensure EventSystem exists
 
 uGUI requires an EventSystem in the scene for button clicks and interactions:
 
@@ -291,7 +291,7 @@ Hierarchy:
 └── EventSystem (required for interactions)
 ```
 
-### Check in Code
+### Check in code
 
 ```csharp
 private void Start()
@@ -306,9 +306,9 @@ private void Start()
 
 ---
 
-## Button to EventChannel Pattern - P1
+## Button to EventChannel pattern - P1
 
-### Convert Button Events
+### Convert button events
 
 ```csharp
 using UnityEngine;
@@ -354,9 +354,9 @@ namespace ProjectName.UI
 
 ---
 
-## Common Pitfalls - P1
+## Common pitfalls - P1
 
-### Pitfall 1: Forgetting to Unsubscribe
+### Pitfall 1: Forgetting to unsubscribe
 
 ```csharp
 // ❌ Bad: Memory leak
@@ -378,7 +378,7 @@ private void OnDisable()
 }
 ```
 
-### Pitfall 2: Querying Camera Every Frame
+### Pitfall 2: Querying camera every frame
 
 ```csharp
 // ❌ Bad: Camera.main is expensive
@@ -402,7 +402,7 @@ private void LateUpdate()
 }
 ```
 
-### Pitfall 3: Using Update for UI Updates
+### Pitfall 3: Using update for UI updates
 
 ```csharp
 // ❌ Bad: Canvas rebuild every frame
@@ -440,9 +440,9 @@ Scene with EventSystem:
 
 ---
 
-## Networking Considerations - P1
+## Networking considerations - P1
 
-### Mirror Integration
+### Mirror integration
 
 When integrating with Mirror Networking:
 
@@ -469,7 +469,7 @@ namespace ProjectName.UI
 }
 ```
 
-### EventChannels are Local
+### EventChannels are local
 
 EventChannels do not propagate across the network. They are local events only:
 
@@ -488,7 +488,7 @@ private void RpcShowDamage(int damage)
 
 ---
 
-## Complete Example - P1
+## Complete example - P1
 
 ```csharp
 using UnityEngine;

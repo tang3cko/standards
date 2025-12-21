@@ -1,4 +1,4 @@
-# Unity-Specific Best Practices
+# Unity-specific best practices
 
 ## Purpose
 
@@ -19,9 +19,9 @@ Follow Unity-specific conventions and patterns to ensure framerate-independent b
 
 ---
 
-## Time.deltaTime Usage - P1
+## Time.deltaTime usage - P1
 
-### Framerate-Independent Movement
+### Framerate-independent movement
 
 ```csharp
 public class PlayerMovement : MonoBehaviour
@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
 }
 ```
 
-### Countdown Timers
+### Countdown timers
 
 ```csharp
 public class Timer : MonoBehaviour
@@ -65,7 +65,7 @@ public class Timer : MonoBehaviour
 }
 ```
 
-### When NOT to Use Time.deltaTime
+### When NOT to use Time.deltaTime
 
 ```csharp
 // Bad: Don't use Time.deltaTime for instant actions
@@ -83,9 +83,9 @@ if (Input.GetKeyDown(KeyCode.Space))
 
 ---
 
-## RequireComponent Attribute - P1
+## RequireComponent attribute - P1
 
-### Basic Usage
+### Basic usage
 
 ```csharp
 // Ensures Rigidbody is attached when adding this component
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 }
 ```
 
-### Multiple Component Requirements
+### Multiple component requirements
 
 ```csharp
 // Require multiple components
@@ -121,7 +121,7 @@ public class PhysicsObject : MonoBehaviour
 }
 ```
 
-### When to Use RequireComponent
+### When to use RequireComponent
 
 ```csharp
 // Good: Component has hard dependency
@@ -151,7 +151,7 @@ public class VisualEffect : MonoBehaviour
 
 ## Update vs FixedUpdate - P1
 
-### Update: Framerate-Dependent
+### Update: framerate-dependent
 
 ```csharp
 public class InputHandler : MonoBehaviour
@@ -170,7 +170,7 @@ public class InputHandler : MonoBehaviour
 }
 ```
 
-### FixedUpdate: Physics Operations
+### FixedUpdate: physics operations
 
 ```csharp
 public class PlayerPhysics : MonoBehaviour
@@ -199,7 +199,7 @@ public class PlayerPhysics : MonoBehaviour
 }
 ```
 
-### When to Use Each
+### When to use each
 
 | Method | Use Cases | Fixed Timestep |
 |--------|-----------|----------------|
@@ -208,7 +208,7 @@ public class PlayerPhysics : MonoBehaviour
 
 ---
 
-## Collider Event Detection - P1
+## Collider event detection - P1
 
 ### OnTriggerEnter vs OnCollisionEnter
 
@@ -237,7 +237,7 @@ public class CollisionHandler : MonoBehaviour
 }
 ```
 
-### Tag vs Layer Comparison
+### Tag vs layer comparison
 
 ```csharp
 public class DetectionZone : MonoBehaviour
@@ -267,7 +267,7 @@ public class DetectionZone : MonoBehaviour
 }
 ```
 
-### 2D Collider Events
+### 2D collider events
 
 ```csharp
 public class Collider2DHandler : MonoBehaviour
@@ -294,9 +294,9 @@ public class Collider2DHandler : MonoBehaviour
 
 ---
 
-## Component Lifecycle Methods - P1
+## Component lifecycle methods - P1
 
-### Execution Order
+### Execution order
 
 ```csharp
 namespace ProjectName.Core
@@ -390,7 +390,7 @@ public class InitializationExample : MonoBehaviour
 }
 ```
 
-### OnEnable vs OnDisable for Events
+### OnEnable vs OnDisable for events
 
 ```csharp
 using Tang3cko.ReactiveSO;
@@ -431,9 +431,9 @@ namespace ProjectName.Player
 
 ---
 
-## GameObject and Component Access - P1
+## GameObject and component access - P1
 
-### Cache GetComponent Calls
+### Cache GetComponent calls
 
 ```csharp
 public class ComponentCaching : MonoBehaviour
@@ -459,7 +459,7 @@ public class ComponentCaching : MonoBehaviour
 }
 ```
 
-### Find Methods Performance
+### Find methods performance
 
 ```csharp
 public class FindMethods : MonoBehaviour
@@ -496,7 +496,7 @@ public class FindMethods : MonoBehaviour
 
 ## Coroutines - P1
 
-### Basic Pattern
+### Basic pattern
 
 ```csharp
 public class CoroutineExample : MonoBehaviour
@@ -530,7 +530,7 @@ public class CoroutineExample : MonoBehaviour
 }
 ```
 
-### Stopping Coroutines Safely
+### Stopping coroutines safely
 
 ```csharp
 public class CoroutineControl : MonoBehaviour
@@ -570,9 +570,9 @@ public class CoroutineControl : MonoBehaviour
 
 ---
 
-## Unity Editor Attributes - P1
+## Unity editor attributes - P1
 
-### Common Attributes
+### Common attributes
 
 ```csharp
 public class AttributeExamples : MonoBehaviour
@@ -598,7 +598,7 @@ public class AttributeExamples : MonoBehaviour
 }
 ```
 
-### OnValidate for Inspector Validation
+### OnValidate for Inspector validation
 
 ```csharp
 public class ValidatedComponent : MonoBehaviour

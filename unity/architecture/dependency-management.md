@@ -15,9 +15,9 @@ Establish clear priorities for dependency injection to maximize visibility, test
 
 ---
 
-## Dependency Priority - P1
+## Dependency priority - P1
 
-### Priority Order
+### Priority order
 
 ```
 1. EventChannel (Highest Priority) - Complete decoupling
@@ -26,7 +26,7 @@ Establish clear priorities for dependency injection to maximize visibility, test
 4. Singleton - Truly global state only (Last Resort)
 ```
 
-### Why This Order?
+### Why this order?
 
 Team development considerations:
 
@@ -38,9 +38,9 @@ Team development considerations:
 
 ---
 
-## EventChannel Pattern (Priority 1) - P1
+## EventChannel pattern (Priority 1) - P1
 
-### Complete Decoupling
+### Complete decoupling
 
 ```csharp
 using UnityEngine;
@@ -94,9 +94,9 @@ namespace ProjectName.Core
 
 ---
 
-## SerializeField Pattern (Priority 2) - P1
+## SerializeField pattern (Priority 2) - P1
 
-### Explicit Dependencies
+### Explicit dependencies
 
 ```csharp
 using UnityEngine;
@@ -155,9 +155,9 @@ namespace ProjectName.UI
 
 ---
 
-## Singleton Pattern (Priority 4 - Last Resort) - P1
+## Singleton pattern (Priority 4 - Last Resort) - P1
 
-### When to Use Singleton
+### When to use Singleton
 
 Use ONLY when ALL four conditions are met:
 
@@ -166,7 +166,7 @@ Use ONLY when ALL four conditions are met:
 3. Truly global state (game-wide state management)
 4. Referenced from 10+ locations (dependency injection would be too verbose)
 
-### Project Singleton Usage
+### Project Singleton usage
 
 | Class | Use Singleton? | Reason |
 |-------|----------------|--------|
@@ -177,7 +177,7 @@ Use ONLY when ALL four conditions are met:
 | `ShopManager` | ❌ | Contained within UI → Use SerializeField |
 | `PlayerWallet` | ❌ | EventChannel subscription only |
 
-### Singleton Implementation
+### Singleton implementation
 
 ```csharp
 using UnityEngine;
@@ -236,7 +236,7 @@ public class UIManager : MonoBehaviour
 [SerializeField] private GameStatsManager gameStatsManager;
 ```
 
-### Impact Analysis
+### Impact analysis
 
 **Singleton:**
 ```
@@ -256,7 +256,7 @@ Impact scope is clear
 IDE refactoring tools work
 ```
 
-### Parallel Development
+### Parallel development
 
 **Singleton:**
 - Programmer A: Add feature to GameStatsManager
@@ -268,7 +268,7 @@ IDE refactoring tools work
 - Programmer B: ResultPanel references GameStatsManager
 - → Different files = No conflicts
 
-### Unity Editor Integration
+### Unity Editor integration
 
 **Singleton:**
 ```
@@ -304,7 +304,7 @@ Designer can notice the issue
 
 ---
 
-## Practical Example - P1
+## Practical example - P1
 
 ### Refactoring from Singleton to SerializeField
 

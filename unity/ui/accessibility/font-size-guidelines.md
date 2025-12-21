@@ -132,7 +132,7 @@ namespace ProjectName.UI
 
 Players **must** be able to resize text up to **200%** of the minimum font sizes without loss of content, functionality, or meaning.
 
-**Example Implementation:**
+**Example implementation:**
 ```csharp
 namespace ProjectName.UI
 {
@@ -174,7 +174,7 @@ namespace ProjectName.UI
 
 Visible text must have a **minimum luminosity contrast ratio of 4.5:1** against the background.
 
-**Good Contrast Examples:**
+**Good contrast examples:**
 ```css
 /* ✅ Good: White text on dark background (high contrast) */
 .high-contrast-text {
@@ -191,7 +191,7 @@ Visible text must have a **minimum luminosity contrast ratio of 4.5:1** against 
 }
 ```
 
-**Bad Contrast Examples:**
+**Bad contrast examples:**
 ```css
 /* ❌ Bad: Gray text on dark gray background (low contrast) */
 .low-contrast-text {
@@ -208,18 +208,18 @@ Visible text must have a **minimum luminosity contrast ratio of 4.5:1** against 
 }
 ```
 
-**Online Contrast Checker:**
+**Online contrast checker:**
 - WebAIM Contrast Checker: https://webaim.org/resources/contrastchecker/
 
 ---
 
 ### Line spacing and width
 
-**Line Spacing:**
+**Line spacing:**
 - Line spacing (leading) should be at least **1.5x** within paragraphs
 - Paragraph spacing should be at least **1.5x** larger than line spacing
 
-**Line Width:**
+**Line width:**
 - Maximum **80 characters or glyphs** per line
 - Maximum **40 characters** for Chinese, Japanese, Korean
 
@@ -305,7 +305,7 @@ namespace ProjectName.UI
 }
 ```
 
-**USS with Platform Classes:**
+**USS with platform classes:**
 ```css
 /* Default: PC/VR */
 .quest-title {
@@ -331,7 +331,7 @@ namespace ProjectName.UI
 
 ## Common violations and fixes - P1
 
-### Violation 1: small supplementary text
+### Violation 1: Small supplementary text
 
 ```css
 /* ❌ Bad: 14px on console (below 26px minimum) */
@@ -346,7 +346,7 @@ namespace ProjectName.UI
 }
 ```
 
-### Violation 2: hardcoded font sizes
+### Violation 2: Hardcoded font sizes
 
 ```css
 /* ❌ Bad: Hardcoded values (no platform scaling) */
@@ -364,7 +364,7 @@ namespace ProjectName.UI
 }
 ```
 
-### Violation 3: relying on screen magnification
+### Violation 3: Relying on screen magnification
 
 ```csharp
 // ❌ Bad: Expecting platform magnifier to fix small text
@@ -417,7 +417,7 @@ namespace ProjectName.UI
 - Degrades user experience
 - Does not meet accessibility compliance
 
-**Correct Approach:**
+**Correct approach:**
 Implement proper minimum font sizes **from the start** for each platform.
 
 ---
@@ -452,7 +452,7 @@ Implement proper minimum font sizes **from the start** for each platform.
 | **Mobile (200 DPI)** | **36px** | **72px** | 1-2 feet | 🟡 Medium |
 | **Mobile (400 DPI)** | **72px** | **144px** | 1-2 feet | 🟡 Medium |
 
-**Additional Requirements (All Platforms):**
+**Additional requirements (all platforms):**
 - ✅ 200% text resizing support
 - ✅ 4.5:1 contrast ratio
 - ✅ 1.5x line spacing

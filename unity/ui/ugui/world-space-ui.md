@@ -17,9 +17,9 @@ Define implementation patterns for uGUI World Space Canvas to display UI element
 
 ---
 
-## When to Use uGUI - P1
+## When to use uGUI - P1
 
-### Recommended Use Cases
+### Recommended use cases
 
 - **Player name plates** - World space text above players
 - **NPC name plates** - Character names in 3D space
@@ -28,7 +28,7 @@ Define implementation patterns for uGUI World Space Canvas to display UI element
 - **Enemy HP bars** - Health bars above enemies
 - **World space markers** - Quest objectives, waypoints
 
-### Not Recommended
+### Not recommended
 
 - **Screen space menus** - Use UI Toolkit instead
 - **HUD elements** - Use UI Toolkit instead
@@ -36,9 +36,9 @@ Define implementation patterns for uGUI World Space Canvas to display UI element
 
 ---
 
-## Basic Template - P1
+## Basic template - P1
 
-### uGUI EventChannel Template
+### uGUI EventChannel template
 
 ```csharp
 using UnityEngine;
@@ -120,9 +120,9 @@ namespace ProjectName.UI
 
 ---
 
-## World Space Canvas Setup - P1
+## World Space Canvas setup - P1
 
-### Canvas Configuration
+### Canvas configuration
 
 ```csharp
 using UnityEngine;
@@ -149,7 +149,7 @@ namespace ProjectName.UI
 }
 ```
 
-### Canvas Hierarchy
+### Canvas hierarchy
 
 ```
 GameObject (World Space UI)
@@ -160,7 +160,7 @@ GameObject (World Space UI)
 
 ---
 
-## Interaction Prompt Example - P1
+## Interaction prompt example - P1
 
 ```csharp
 using UnityEngine;
@@ -252,7 +252,7 @@ namespace ProjectName.UI
 
 ---
 
-## Health Bar Example - P1
+## Health bar example - P1
 
 ```csharp
 using UnityEngine;
@@ -335,7 +335,7 @@ namespace ProjectName.UI
 
 ---
 
-## Button Event to EventChannel - P1
+## Button event to EventChannel - P1
 
 ```csharp
 using UnityEngine;
@@ -385,7 +385,7 @@ namespace ProjectName.UI
 
 ---
 
-## Show/Hide Pattern - P1
+## Show/hide pattern - P1
 
 ### Good: Use Canvas.enabled
 
@@ -414,9 +414,9 @@ private void HideUI()
 
 ---
 
-## Performance Considerations - P1
+## Performance considerations - P1
 
-### Minimize Canvas Rebuilds
+### Minimize Canvas rebuilds
 
 ```csharp
 // ✅ Good: Update only when EventChannel fires
@@ -437,7 +437,7 @@ private void Update()
 }
 ```
 
-### Cache Camera Reference
+### Cache camera reference
 
 ```csharp
 // ✅ Good: Cache in Start

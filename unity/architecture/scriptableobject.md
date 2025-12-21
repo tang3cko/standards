@@ -15,9 +15,9 @@ Use ScriptableObjects as the foundation for data management and game state, sepa
 
 ---
 
-## Data Container Pattern - P1
+## Data container pattern - P1
 
-### Immutable Data Definition
+### Immutable data definition
 
 ```csharp
 using UnityEngine;
@@ -76,7 +76,7 @@ namespace ProjectName.Quest
 }
 ```
 
-### Runtime State (When Needed)
+### Runtime state (when needed)
 
 ```csharp
 namespace ProjectName.Quest
@@ -138,7 +138,7 @@ namespace ProjectName.Quest
 
 ---
 
-## CreateAssetMenu Naming Conventions - P1
+## CreateAssetMenu naming conventions - P1
 
 Follow these patterns for CreateAssetMenu menuName:
 
@@ -175,7 +175,7 @@ Pattern: `"ProjectName/Events/TypeName Event Channel"`
 
 ## Benefits - P1
 
-### Data-Logic Separation
+### Data-logic separation
 
 ```csharp
 // Data: EnemyDataSO (ScriptableObject)
@@ -205,14 +205,14 @@ public class EnemyController : MonoBehaviour
 }
 ```
 
-### Inspector-Based Configuration
+### Inspector-based configuration
 
 - Edit values in Inspector without code changes
 - Create multiple variants (Fast Enemy, Slow Enemy, Boss)
 - Designer-friendly workflow
 - Hot reload during Play mode
 
-### Memory Efficiency
+### Memory efficiency
 
 ```csharp
 // 100 enemies share the same EnemyDataSO instance
@@ -222,9 +222,9 @@ public class EnemyController : MonoBehaviour
 
 ---
 
-## Practical Example - P1
+## Practical example - P1
 
-### Complete Quest System
+### Complete quest system
 
 ```csharp
 using UnityEngine;

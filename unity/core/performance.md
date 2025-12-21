@@ -1,4 +1,4 @@
-# Performance Optimization
+# Performance optimization
 
 ## Purpose
 
@@ -17,9 +17,9 @@ Improve game performance through caching strategies, object pooling, and Update 
 
 ---
 
-## Object Pooling - P1
+## Object pooling - P1
 
-### Basic Implementation
+### Basic implementation
 
 ```csharp
 public class ObjectPool<T> where T : Component
@@ -72,7 +72,7 @@ public class ObjectPool<T> where T : Component
 }
 ```
 
-### Usage Example
+### Usage example
 
 ```csharp
 namespace ProjectName.Enemy
@@ -106,9 +106,9 @@ namespace ProjectName.Enemy
 
 ---
 
-## Caching Strategy - P1
+## Caching strategy - P1
 
-### Component Caching
+### Component caching
 
 ```csharp
 public class EnemyManager : MonoBehaviour
@@ -136,7 +136,7 @@ public class EnemyManager : MonoBehaviour
 }
 ```
 
-### GameObject Caching
+### GameObject caching
 
 ```csharp
 public class PlayerController : MonoBehaviour
@@ -170,9 +170,9 @@ public class PlayerController : MonoBehaviour
 
 ---
 
-## Update Loop Optimization - P1
+## Update loop optimization - P1
 
-### Avoid Heavy Operations in Update
+### Avoid heavy operations in Update
 
 ```csharp
 // Bad: Heavy processing every frame
@@ -204,7 +204,7 @@ private void ProcessEnemies()
 }
 ```
 
-### Use Event-Driven Architecture
+### Use event-driven architecture
 
 ```csharp
 // Bad: Polling in Update
@@ -241,9 +241,9 @@ private void Update()
 
 ---
 
-## String Operations - P1
+## String operations - P1
 
-### Avoid String Concatenation in Update
+### Avoid string concatenation in Update
 
 ```csharp
 // Bad: String concatenation every frame
@@ -266,7 +266,7 @@ private void UpdateScoreUI(int newScore)
 }
 ```
 
-### String Builder for Complex Operations
+### String Builder for complex operations
 
 ```csharp
 // Bad: Multiple concatenations
@@ -291,9 +291,9 @@ string BuildReport()
 
 ---
 
-## Collection Management - P1
+## Collection management - P1
 
-### Pre-Allocate Collections
+### Pre-allocate collections
 
 ```csharp
 // Bad: Reallocate every time
@@ -315,7 +315,7 @@ public List<Enemy> GetNearbyEnemies()
 }
 ```
 
-### Use Capacity for Known Sizes
+### Use capacity for known sizes
 
 ```csharp
 // Bad: Default capacity (causes resizing)
@@ -327,9 +327,9 @@ var enemies = new List<Enemy>(50);
 
 ---
 
-## Physics Optimization - P1
+## Physics optimization - P1
 
-### Use Layers for Raycasts
+### Use layers for raycasts
 
 ```csharp
 // Bad: Raycast hits everything
@@ -352,7 +352,7 @@ private void CheckRaycast()
 }
 ```
 
-### Cache Physics Materials
+### Cache physics materials
 
 ```csharp
 public class CollisionManager : MonoBehaviour
@@ -371,7 +371,7 @@ public class CollisionManager : MonoBehaviour
 
 ---
 
-## Coroutine Optimization - P1
+## Coroutine optimization - P1
 
 ### Cache WaitForSeconds
 

@@ -17,7 +17,7 @@ Implement secure Server Authority pattern in Mirror Networking to prevent cheati
 
 ---
 
-## Core Principle - P1
+## Core principle - P1
 
 **The server is the single source of truth.** Clients request actions, the server validates and executes them, then notifies all clients of the result.
 
@@ -27,7 +27,7 @@ Client Request → Server Validation → Server Execution → Client Notificatio
 
 ---
 
-## Basic Pattern - P1
+## Basic pattern - P1
 
 ```csharp
 using Mirror;
@@ -110,7 +110,7 @@ namespace ProjectName.Combat
 
 ---
 
-## Quest System Example - P1
+## Quest system example - P1
 
 ```csharp
 using Mirror;
@@ -195,9 +195,9 @@ namespace ProjectName.Quest
 
 ---
 
-## Validation Patterns - P1
+## Validation patterns - P1
 
-### Range Validation
+### Range validation
 
 ```csharp
 [Command(requiresAuthority = false)]
@@ -222,7 +222,7 @@ private void CmdPurchaseItem(int itemPrice, uint buyerNetId)
 }
 ```
 
-### Cooldown Validation
+### Cooldown validation
 
 ```csharp
 private Dictionary<uint, float> lastAbilityUse = new Dictionary<uint, float>();
@@ -248,7 +248,7 @@ private void CmdUseAbility(uint playerNetId)
 }
 ```
 
-### Distance Validation
+### Distance validation
 
 ```csharp
 [Command(requiresAuthority = false)]
@@ -276,9 +276,9 @@ private void CmdInteract(uint interactorNetId, uint targetNetId)
 
 ---
 
-## ScriptableObject Management - P1
+## ScriptableObject management - P1
 
-### Server-Only Updates
+### Server-only updates
 
 ```csharp
 using Mirror;
@@ -327,9 +327,9 @@ namespace ProjectName.Game
 
 ---
 
-## Anti-Patterns - P1
+## Anti-patterns - P1
 
-### Pattern 1: Trusting Client Input
+### Pattern 1: trusting client input
 
 ```csharp
 // ❌ Bad: No validation
@@ -351,7 +351,7 @@ private void CmdEnemyKilled(uint enemyNetId, uint killerNetId)
 }
 ```
 
-### Pattern 2: Client-Side State Updates
+### Pattern 2: client-side state updates
 
 ```csharp
 // ❌ Bad: Client updates directly
@@ -375,7 +375,7 @@ private void Update()
 }
 ```
 
-### Pattern 3: Missing NetworkServer.active Check
+### Pattern 3: missing NetworkServer.active check
 
 ```csharp
 // ❌ Bad: Runs on all clients

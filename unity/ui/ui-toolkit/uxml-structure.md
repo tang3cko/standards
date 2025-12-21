@@ -18,7 +18,7 @@ Define clear structure for UI Toolkit files, naming conventions, and integration
 
 ---
 
-## Directory Structure - P1
+## Directory structure - P1
 
 Separate UI structure (UXML), styles (USS), and logic (C#) into dedicated directories:
 
@@ -51,9 +51,9 @@ Assets/_Project/
 
 ---
 
-## Naming Conventions - P1
+## Naming conventions - P1
 
-### UXML name Attribute
+### UXML name attribute
 
 Use PascalCase for `name` attributes (used for C# queries):
 
@@ -67,7 +67,7 @@ Use PascalCase for `name` attributes (used for C# queries):
 </ui:UXML>
 ```
 
-### USS class Attribute
+### USS class attribute
 
 Use kebab-case for `class` attributes (BEM naming):
 
@@ -80,9 +80,9 @@ Use kebab-case for `class` attributes (BEM naming):
 
 ---
 
-## Basic UXML Structure - P1
+## Basic UXML structure - P1
 
-### UXML File Template
+### UXML file template
 
 ```xml
 <!-- Assets/_Project/UI/UXML/Quest/QuestProgressHUD.uxml -->
@@ -105,7 +105,7 @@ Use kebab-case for `class` attributes (BEM naming):
 </ui:UXML>
 ```
 
-### USS Reference
+### USS reference
 
 Always reference USS files at the top of UXML:
 
@@ -120,9 +120,9 @@ Always reference USS files at the top of UXML:
 
 ---
 
-## C# Controller Pattern - P1
+## C# controller pattern - P1
 
-### Basic Controller Template
+### Basic controller template
 
 ```csharp
 using UnityEngine;
@@ -198,9 +198,9 @@ namespace ProjectName.UI
 
 ---
 
-## EventChannel Integration - P1
+## EventChannel integration - P1
 
-### Button Click to EventChannel
+### Button click to EventChannel
 
 ```csharp
 using UnityEngine;
@@ -233,7 +233,7 @@ namespace ProjectName.UI
 }
 ```
 
-### Bidirectional EventChannel Communication
+### Bidirectional EventChannel communication
 
 ```csharp
 namespace ProjectName.UI
@@ -287,9 +287,9 @@ namespace ProjectName.UI
 
 ---
 
-## Data Binding with ScriptableObjects - P1
+## Data binding with ScriptableObjects - P1
 
-### Dynamic List Rendering
+### Dynamic list rendering
 
 ```csharp
 using UnityEngine;
@@ -352,7 +352,7 @@ namespace ProjectName.UI
 }
 ```
 
-### UXML for Dynamic List
+### UXML for dynamic list
 
 ```xml
 <!-- QuestSelectionPanel.uxml -->
@@ -373,7 +373,7 @@ namespace ProjectName.UI
 </ui:UXML>
 ```
 
-### USS for Quest List
+### USS for quest list
 
 ```css
 /* QuestUI.uss */
@@ -409,9 +409,9 @@ namespace ProjectName.UI
 
 ---
 
-## Element Query Best Practices - P1
+## Element query best practices - P1
 
-### Query by Type and Name
+### Query by type and name
 
 ```csharp
 // ✅ Good: Type-safe query
@@ -423,7 +423,7 @@ ScrollView itemList = root.Q<ScrollView>("ItemListContainer");
 VisualElement titleLabel = root.Q("TitleLabel");
 ```
 
-### Query with Null Check
+### Query with null check
 
 ```csharp
 private void OnEnable()
@@ -440,7 +440,7 @@ private void OnEnable()
 }
 ```
 
-### Query by Class (Multiple Elements)
+### Query by class (multiple elements)
 
 ```csharp
 // Query all elements with a specific class
@@ -455,9 +455,9 @@ allLabels.ForEach(label =>
 
 ---
 
-## Performance Optimization - P1
+## Performance optimization - P1
 
-### Cache Element References
+### Cache element references
 
 ```csharp
 // ✅ Good: Cache in OnEnable
@@ -483,7 +483,7 @@ private void UpdateStatus(string status)
 }
 ```
 
-### Event-Driven Updates
+### Event-driven updates
 
 ```csharp
 // ✅ Good: Update only when EventChannel fires

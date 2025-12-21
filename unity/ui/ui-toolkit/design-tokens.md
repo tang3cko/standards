@@ -16,7 +16,7 @@ Centrally manage design values (colors, font sizes, spacing) using USS variables
 
 ---
 
-## What Are Design Tokens? - P1
+## What are design tokens? - P1
 
 Design tokens are design values (colors, font sizes, spacing) managed as variables in USS (Unity Style Sheets). They are defined in the `:root` selector and referenced throughout all stylesheets.
 
@@ -29,9 +29,9 @@ Design tokens are design values (colors, font sizes, spacing) managed as variabl
 
 ---
 
-## Token Definition - P1
+## Token definition - P1
 
-### Common.uss Structure
+### Common.uss structure
 
 All design tokens must be defined in `Common.uss` within the `:root` section:
 
@@ -73,9 +73,9 @@ All design tokens must be defined in `Common.uss` within the `:root` section:
 
 ---
 
-## Token Usage - P1
+## Token usage - P1
 
-### Good Examples
+### Good examples
 
 ```css
 /* QuestUI.uss */
@@ -97,7 +97,7 @@ All design tokens must be defined in `Common.uss` within the `:root` section:
 }
 ```
 
-### Bad Examples
+### Bad examples
 
 ```css
 /* ❌ Bad: Hardcoded values */
@@ -110,7 +110,7 @@ All design tokens must be defined in `Common.uss` within the `:root` section:
 
 ---
 
-## Naming Conventions - P1
+## Naming conventions - P1
 
 ### Pattern
 
@@ -118,7 +118,7 @@ All design tokens must be defined in `Common.uss` within the `:root` section:
 --category-name-variant: value;
 ```
 
-### Category Guidelines
+### Category guidelines
 
 | Category | Examples | Purpose |
 |----------|----------|---------|
@@ -162,18 +162,18 @@ All design tokens must be defined in `Common.uss` within the `:root` section:
 }
 ```
 
-**IMPORTANT - Accessibility Compliance:**
+**IMPORTANT - Accessibility compliance:**
 
 When defining font size tokens, ensure they meet [platform-specific minimum requirements](../accessibility/font-size-guidelines.md):
 - **Console (1080p)**: Minimum 26px
 - **PC/VR (1080p)**: Minimum 18px
 - **4K**: 2x the 1080p values
 
-See [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.md) for detailed requirements and platform detection patterns.
+See [Font size accessibility guidelines](../accessibility/font-size-guidelines.md) for detailed requirements and platform detection patterns.
 
 ---
 
-## Common Components with Tokens - P1
+## Common components with tokens - P1
 
 ### Panel
 
@@ -209,7 +209,7 @@ See [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.m
 }
 ```
 
-### Text Styles
+### Text styles
 
 ```css
 .text-title {
@@ -232,7 +232,7 @@ See [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.m
 
 ---
 
-## Adding New Tokens - P1
+## Adding new tokens - P1
 
 ### Rules
 
@@ -241,7 +241,7 @@ See [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.m
 3. **Add comments**: Explain the token's purpose
 4. **Check for existing tokens**: Verify similar tokens don't already exist
 
-### Example: Adding Animation Tokens
+### Example: Adding animation tokens
 
 ```css
 /* Common.uss */
@@ -259,7 +259,7 @@ See [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.m
 }
 ```
 
-### Usage of New Tokens
+### Usage of new tokens
 
 ```css
 /* QuestUI.uss */
@@ -276,11 +276,11 @@ See [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.m
 
 ---
 
-## Theme Support (Future) - P1
+## Theme support (future) - P1
 
 Design tokens enable easy theme switching. While not currently implemented, the structure supports it:
 
-### Dark Theme Example
+### Dark theme example
 
 ```css
 /* Common.uss */
@@ -299,7 +299,7 @@ Design tokens enable easy theme switching. While not currently implemented, the 
 }
 ```
 
-### C# Theme Switching (Future)
+### C# theme switching (future)
 
 ```csharp
 namespace ProjectName.UI
@@ -330,9 +330,9 @@ namespace ProjectName.UI
 
 ---
 
-## Token Organization Best Practices - P1
+## Token organization best practices - P1
 
-### Group by Category
+### Group by category
 
 ```css
 :root {
@@ -350,7 +350,7 @@ namespace ProjectName.UI
 }
 ```
 
-### Semantic vs Literal Naming
+### Semantic vs literal naming
 
 ```css
 /* ✅ Good: Semantic naming */
@@ -368,7 +368,7 @@ Semantic naming makes intent clear and allows color changes without token renami
 
 ---
 
-## Complete Common.uss Example - P1
+## Complete Common.uss example - P1
 
 ```css
 /* Common.uss */
@@ -456,7 +456,7 @@ Semantic naming makes intent clear and allows color changes without token renami
 
 ## References
 
-- [Font Size Accessibility Guidelines](../accessibility/font-size-guidelines.md)
+- [Font size accessibility guidelines](../accessibility/font-size-guidelines.md)
 - [BEM Naming](bem-naming.md)
 - [UXML Structure](uxml-structure.md)
 - [USS Responsive Design](uss-responsive.md)

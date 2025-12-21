@@ -18,7 +18,7 @@ Define consistent implementation patterns for adding new features to projects us
 
 ---
 
-## SpecKit Workflow - P1
+## SpecKit workflow - P1
 
 All new features must follow the SpecKit (Spec-Driven Development) workflow:
 
@@ -30,7 +30,7 @@ All new features must follow the SpecKit (Spec-Driven Development) workflow:
 
 **Reference:** https://github.com/github/spec-kit
 
-### Workflow Example
+### Workflow example
 
 ```
 1. Create docs/00_spec/inventory-system-spec.md
@@ -43,9 +43,9 @@ All new features must follow the SpecKit (Spec-Driven Development) workflow:
 
 ---
 
-## Pattern 1: Adding New ScriptableObject - P1
+## Pattern 1: Adding new ScriptableObject - P1
 
-### Immutable Data Definition
+### Immutable data definition
 
 ```csharp
 using UnityEngine;
@@ -91,7 +91,7 @@ namespace ProjectName.Item
 }
 ```
 
-### Runtime Data (When Needed)
+### Runtime data (when needed)
 
 ```csharp
 namespace ProjectName.Item
@@ -149,7 +149,7 @@ namespace ProjectName.Item
 }
 ```
 
-### CreateAssetMenu Naming Conventions
+### CreateAssetMenu naming conventions
 
 Follow these patterns consistently:
 
@@ -171,9 +171,9 @@ Follow these patterns consistently:
 
 ---
 
-## Pattern 2: Adding New EventChannel - P1
+## Pattern 2: Adding new EventChannel - P1
 
-### EventChannel Class Definition
+### EventChannel class definition
 
 ```csharp
 using UnityEngine;
@@ -192,7 +192,7 @@ namespace ProjectName.Item
 }
 ```
 
-### ScriptableObject Asset Creation
+### ScriptableObject asset creation
 
 Create assets in the appropriate directory:
 
@@ -203,7 +203,7 @@ Assets/_Project/ScriptableObjects/Events/Item/
 └── OnInventoryChanged.asset (VoidEventChannelSO)
 ```
 
-### Publisher and Subscriber Implementation
+### Publisher and subscriber implementation
 
 ```csharp
 using UnityEngine;
@@ -257,9 +257,9 @@ namespace ProjectName.Item
 
 ---
 
-## Pattern 3: Adding New RuntimeSet - P1
+## Pattern 3: Adding new RuntimeSet - P1
 
-### RuntimeSet Class Definition
+### RuntimeSet class definition
 
 ```csharp
 using UnityEngine;
@@ -321,7 +321,7 @@ namespace ProjectName.Enemy
 }
 ```
 
-### Registration Pattern
+### Registration pattern
 
 ```csharp
 using UnityEngine;
@@ -370,9 +370,9 @@ namespace ProjectName.Enemy
 
 ---
 
-## Pattern 4: Adding New UI (UI Toolkit) - P1
+## Pattern 4: Adding new UI (UI Toolkit) - P1
 
-### UXML Structure
+### UXML structure
 
 ```xml
 <!-- Assets/_Project/UI/UXML/InventoryPanel.uxml -->
@@ -389,7 +389,7 @@ namespace ProjectName.Enemy
 </ui:UXML>
 ```
 
-### USS Styling
+### USS styling
 
 ```css
 /* Assets/_Project/UI/USS/InventoryUI.uss */
@@ -426,7 +426,7 @@ namespace ProjectName.Enemy
 }
 ```
 
-### C# Controller
+### C# controller
 
 ```csharp
 using UnityEngine;
@@ -518,9 +518,9 @@ namespace ProjectName.UI
 
 ---
 
-## Pattern 5: Extending Enum-Based Systems - P1
+## Pattern 5: Extending enum-based systems - P1
 
-### Adding New Quest Type Example
+### Adding new quest type example
 
 ```csharp
 namespace ProjectName.Quest
@@ -545,7 +545,7 @@ namespace ProjectName.Quest
 }
 ```
 
-### Create Quest Asset
+### Create quest asset
 
 ```
 Assets/_Project/ScriptableObjects/Data/Quest/

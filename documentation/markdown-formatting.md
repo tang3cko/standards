@@ -8,7 +8,7 @@ This document defines Markdown syntax and formatting standards for all technical
 
 ## Headings - P1
 
-### ATX-Style Headings
+### ATX-style headings
 
 **Rule:**
 - Use ATX-style (`#`) headings, not Setext-style (`===` or `---`)
@@ -39,7 +39,7 @@ Second-Level Heading
 
 ---
 
-### Sentence Case
+### Sentence case
 
 **Rule:**
 - Use sentence case for headings (capitalize only the first word and proper nouns)
@@ -63,7 +63,7 @@ Second-Level Heading
 
 ---
 
-### Heading Hierarchy
+### Heading hierarchy
 
 **Rule:**
 - Don't skip heading levels (e.g., H1 → H3)
@@ -97,9 +97,9 @@ Second-Level Heading
 
 ---
 
-## Code Formatting - P1
+## Code formatting - P1
 
-### Code Blocks
+### Code blocks
 
 **Rule:**
 - Use triple backticks (```) for code blocks
@@ -144,7 +144,7 @@ private void Start() {
 
 ---
 
-### Inline Code
+### Inline code
 
 **Rule:**
 - Use single backticks for inline code, class names, methods, variables
@@ -167,7 +167,7 @@ The PlayerHealth class uses the TakeDamage() method. Use `emphasis` for importan
 
 ## Lists - P1
 
-### Unordered Lists
+### Unordered lists
 
 **Rule:**
 - Use `-` (hyphen) for unordered lists, not `*` or `+`
@@ -194,7 +194,7 @@ The PlayerHealth class uses the TakeDamage() method. Use `emphasis` for importan
 
 ---
 
-### Ordered Lists
+### Ordered lists
 
 **Rule:**
 - Use `1.`, `2.`, `3.` for ordered lists
@@ -219,7 +219,7 @@ or
 
 ---
 
-### Serial Comma
+### Serial comma
 
 **Rule:**
 - Use serial comma (Oxford comma) in lists within sentences
@@ -239,7 +239,7 @@ This pattern uses ScriptableObjects, EventChannels and RuntimeSets.
 
 ---
 
-### Task Lists
+### Task lists
 
 **Rule:**
 - Use GitHub-style task lists for checklists
@@ -258,7 +258,7 @@ This pattern uses ScriptableObjects, EventChannels and RuntimeSets.
 
 ## Links - P1
 
-### Descriptive Link Text
+### Descriptive link text
 
 **Rule:**
 - Use descriptive text that explains the link destination
@@ -282,7 +282,7 @@ Read more [here](event-channels.md).
 
 ---
 
-### Internal Links
+### Internal links
 
 **Rule:**
 - Use relative paths for internal documentation links
@@ -305,7 +305,7 @@ Read more [here](event-channels.md).
 
 ---
 
-### External Links
+### External links
 
 **Rule:**
 - Use full URLs for external links
@@ -322,7 +322,7 @@ Read more [here](event-channels.md).
 
 ## Emphasis - P2
 
-### Bold
+### Bold text
 
 **Rule:**
 - Use `**text**` for bold (not `__text__`)
@@ -345,7 +345,7 @@ Use **PascalCase** for **classes** and **camelCase** for **fields**.
 
 ---
 
-### Italic
+### Italic text
 
 **Rule:**
 - Use `*text*` for italic (not `_text_`)
@@ -359,7 +359,7 @@ The *singleton pattern* should be avoided in favor of ScriptableObjects.
 
 ---
 
-### Strikethrough
+### Strikethrough text
 
 **Rule:**
 - Use `~~text~~` for strikethrough (when supported)
@@ -373,9 +373,9 @@ The *singleton pattern* should be avoided in favor of ScriptableObjects.
 
 ---
 
-## Images and Diagrams - P2
+## Images and diagrams - P2
 
-### Image Syntax
+### Image syntax
 
 **Rule:**
 - Use `![alt text](path/to/image.png)` format
@@ -397,7 +397,7 @@ The *singleton pattern* should be avoided in favor of ScriptableObjects.
 
 ---
 
-### Image Guidelines
+### Image guidelines
 
 **P2 Rules:**
 - Optimize image file size (< 1MB recommended)
@@ -421,7 +421,7 @@ The *singleton pattern* should be avoided in favor of ScriptableObjects.
 
 ## Tables - P2
 
-### Basic Table Format
+### Basic table format
 
 **Rule:**
 - Use pipe (`|`) for columns
@@ -440,7 +440,7 @@ The *singleton pattern* should be avoided in favor of ScriptableObjects.
 
 ---
 
-### Table Alignment
+### Table alignment
 
 **Rule:**
 - Use `:` for column alignment
@@ -457,7 +457,7 @@ The *singleton pattern* should be avoided in favor of ScriptableObjects.
 
 ---
 
-## Horizontal Rules - P1
+## Horizontal rules - P1
 
 **Rule:**
 - Use `---` for horizontal rules (three hyphens)
@@ -504,7 +504,7 @@ Content.
 
 ---
 
-## Escaping Characters - P3
+## Escaping characters - P3
 
 **Rule:**
 - Use backslash (`\`) to escape Markdown syntax
@@ -520,7 +520,7 @@ File names should use kebab\-case.
 
 ---
 
-## Line Length - P3
+## Line length - P3
 
 **Rule:**
 - Soft limit: 80-100 characters per line
@@ -534,7 +534,7 @@ File names should use kebab\-case.
 
 ---
 
-## Markdown Linters - P3
+## Markdown linters - P3
 
 **Recommended Tools:**
 - `markdownlint` - Linting and style checking

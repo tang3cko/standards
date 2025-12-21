@@ -1,4 +1,4 @@
-# Coding Standards
+# Coding standards
 
 ## Purpose
 
@@ -46,3 +46,12 @@ git submodule update --init --recursive
 ```bash
 git submodule update --remote docs/standards
 ```
+
+---
+
+## References
+
+- [Google Developer Documentation Style Guide](https://developers.google.com/style)
+- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/)
+- [Unity Manual](https://docs.unity3d.com/Manual/)
+- [C# Coding Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)

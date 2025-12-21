@@ -6,9 +6,9 @@ This document defines standards for writing code examples in documentation. Clea
 
 ---
 
-## Namespace Rules - P1
+## Namespace rules - P1
 
-### Use ProjectName as Placeholder
+### Use ProjectName as placeholder
 
 **Rule:**
 - Always use `ProjectName` as the namespace in code examples
@@ -46,7 +46,7 @@ namespace MyGame.Player
 
 ---
 
-### Namespace Hierarchy
+### Namespace hierarchy
 
 Follow project-agnostic namespace structure:
 
@@ -61,9 +61,9 @@ namespace ProjectName.Utils         // Utility classes
 
 ---
 
-## Code Block Formatting - P1
+## Code block formatting - P1
 
-### Syntax Highlighting
+### Syntax highlighting
 
 **Rule:**
 - Always specify language in code blocks
@@ -90,7 +90,7 @@ public class Example : MonoBehaviour
 
 ---
 
-### Inline Code Formatting
+### Inline code formatting
 
 **Rule:**
 - Use backticks for class names, methods, variables, and technical terms
@@ -102,9 +102,9 @@ Use `PascalCase` for public properties and `camelCase` for private fields. The `
 
 ---
 
-## Good vs Bad Examples - P1
+## Good vs bad examples - P1
 
-### Use Comparison Format
+### Use comparison format
 
 **Rule:**
 - Always show bad examples before good examples
@@ -162,9 +162,9 @@ public class ScoreUI : MonoBehaviour
 
 ---
 
-## Code Comments - P2
+## Code comments - P2
 
-### When to Add Comments
+### When to add comments
 
 **Add comments for:**
 - Non-obvious logic or algorithms
@@ -198,7 +198,7 @@ public class EnemySpawner : MonoBehaviour
 
 ---
 
-### Avoid Obvious Comments
+### Avoid obvious comments
 
 **❌ Bad:**
 
@@ -221,9 +221,9 @@ rb.AddForce(Vector3.forward);
 
 ---
 
-## Context Provision - P1
+## Context provision - P1
 
-### Provide Surrounding Context
+### Provide surrounding context
 
 **Rule:**
 - Don't show isolated snippets without context
@@ -266,9 +266,9 @@ namespace ProjectName.Core
 
 ---
 
-## Complete Examples - P1
+## Complete examples - P1
 
-### Ensure Examples Work
+### Ensure examples work
 
 **Rule:**
 - All code examples must compile
@@ -311,9 +311,9 @@ namespace ProjectName.Data
 
 ---
 
-## XML Documentation - P2
+## XML documentation - P2
 
-### Include XML Docs for Public APIs
+### Include XML docs for public APIs
 
 **Rule:**
 - Use XML documentation comments (`///`) for public classes, methods, and properties
@@ -345,9 +345,9 @@ namespace ProjectName.Utils
 
 ---
 
-## Code Example Categories - P2
+## Code example categories - P2
 
-### Full Class Examples
+### Full class examples
 
 Use for demonstrating complete patterns:
 
@@ -403,7 +403,7 @@ namespace ProjectName.Core
 
 ---
 
-### Snippet Examples
+### Snippet examples
 
 Use for demonstrating specific techniques:
 
@@ -421,7 +421,7 @@ private void Awake()
 
 ---
 
-### Anti-Pattern Examples
+### Anti-pattern examples
 
 Use for showing what NOT to do:
 
@@ -450,9 +450,9 @@ private void UpdateHealthUI(int health)
 
 ---
 
-## Unity-Specific Considerations - P1
+## Unity-specific considerations - P1
 
-### Show Unity Lifecycle Methods
+### Show Unity lifecycle methods
 
 **Rule:**
 - Use correct Unity lifecycle method names
@@ -496,7 +496,7 @@ namespace ProjectName.Core
 
 ---
 
-### Show SerializeField Usage
+### Show SerializeField usage
 
 **Example:**
 

@@ -15,9 +15,9 @@ Implement event-driven architecture using Tang3cko.ReactiveSO for decoupled comm
 
 ---
 
-## EventChannel Pattern - P1
+## EventChannel pattern - P1
 
-### Basic Implementation
+### Basic implementation
 
 ```csharp
 using UnityEngine;
@@ -36,7 +36,7 @@ namespace ProjectName.Quest
 }
 ```
 
-### Event Publisher
+### Event publisher
 
 ```csharp
 using UnityEngine;
@@ -64,7 +64,7 @@ namespace ProjectName.Quest
 }
 ```
 
-### Event Subscriber
+### Event subscriber
 
 ```csharp
 using UnityEngine;
@@ -109,9 +109,9 @@ namespace ProjectName.UI
 
 ---
 
-## EventChannel Types - P1
+## EventChannel types - P1
 
-### Available Types
+### Available types
 
 | EventChannel Type | Use Case | Example |
 |-------------------|----------|---------|
@@ -122,7 +122,7 @@ namespace ProjectName.UI
 | `StringEventChannelSO` | Text data | OnMessageReceived, OnPlayerNameChanged |
 | Custom EventChannel | Complex data | OnEnemyDeath(EnemyData, Position) |
 
-### VoidEventChannel Example
+### VoidEventChannel example
 
 ```csharp
 // Definition
@@ -151,7 +151,7 @@ private void HandleGameStart()
 }
 ```
 
-### IntEventChannel Example
+### IntEventChannel example
 
 ```csharp
 // Publisher
@@ -177,7 +177,7 @@ private void HandleCoinEarned(int amount)
 }
 ```
 
-### Enum Events (Use IntEventChannel)
+### Enum events (use IntEventChannel)
 
 ```csharp
 // Definition
@@ -227,7 +227,7 @@ private void HandleGameEnd(int reasonInt)
 
 ## Benefits - P1
 
-### Complete Decoupling
+### Complete decoupling
 
 ```csharp
 // EnemyHealth doesn't know who cares about enemy deaths
@@ -249,7 +249,7 @@ public class EnemyHealth : MonoBehaviour
 // ParticleManager: spawns death effect
 ```
 
-### Multiple Subscribers
+### Multiple subscribers
 
 ```csharp
 // Subscriber 1: Stats tracking
@@ -305,7 +305,7 @@ public class AudioManager : MonoBehaviour
 }
 ```
 
-### Inspector Visibility
+### Inspector visibility
 
 EventChannels are ScriptableObject assets, making event flow visible:
 
@@ -323,9 +323,9 @@ You can:
 
 ---
 
-## Practical Example - P1
+## Practical example - P1
 
-### Complete Enemy Death System
+### Complete enemy death system
 
 ```csharp
 using UnityEngine;

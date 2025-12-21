@@ -17,9 +17,9 @@ Define a unified base class pattern for interactable objects in Mirror Networkin
 
 ---
 
-## Base Class Design - P1
+## Base class design - P1
 
-### Design Philosophy
+### Design philosophy
 
 The `useServerAuthority` flag allows switching between local processing and Server Authority in a unified base class.
 
@@ -103,9 +103,9 @@ namespace ProjectName.Interaction
 
 ---
 
-## Server Authority Example - P1
+## Server authority example - P1
 
-### Collectible Item (Mushroom)
+### Collectible item (mushroom)
 
 ```csharp
 using UnityEngine;
@@ -162,9 +162,9 @@ namespace ProjectName.Quest
 
 ---
 
-## Local-Only Example - P1
+## Local-only example - P1
 
-### Receptionist NPC (UI Trigger)
+### Receptionist NPC (UI trigger)
 
 ```csharp
 using UnityEngine;
@@ -202,7 +202,7 @@ namespace ProjectName.Lobby
 
 ---
 
-## Networked Door Example - P1
+## Networked door example - P1
 
 ```csharp
 using Mirror;
@@ -270,7 +270,7 @@ namespace ProjectName.Environment
 
 ---
 
-## Networked Chest Example - P1
+## Networked chest example - P1
 
 ```csharp
 using Mirror;
@@ -360,7 +360,7 @@ namespace ProjectName.Loot
 
 ---
 
-## When to Use Each Mode - P1
+## When to use each mode - P1
 
 ### Use Server Authority (useServerAuthority = true)
 
@@ -372,7 +372,7 @@ namespace ProjectName.Loot
 
 **Why:** Server validates, prevents cheating, ensures consistency
 
-### Use Local-Only (useServerAuthority = false)
+### Use local-only (useServerAuthority = false)
 
 - UI triggers (NPC dialogue, shop, quest board)
 - Local player settings
@@ -384,9 +384,9 @@ namespace ProjectName.Loot
 
 ---
 
-## Best Practices - P1
+## Best practices - P1
 
-### Validate on Server
+### Validate on server
 
 ```csharp
 protected override void OnInteractServer(uint interactorNetId)
@@ -403,7 +403,7 @@ protected override void OnInteractServer(uint interactorNetId)
 }
 ```
 
-### Use EventChannels for Decoupling
+### Use EventChannels for decoupling
 
 ```csharp
 // ✅ Good: Raise EventChannel instead of direct calls
@@ -420,7 +420,7 @@ protected override void OnInteractServer(uint interactorNetId)
 }
 ```
 
-### Separate Server and Client Logic
+### Separate server and client logic
 
 ```csharp
 // ✅ Good: Clear separation
