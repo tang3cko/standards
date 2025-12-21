@@ -25,7 +25,7 @@ SyncVar automatically synchronizes values from server to clients, including late
 ```csharp
 using Mirror;
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Player
 {
@@ -138,7 +138,7 @@ private QuestSO selectedQuest; // Won't work!
 using Mirror;
 using UnityEngine;
 using System.Collections.Generic;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {
@@ -236,7 +236,7 @@ private void OnValueChanged(int oldValue, int newValue)
 
 ```csharp
 using Mirror;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Game
 {
@@ -291,7 +291,7 @@ private void RpcShowEffect(Vector3 position, EffectType effectType)
 
 ```csharp
 using Mirror;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {

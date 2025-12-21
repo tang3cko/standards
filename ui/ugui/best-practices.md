@@ -313,7 +313,7 @@ private void Start()
 ```csharp
 using UnityEngine;
 using UnityEngine.UI;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
@@ -493,7 +493,7 @@ private void RpcShowDamage(int damage)
 ```csharp
 using UnityEngine;
 using TMPro;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {

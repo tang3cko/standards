@@ -44,7 +44,7 @@ Define implementation patterns for uGUI World Space Canvas to display UI element
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
@@ -165,7 +165,7 @@ GameObject (World Space UI)
 ```csharp
 using UnityEngine;
 using TMPro;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
@@ -257,7 +257,7 @@ namespace ProjectName.UI
 ```csharp
 using UnityEngine;
 using UnityEngine.UI;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
@@ -340,7 +340,7 @@ namespace ProjectName.UI
 ```csharp
 using UnityEngine;
 using UnityEngine.UI;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {

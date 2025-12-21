@@ -109,7 +109,7 @@ namespace ProjectName.Interaction
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {
@@ -168,7 +168,7 @@ namespace ProjectName.Quest
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Lobby
 {
@@ -207,7 +207,7 @@ namespace ProjectName.Lobby
 ```csharp
 using Mirror;
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Environment
 {
@@ -275,7 +275,7 @@ namespace ProjectName.Environment
 ```csharp
 using Mirror;
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Loot
 {
