@@ -1,17 +1,8 @@
-# Code Examples
+# Code examples
 
 ## Purpose
 
 This document defines standards for writing code examples in documentation. Clear, consistent code examples improve understanding and reduce ambiguity across all projects.
-
-## Checklist
-
-- [ ] Use `ProjectName` namespace for all examples
-- [ ] Include both good (✅) and bad (❌) examples when showing patterns
-- [ ] Add inline comments to explain non-obvious code
-- [ ] Use syntax highlighting with language specifiers
-- [ ] Provide context for code snippets
-- [ ] Ensure all examples compile and follow coding standards
 
 ---
 
@@ -539,21 +530,6 @@ namespace ProjectName.UI
     }
 }
 ```
-
----
-
-## Verification Checklist
-
-Before publishing documentation with code examples:
-
-- [ ] All examples use `ProjectName` namespace
-- [ ] Code blocks specify language (e.g., ```csharp)
-- [ ] Good/bad examples use ✅/❌ emoji consistently
-- [ ] Examples include necessary using statements
-- [ ] Code compiles without errors
-- [ ] Inline comments explain non-obvious logic
-- [ ] Unity-specific behavior is documented
-- [ ] Examples follow coding standards
 
 ---
 

@@ -1,18 +1,8 @@
-# Markdown Formatting
+# Markdown formatting
 
 ## Purpose
 
 This document defines Markdown syntax and formatting standards for all technical documentation. Consistent Markdown usage ensures readability, maintainability, and proper rendering across different platforms.
-
-## Checklist
-
-- [ ] Use ATX-style headings (`#`, `##`, `###`)
-- [ ] Apply sentence case to headings
-- [ ] Specify language in code blocks
-- [ ] Use backticks for inline code and technical terms
-- [ ] Use serial comma in lists
-- [ ] Use descriptive link text (avoid "click here")
-- [ ] Add alt text to all images
 
 ---
 
@@ -557,22 +547,6 @@ File names should use kebab\-case.
 - MD004: Unordered list style (dash)
 - MD022: Headings should be surrounded by blank lines
 - MD031: Fenced code blocks should be surrounded by blank lines
-
----
-
-## Verification Checklist
-
-Before publishing Markdown documentation:
-
-- [ ] All headings use ATX-style with sentence case
-- [ ] Code blocks specify language identifiers
-- [ ] Inline code used for technical terms
-- [ ] Lists use consistent formatting
-- [ ] Links use descriptive text
-- [ ] Images include alt text
-- [ ] Horizontal rules separate major sections
-- [ ] No unnecessary bold or emphasis
-- [ ] Serial comma used in lists
 
 ---
 

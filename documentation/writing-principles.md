@@ -1,18 +1,8 @@
-# Writing Principles
+# Writing principles
 
 ## Purpose
 
 This document defines voice, tone, grammar, and style guidelines for technical documentation. Following these principles ensures documentation is clear, accessible, and professional across all projects.
-
-## Checklist
-
-- [ ] Use active voice instead of passive voice
-- [ ] Address the reader as "you" (second person)
-- [ ] Use serial comma in lists
-- [ ] Write in English with clear, concise language
-- [ ] Follow accessibility best practices (headings, alt text, contrast)
-- [ ] Use inclusive language (avoid ableist terms)
-- [ ] Keep sentences short and simple
 
 ---
 
@@ -522,23 +512,6 @@ The method executes in 5 ms.
 
 Target frame rate is 60 FPS.
 ```
-
----
-
-## Verification Checklist
-
-Before publishing documentation:
-
-- [ ] Used active voice throughout
-- [ ] Addressed reader as "you" (second person)
-- [ ] Used serial comma in lists
-- [ ] Wrote in clear, concise English
-- [ ] Proper heading hierarchy for accessibility
-- [ ] Alt text provided for all images
-- [ ] Avoided ableist and non-inclusive language
-- [ ] Used blocklist/allowlist (not blacklist/whitelist)
-- [ ] Short paragraphs and sentences
-- [ ] Consistent terminology throughout
 
 ---
 

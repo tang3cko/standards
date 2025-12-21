@@ -1,26 +1,16 @@
-# File Organization
+# File organization
 
 ## Purpose
 
 This document defines standards for file naming, directory structure, and version control practices for documentation. Consistent file organization improves discoverability, maintainability, and collaboration across all projects.
 
-## Checklist
-
-- [ ] Use kebab-case for file names
-- [ ] Keep file names under 30 characters
-- [ ] Avoid spaces and special characters in file names
-- [ ] Organize files by type or feature
-- [ ] Keep directory hierarchy shallow (max 3-4 levels)
-- [ ] Maintain CHANGELOG.md for significant updates
-- [ ] Use Git for version history (avoid "Last Updated" sections)
-
 ---
 
-## File Naming - P1
+## File naming - P1
 
-### Kebab-Case Convention
+### Kebab-case convention
 
-**Rule:**
+**Rules:**
 - Use lowercase letters with hyphens (`kebab-case`)
 - No spaces, underscores, or camelCase
 - Use descriptive names that indicate content
@@ -45,9 +35,9 @@ UI-Toolkit-Best-Practices.MD
 
 ---
 
-### File Name Length
+### File name length
 
-**Rule:**
+**Rules:**
 - Keep file names under 30 characters (excluding extension)
 - Use abbreviations sparingly and only when widely understood
 - Prioritize clarity over brevity
@@ -69,9 +59,9 @@ err-hdl.md                                           (7 chars - unclear)
 
 ---
 
-### Special Characters
+### Special characters
 
-**Rule:**
+**Rules:**
 - Avoid spaces, underscores, and special characters
 - Do not use: `!@#$%^&*()+=[]{}|;:'",<>?/\`
 - Exception: Use `-` (hyphen) as word separator
@@ -93,9 +83,9 @@ architecture (v2).md
 
 ---
 
-### File Extensions
+### File extensions
 
-**Rule:**
+**Rules:**
 - Use `.md` for Markdown documentation
 - Use `.json` for JSON configuration
 - Use `.yaml` or `.yml` for YAML configuration
@@ -103,42 +93,35 @@ architecture (v2).md
 
 ---
 
-## Directory Structure - P1
+## Directory structure - P1
 
-### Type-Based Organization
+### Type-based organization
 
-**Rule:**
+**Rules:**
 - Organize files by type or topic
 - Keep related files together
 - Use clear, descriptive directory names
 
-**Example Structure:**
+**Example structure:**
 
 ```
 docs/
-├── 00_spec/              # Specifications
-│   ├── features/
-│   └── clarifications/
-├── 01_overview/          # Project overview
-├── 02_game_design/       # Game design documents
-├── 03_technical/         # Technical documentation
-│   ├── coding_standards/
-│   │   ├── core/
-│   │   ├── architecture/
-│   │   ├── ui/
-│   │   ├── documentation/
-│   │   └── examples/
-│   └── architecture.md
-├── 98_plans/             # Implementation plans
-│   └── tasks/
-└── 99_ideas/             # Ideas and brainstorming
+├── 00_overview/           # Project overview and terminology
+├── 01_architecture/       # Architecture decisions
+├── 02_game-design/        # Game design documents (optional)
+├── 03_development/        # Development guides
+│   └── testing/           # Testing guidelines
+├── 04_designs/            # UI/UX designs (optional)
+├── 05_standards/          # Shared coding standards (Git submodule)
+├── 98_plans/              # Implementation plans (optional)
+└── 99_ideas/              # Ideas and exploration (optional)
 ```
 
 ---
 
-### Shallow Hierarchy
+### Shallow hierarchy
 
-**Rule:**
+**Rules:**
 - Limit directory depth to 3-4 levels maximum
 - Avoid deeply nested structures
 - Use flat structures when possible
@@ -146,7 +129,7 @@ docs/
 **✅ Good:**
 
 ```
-docs/03_technical/coding_standards/core/naming-conventions.md  (4 levels)
+docs/05_standards/unity/core/naming-conventions.md  (4 levels)
 ```
 
 **❌ Bad:**
@@ -157,167 +140,38 @@ docs/technical/standards/coding/unity/csharp/core/naming/conventions.md  (9 leve
 
 ---
 
-### Index Files
+### Index files
 
-**Rule:**
-- Use `README.md` as the index for each directory
+**Rules:**
+- Use `README.md` as the index for top-level `docs/` directories (e.g., `00_overview/`, `01_architecture/`)
+- Do NOT create README.md for subdirectories (e.g., `mockups/`, `images/`, `test/`)
 - README should provide overview and navigation
 - Link to subdirectories and key files
 
 **Example:**
 
 ```markdown
-# Core Coding Standards
+# Coding standards
 
 ## Purpose
 
-This directory contains core coding standards applicable to all Unity projects.
+This directory contains coding standards applicable to all projects.
 
 ## Contents
 
-- [Naming Conventions](naming-conventions.md)
-- [Code Organization](code-organization.md)
-- [Error Handling](error-handling.md)
-- [Performance](performance.md)
+- [Naming conventions](naming-conventions.md)
+- [Code organization](code-organization.md)
+- [Error handling](error-handling.md)
+- [Testing guidelines](testing-guidelines.md)
 ```
 
 ---
 
-## Version Control - P2
+## Directory naming - P1
 
-### Git as Source of Truth
+### Kebab-case for directories
 
-**Rule:**
-- Use Git commit history for tracking changes
-- Avoid "Last Updated" or "Version" sections in documents
-- Exception: YAML frontmatter for publishing systems
-
-**✅ Good:**
-
-```bash
-# View document history
-git log --follow docs/03_technical/coding_standards/core/naming-conventions.md
-
-# View specific changes
-git diff HEAD~1 docs/03_technical/coding_standards/core/naming-conventions.md
-```
-
-**❌ Bad:**
-
-```markdown
-# Naming Conventions
-
-**Last Updated:** 2025-01-15
-**Version:** 1.2.3
-
-## Purpose
-...
-```
-
----
-
-### CHANGELOG.md
-
-**Rule:**
-- Maintain `CHANGELOG.md` at project root for significant updates
-- Follow [Keep a Changelog](https://keepachangelog.com/) format
-- Use Semantic Versioning for releases
-
-**Example:**
-
-```markdown
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
-
-### Added
-- Documentation writing guide with 5 core documents
-
-### Changed
-- Restructured coding standards into shared submodule
-
-### Deprecated
-- Old singleton-based patterns
-
-### Removed
-- Redundant UI standards documentation
-
-### Fixed
-- Broken links in architecture documentation
-
-## [1.0.0] - 2025-01-15
-
-### Added
-- Initial coding standards documentation
-- EventChannel pattern examples
-- ScriptableObject best practices
-```
-
----
-
-### Semantic Versioning
-
-**Rule:**
-- Use `MAJOR.MINOR.PATCH` format
-- MAJOR: Breaking changes or major restructuring
-- MINOR: New content or non-breaking additions
-- PATCH: Fixes, typos, minor clarifications
-
-**Examples:**
-- `1.0.0` - Initial release
-- `1.1.0` - Added new documentation section
-- `1.1.1` - Fixed typos and broken links
-- `2.0.0` - Major restructure of documentation
-
----
-
-## File Metadata - P3
-
-### YAML Frontmatter
-
-**Rule:**
-- Use YAML frontmatter for metadata when needed by publishing tools
-- Place at the very beginning of the document
-- Keep minimal and relevant
-
-**Example:**
-
-```markdown
----
-title: Naming Conventions
-date: 2025-01-15
-author: Development Team
-status: Active
-version: 1.0.0
-tags: [coding-standards, naming, conventions]
----
-
-# Naming conventions
-
-## Purpose
-...
-```
-
-**Common Fields:**
-- `title`: Document title
-- `date`: Creation or publication date (YYYY-MM-DD)
-- `author`: Author or team name
-- `status`: Active, Draft, Deprecated, Archived
-- `version`: Semantic version number
-- `tags`: Array of relevant tags
-
----
-
-## Directory Naming - P1
-
-### Kebab-Case for Directories
-
-**Rule:**
+**Rules:**
 - Use kebab-case for directory names
 - Keep names short and descriptive
 - Use numbers for ordering when needed
@@ -326,13 +180,12 @@ tags: [coding-standards, naming, conventions]
 
 ```
 docs/
-├── 00_spec/
-├── 01_overview/
-├── 02_game_design/
-├── 03_technical/
-│   ├── coding_standards/
-│   │   ├── documentation/
-│   │   └── examples/
+├── 00_overview/
+├── 01_architecture/
+├── 02_game-design/
+├── 03_development/
+│   ├── coding-standards/
+│   └── testing/
 ```
 
 **❌ Bad:**
@@ -347,32 +200,148 @@ docs/
 
 ---
 
-### Numbered Prefixes
+### Numbered prefixes
 
-**Rule:**
+**Rules:**
 - Use numbered prefixes for enforcing order
-- Format: `00_`, `01_`, `02_`, etc.
+- Format: `00_`, `01_`, `02_`, etc. (two digits with underscore)
 - Use for sequential or priority-based organization
 
 **Example:**
 
 ```
 docs/
-├── 00_spec/           # First: Specifications
-├── 01_overview/       # Second: Overview
-├── 02_game_design/    # Third: Game Design
-├── 03_technical/      # Fourth: Technical
-├── 98_plans/          # Near-end: Plans
-└── 99_ideas/          # Last: Ideas
+├── 00_overview/
+├── 01_architecture/
+├── 02_game-design/
+├── 03_development/
+├── 04_designs/
+├── 05_standards/
+├── 98_plans/
+└── 99_ideas/
 ```
 
 ---
 
-## Asset Organization - P2
+## Version control - P2
 
-### Documentation Assets
+### Git as source of truth
 
-**Rule:**
+**Rules:**
+- Use Git commit history for tracking changes
+- Avoid "Last Updated" or "Version" sections in documents
+- Exception: YAML frontmatter for publishing systems
+
+**✅ Good:**
+
+```bash
+# View document history
+git log --follow docs/05_standards/unity/core/naming-conventions.md
+
+# View specific changes
+git diff HEAD~1 docs/05_standards/unity/core/naming-conventions.md
+```
+
+**❌ Bad:**
+
+```markdown
+# Naming conventions
+
+**Last Updated:** 2025-01-15
+**Version:** 1.2.3
+
+## Purpose
+...
+```
+
+---
+
+### CHANGELOG.md
+
+**Rules:**
+- Maintain `CHANGELOG.md` at project root for significant updates
+- Follow [Keep a Changelog](https://keepachangelog.com/) format
+- Use semantic versioning for releases
+
+**Example:**
+
+```markdown
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- Documentation writing guide
+
+### Changed
+- Restructured coding standards into shared submodule
+
+## [1.0.0] - 2025-01-15
+
+### Added
+- Initial coding standards documentation
+```
+
+---
+
+## Cross-project reusability - P1
+
+### Shared documentation repositories
+
+**Rules:**
+- Use Git submodules for shared documentation
+- Keep shared content project-agnostic
+- Use `ProjectName` placeholder in examples
+
+**Example:**
+
+```
+project-a/
+└── docs/
+    └── 05_standards/  (Git submodule)
+
+project-b/
+└── docs/
+    └── 05_standards/  (Same submodule)
+```
+
+---
+
+### Submodule configuration
+
+**`.gitmodules` example:**
+
+```ini
+[submodule "docs/05_standards"]
+    path = docs/05_standards
+    url = https://github.com/tang3cko/coding-standards.git
+```
+
+**Commands:**
+
+```bash
+# Add submodule
+git submodule add https://github.com/tang3cko/coding-standards.git docs/05_standards
+
+# Update submodule
+git submodule update --remote docs/05_standards
+
+# Clone project with submodules
+git clone --recursive https://github.com/tang3cko/[project].git
+```
+
+---
+
+## Asset organization - P2
+
+### Documentation assets
+
+**Rules:**
 - Store images in `images/` or `assets/` subdirectory
 - Use descriptive file names for assets
 - Keep asset files close to referencing documents
@@ -380,7 +349,7 @@ docs/
 **Example:**
 
 ```
-docs/03_technical/coding_standards/architecture/
+docs/architecture/
 ├── event-channels.md
 ├── images/
 │   ├── event-channel-flow.png
@@ -390,75 +359,25 @@ docs/03_technical/coding_standards/architecture/
 
 ---
 
-### Asset File Size
+### Asset file size
 
-**P2 Guidelines:**
-- Images: < 1MB per file
+**P2 guidelines:**
+- Images: < 1 MB per file
 - Diagrams: Prefer SVG when possible
 - Screenshots: Optimize PNG compression
 
-**P3 Guidelines:**
+**P3 guidelines:**
 - Use lossy compression for photos (JPEG 80-90% quality)
 - Use lossless compression for diagrams (PNG)
 - Consider WebP format for modern browsers
 
 ---
 
-## Cross-Project Reusability - P1
+## Archiving and deprecation - P3
 
-### Shared Documentation Repositories
+### Marking deprecated documents
 
-**Rule:**
-- Use Git submodules for shared documentation
-- Keep shared content project-agnostic
-- Use `ProjectName` placeholder in examples
-
-**Example:**
-
-```
-ProjectA/
-└── docs/
-    └── 03_technical/
-        └── coding_standards/  (Git submodule)
-
-ProjectB/
-└── docs/
-    └── 03_technical/
-        └── coding_standards/  (Same submodule)
-```
-
----
-
-### Submodule Configuration
-
-**`.gitmodules` Example:**
-
-```ini
-[submodule "docs/03_technical/coding_standards"]
-    path = docs/03_technical/coding_standards
-    url = https://github.com/your-org/coding-standards.git
-```
-
-**Commands:**
-
-```bash
-# Add submodule
-git submodule add https://github.com/your-org/coding-standards.git docs/03_technical/coding_standards
-
-# Update submodule
-git submodule update --remote docs/03_technical/coding_standards
-
-# Clone project with submodules
-git clone --recursive https://github.com/your-org/project.git
-```
-
----
-
-## Archiving and Deprecation - P3
-
-### Marking Deprecated Documents
-
-**Rule:**
+**Rules:**
 - Add deprecation notice at the top
 - Link to replacement document
 - Keep file accessible for reference
@@ -466,20 +385,20 @@ git clone --recursive https://github.com/your-org/project.git
 **Example:**
 
 ```markdown
-# Old Architecture Pattern
+# Legacy authentication
 
-> **⚠️ DEPRECATED:** This document is deprecated as of 2025-01-15. See [Event-Driven Architecture](event-channels.md) for the current approach.
+> **Deprecated:** This document is deprecated as of 2025-01-15. See [OAuth 2.0 guide](oauth2-guide.md) for the current approach.
 
 ## Purpose
 
-This document describes the legacy architecture pattern...
+This document describes the legacy authentication pattern...
 ```
 
 ---
 
-### Moving to Archive
+### Moving to archive
 
-**Rule:**
+**Rules:**
 - Create `archive/` directory for old documents
 - Move deprecated files instead of deleting
 - Update links to archived files
@@ -487,30 +406,13 @@ This document describes the legacy architecture pattern...
 **Example:**
 
 ```
-docs/03_technical/
-├── coding_standards/
-│   ├── archive/
-│   │   ├── old-singleton-pattern.md
-│   │   └── legacy-ui-guidelines.md
-│   ├── core/
-│   └── architecture/
+docs/
+├── guides/
+├── reference/
+├── archive/
+│   ├── legacy-auth.md
+│   └── old-api-v1.md
 ```
-
----
-
-## Verification Checklist
-
-Before committing documentation files:
-
-- [ ] File names use kebab-case
-- [ ] File names are under 30 characters
-- [ ] No spaces or special characters in file names
-- [ ] Directory structure is shallow (max 3-4 levels)
-- [ ] README.md exists in major directories
-- [ ] Git history used instead of "Last Updated" sections
-- [ ] CHANGELOG.md updated for significant changes
-- [ ] Assets organized in dedicated subdirectories
-- [ ] Deprecated documents marked clearly
 
 ---
 
@@ -518,5 +420,5 @@ Before committing documentation files:
 
 - [Keep a Changelog](https://keepachangelog.com/)
 - [Semantic Versioning](https://semver.org/)
-- [Git Submodules Documentation](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
-- [GitHub Documentation Best Practices](https://github.blog/2021-11-18-repository-structure-best-practices/)
+- [Git Submodules documentation](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
+- [GitHub repository structure best practices](https://github.blog/2021-11-18-repository-structure-best-practices/)
