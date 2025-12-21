@@ -16,6 +16,30 @@ This repository contains shared coding standards for Tang3cko projects. Add it a
 
 ---
 
+## Claude Code skills
+
+Reusable skills for Claude Code. Link these to your project's `.claude/skills/` directory.
+
+| Skill | Description |
+|-------|-------------|
+| [unity-csharp](skills/unity-csharp/) | Unity C# naming, architecture, performance |
+| [mirror-networking](skills/mirror-networking/) | Mirror multiplayer patterns |
+| [unity-ui](skills/unity-ui/) | UI Toolkit, uGUI, accessibility |
+| [unity-testing](skills/unity-testing/) | NUnit, FIRST principles, test patterns |
+| [documentation](skills/documentation/) | Technical writing standards |
+
+### Usage
+
+```bash
+# Link a skill to your project
+ln -s /path/to/coding_standards/skills/unity-csharp .claude/skills/unity-csharp
+
+# Or if using as submodule
+ln -s docs/standards/skills/unity-csharp .claude/skills/unity-csharp
+```
+
+---
+
 ## Priority levels
 
 Each standard uses priority levels to indicate importance:
