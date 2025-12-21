@@ -166,7 +166,7 @@ private void Update()
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Core
 {

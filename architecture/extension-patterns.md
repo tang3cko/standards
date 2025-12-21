@@ -177,7 +177,7 @@ Follow these patterns consistently:
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Item
 {
@@ -187,7 +187,7 @@ namespace ProjectName.Item
     [CreateAssetMenu(fileName = "ItemEventChannel", menuName = "ProjectName/Events/Item Event Channel")]
     public class ItemEventChannelSO : EventChannelSO<ItemSO>
     {
-        // Tang3cko.EventChannels base class provides all functionality
+        // Tang3cko.ReactiveSO base class provides all functionality
     }
 }
 ```
@@ -207,7 +207,7 @@ Assets/_Project/ScriptableObjects/Events/Item/
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Item
 {
@@ -431,7 +431,7 @@ namespace ProjectName.Enemy
 ```csharp
 using UnityEngine;
 using UnityEngine.UIElements;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {

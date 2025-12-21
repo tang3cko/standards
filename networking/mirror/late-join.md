@@ -61,7 +61,7 @@ Maintain EventChannel decoupling while supporting late join.
 using Mirror;
 using UnityEngine;
 using System.Collections.Generic;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {

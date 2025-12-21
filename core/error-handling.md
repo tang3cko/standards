@@ -294,7 +294,7 @@ public void DealDamage(int damage)
 ```csharp
 using UnityEngine;
 using UnityEngine.Assertions;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {

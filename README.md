@@ -49,7 +49,7 @@ Architecture based on ScriptableObject and event-driven design. **The foundation
 | File | Key Topics | Priority |
 |------|-----------|----------|
 | [scriptableobject.md](architecture/scriptableobject.md) | SO-driven architecture, data assets | 🔴 Must Read |
-| [event-channels.md](architecture/event-channels.md) | Tang3cko.EventChannels, decoupling | 🔴 Must Read |
+| [event-channels.md](architecture/event-channels.md) | Tang3cko.ReactiveSO, decoupling | 🔴 Must Read |
 | [variables.md](architecture/variables.md) | Reactive variables, auto-notification | 🟡 Recommended |
 | [runtime-sets.md](architecture/runtime-sets.md) | Dynamic object collections | 🟡 Recommended |
 | [dependency-management.md](architecture/dependency-management.md) | Dependency injection priorities | 🟢 Reference |

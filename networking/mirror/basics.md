@@ -35,7 +35,7 @@ The server is the single source of truth. Clients request actions, server valida
 
 ```csharp
 using Mirror;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {
@@ -225,7 +225,7 @@ namespace ProjectName.Quest
 
 ```csharp
 using Mirror;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {
@@ -257,7 +257,7 @@ namespace ProjectName.Quest
 
 ```csharp
 using Mirror;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {

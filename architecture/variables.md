@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Implement reactive state management using Tang3cko.EventChannels Variables for automatic event notification when values change.
+Implement reactive state management using Tang3cko.ReactiveSO Variables for automatic event notification when values change.
 
 ## Checklist
 
@@ -102,7 +102,7 @@ Select IntVariableSO asset → Assign IntEventChannelSO in "On Value Changed" fi
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Core
 {
@@ -139,7 +139,7 @@ namespace ProjectName.Core
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
@@ -294,7 +294,7 @@ Use `on + PastTense` form:
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Core
 {
@@ -343,7 +343,7 @@ namespace ProjectName.Core
 ```csharp
 using UnityEngine;
 using UnityEngine.UI;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {

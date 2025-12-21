@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Implement event-driven architecture using Tang3cko.EventChannels for decoupled communication between game systems.
+Implement event-driven architecture using Tang3cko.ReactiveSO for decoupled communication between game systems.
 
 ## Checklist
 
@@ -21,7 +21,7 @@ Implement event-driven architecture using Tang3cko.EventChannels for decoupled c
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {
@@ -31,7 +31,7 @@ namespace ProjectName.Quest
     [CreateAssetMenu(fileName = "QuestEventChannel", menuName = "ProjectName/Events/Quest Event Channel")]
     public class QuestEventChannelSO : EventChannelSO<QuestSO>
     {
-        // Tang3cko.EventChannels base class provides all functionality
+        // Tang3cko.ReactiveSO base class provides all functionality
     }
 }
 ```
@@ -40,7 +40,7 @@ namespace ProjectName.Quest
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {
@@ -68,7 +68,7 @@ namespace ProjectName.Quest
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
@@ -329,7 +329,7 @@ You can:
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Enemy
 {

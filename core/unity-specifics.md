@@ -393,7 +393,7 @@ public class InitializationExample : MonoBehaviour
 ### OnEnable vs OnDisable for Events
 
 ```csharp
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Player
 {

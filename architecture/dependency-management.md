@@ -44,7 +44,7 @@ Team development considerations:
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Enemy
 {
@@ -323,7 +323,7 @@ public class UIManager : MonoBehaviour
 
 **After (SerializeField + EventChannel):**
 ```csharp
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 public class UIManager : MonoBehaviour
 {

@@ -127,7 +127,7 @@ Always reference USS files at the top of UXML:
 ```csharp
 using UnityEngine;
 using UnityEngine.UIElements;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
@@ -205,7 +205,7 @@ namespace ProjectName.UI
 ```csharp
 using UnityEngine;
 using UnityEngine.UIElements;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
@@ -294,7 +294,7 @@ namespace ProjectName.UI
 ```csharp
 using UnityEngine;
 using UnityEngine.UIElements;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 using System.Collections.Generic;
 
 namespace ProjectName.UI

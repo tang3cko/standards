@@ -37,7 +37,7 @@ namespace ProjectName.Data        // ScriptableObject definitions
 ```csharp
 using UnityEngine;
 using Mirror;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {
@@ -206,7 +206,7 @@ public enum QuestType
 ```csharp
 using UnityEngine;
 using System.Collections.Generic;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Category
 {

@@ -28,7 +28,7 @@ This document defines standards for writing code examples in documentation. Clea
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Core
 {
@@ -250,7 +250,7 @@ onHealthChanged?.RaiseEvent(currentHealth);
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Core
 {
@@ -289,7 +289,7 @@ namespace ProjectName.Core
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Data
 {
@@ -362,7 +362,7 @@ Use for demonstrating complete patterns:
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Core
 {
@@ -511,7 +511,7 @@ namespace ProjectName.Core
 
 ```csharp
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {

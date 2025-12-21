@@ -32,7 +32,7 @@ Client Request → Server Validation → Server Execution → Client Notificatio
 ```csharp
 using Mirror;
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Combat
 {
@@ -115,7 +115,7 @@ namespace ProjectName.Combat
 ```csharp
 using Mirror;
 using UnityEngine;
-using Tang3cko.EventChannels;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Quest
 {
