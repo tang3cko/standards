@@ -1,12 +1,14 @@
-# Coding standards
+# Tang3cko Standards
 
 ## Purpose
 
-This repository contains shared coding standards for Tang3cko projects. Add it as a Git submodule to maintain consistency across repositories.
+Shared standards and Claude Code skills for Tang3cko projects. Add as a Git submodule to maintain consistency across repositories.
 
 ---
 
-## Standards
+## Contents
+
+### Standards
 
 | Directory | Description |
 |-----------|-------------|
@@ -14,11 +16,7 @@ This repository contains shared coding standards for Tang3cko projects. Add it a
 | [repository/](repository/) | Repository setup standards |
 | [unity/](unity/) | Unity and C# coding standards |
 
----
-
-## Claude Code skills
-
-Reusable skills for Claude Code. Link these to your project's `.claude/skills/` directory.
+### Claude Code skills
 
 | Skill | Description |
 |-------|-------------|
@@ -28,15 +26,37 @@ Reusable skills for Claude Code. Link these to your project's `.claude/skills/` 
 | [unity-testing](skills/unity-testing/) | NUnit, FIRST principles, test patterns |
 | [documentation](skills/documentation/) | Technical writing standards |
 
-### Usage
+---
+
+## Installation
 
 ```bash
-# Link a skill to your project
-ln -s /path/to/coding_standards/skills/unity-csharp .claude/skills/unity-csharp
+# Add as submodule
+git submodule add https://github.com/tang3cko/coding-standards.git docs/standards
 
-# Or if using as submodule
-ln -s docs/standards/skills/unity-csharp .claude/skills/unity-csharp
+# Clone with submodules
+git clone --recurse-submodules <your-project-url>
+
+# Initialize submodules in existing clone
+git submodule update --init --recursive
 ```
+
+---
+
+## Skills setup
+
+Link skills to enable automatic context loading in Claude Code.
+
+```bash
+# Create skills directory
+mkdir -p .claude/skills
+
+# Link skills (adjust path based on submodule location)
+ln -s ../../docs/standards/skills/unity-csharp .claude/skills/unity-csharp
+ln -s ../../docs/standards/skills/documentation .claude/skills/documentation
+```
+
+See [repository/setup.md](repository/setup.md) for detailed setup instructions.
 
 ---
 
@@ -47,21 +67,6 @@ Each standard uses priority levels to indicate importance:
 - **P1 (Required)**: Must be followed
 - **P2 (Recommended)**: Should be followed when possible
 - **P3 (Optional)**: Nice-to-have
-
----
-
-## Installation
-
-```bash
-# Add as submodule
-git submodule add https://github.com/user/coding-standards.git docs/standards
-
-# Clone with submodules
-git clone --recurse-submodules <your-project-url>
-
-# Initialize submodules in existing clone
-git submodule update --init --recursive
-```
 
 ---
 
@@ -79,3 +84,4 @@ git submodule update --remote docs/standards
 - [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/)
 - [Unity Manual](https://docs.unity3d.com/Manual/)
 - [C# Coding Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
+- [Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills)
