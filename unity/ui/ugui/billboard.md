@@ -16,9 +16,9 @@ Implement camera billboard behavior for World Space UI elements to ensure they a
 
 ---
 
-## When to Use Billboard - P1
+## When to use billboard - P1
 
-### Recommended Use Cases
+### Recommended use cases
 
 - **Player name plates** - Always readable text above players
 - **NPC name plates** - Character names in 3D space
@@ -26,7 +26,7 @@ Implement camera billboard behavior for World Space UI elements to ensure they a
 - **Enemy HP bars** - Health bars above enemies
 - **Floating damage numbers** - Damage popups
 
-### When Not to Use
+### When not to use
 
 - **Static UI elements** - Signs, billboards in-world
 - **Directional indicators** - Arrows pointing to objectives
@@ -34,7 +34,7 @@ Implement camera billboard behavior for World Space UI elements to ensure they a
 
 ---
 
-## Basic Billboard Pattern - P1
+## Basic billboard pattern - P1
 
 ### Implementation
 
@@ -100,7 +100,7 @@ private void Update()
 
 ---
 
-## Player Name Plate Example - P1
+## Player name plate example - P1
 
 ```csharp
 using UnityEngine;
@@ -180,7 +180,7 @@ namespace ProjectName.UI
 
 ---
 
-## Interaction Prompt with Billboard - P1
+## Interaction prompt with billboard - P1
 
 ```csharp
 using UnityEngine;
@@ -297,7 +297,7 @@ namespace ProjectName.UI
 
 ---
 
-## Health Bar with Billboard - P1
+## Health bar with billboard - P1
 
 ```csharp
 using UnityEngine;
@@ -397,9 +397,9 @@ namespace ProjectName.UI
 
 ---
 
-## Performance Optimization - P1
+## Performance optimization - P1
 
-### Conditional Billboard Update
+### Conditional billboard update
 
 Only apply billboard when canvas is visible:
 
@@ -423,7 +423,7 @@ private void LateUpdate()
 }
 ```
 
-### Distance-Based Culling
+### Distance-based culling
 
 Disable billboard for far-away objects:
 
@@ -456,7 +456,7 @@ private void LateUpdate()
 
 ---
 
-## Alternative: Constraints Component - P1
+## Alternative: Constraints component - P1
 
 Unity's Look At Constraint can replace code-based billboard:
 
@@ -469,7 +469,7 @@ Unity's Look At Constraint can replace code-based billboard:
    - `Lock`: None
    - `Rotation Offset`: (0, 180, 0) if UI appears backwards
 
-### Pros and Cons
+### Pros and cons
 
 | Approach | Pros | Cons |
 |----------|------|------|
@@ -480,9 +480,9 @@ Unity's Look At Constraint can replace code-based billboard:
 
 ---
 
-## Common Issues - P1
+## Common issues - P1
 
-### Issue 1: UI Appears Backwards
+### Issue 1: UI appears backwards
 
 ```csharp
 // ❌ Bad: UI is backwards
@@ -495,7 +495,7 @@ transform.LookAt(
 );
 ```
 
-### Issue 2: Jittery Movement
+### Issue 2: Jittery movement
 
 ```csharp
 // ❌ Bad: Update before camera moves
@@ -511,7 +511,7 @@ private void LateUpdate()
 }
 ```
 
-### Issue 3: Missing Camera Reference
+### Issue 3: Missing camera reference
 
 ```csharp
 // ✅ Good: Null check

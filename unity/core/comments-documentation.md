@@ -1,4 +1,4 @@
-# Comments & Documentation
+# Comments and documentation
 
 ## Purpose
 
@@ -14,16 +14,16 @@ Proper comments and documentation help code understanding and improve maintainab
 
 ---
 
-## XML Documentation Comments - P1
+## XML documentation comments - P1
 
-### Basic Rules
+### Basic rules
 
 - public classes, methods, and properties must have XML documentation comments
 - Use `<summary>` tag for overview
 - Use `<param>` tag for parameters
 - Use `<returns>` tag for return values
 
-### Class Documentation
+### Class documentation
 
 ```csharp
 /// <summary>
@@ -35,7 +35,7 @@ public class ExperienceOrbManager : MonoBehaviour
 }
 ```
 
-### Method Documentation
+### Method documentation
 
 ```csharp
 /// <summary>
@@ -50,7 +50,7 @@ public List<GameObject> SpawnOrbs(Vector3 position, int experienceValue)
 }
 ```
 
-### Property Documentation
+### Property documentation
 
 ```csharp
 /// <summary>
@@ -66,9 +66,9 @@ public bool IsAlive => CurrentHealth > 0;
 
 ---
 
-## Header Attribute - P1
+## Header attribute - P1
 
-### Inspector Organization
+### Inspector organization
 
 ```csharp
 public class PlayerStats : MonoBehaviour
@@ -89,9 +89,9 @@ public class PlayerStats : MonoBehaviour
 
 ---
 
-## Tooltip Attribute - P1
+## Tooltip attribute - P1
 
-### Inspector Descriptions
+### Inspector descriptions
 
 ```csharp
 public class PlayerStats : MonoBehaviour
@@ -112,9 +112,9 @@ public class PlayerStats : MonoBehaviour
 
 ---
 
-## Inline Comments - P1
+## Inline comments - P1
 
-### Usage Guidelines
+### Usage guidelines
 
 **Good: Explaining Complex Logic**
 
@@ -157,9 +157,9 @@ StartCoroutine(UpdateUINextFrame());
 
 ---
 
-## TODO Comments - P1
+## TODO comments - P1
 
-### Usage Rules
+### Usage rules
 
 ```csharp
 // TODO: Add DOTween animation in Phase 2
@@ -185,9 +185,9 @@ private void Update()
 
 ---
 
-## When Documentation is Unnecessary - P1
+## When documentation is unnecessary - P1
 
-### Self-Explanatory Code
+### Self-explanatory code
 
 ```csharp
 // Bad: Unnecessary comment
@@ -198,7 +198,7 @@ public Vector3 GetPosition() => transform.position;
 public Vector3 GetPlayerPosition() => transform.position;
 ```
 
-### Unity Event Functions
+### Unity event functions
 
 ```csharp
 // Bad: Unnecessary
@@ -216,9 +216,9 @@ private void Awake()
 
 ---
 
-## Practical Example - P1
+## Practical example - P1
 
-### Complete Class Documentation
+### Complete class documentation
 
 ```csharp
 using UnityEngine;

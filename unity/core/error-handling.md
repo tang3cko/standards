@@ -1,4 +1,4 @@
-# Error Handling
+# Error handling
 
 ## Purpose
 
@@ -16,9 +16,9 @@ Proper error handling prevents unexpected behavior and facilitates debugging.
 
 ---
 
-## Null Safety - P1
+## Null safety - P1
 
-### Null Conditional Operator Usage
+### Null conditional operator usage
 
 ```csharp
 // Good: Use null conditional operator (?.)
@@ -35,7 +35,7 @@ private void RaiseEvent()
 }
 ```
 
-### Explicit Null Checks
+### Explicit null checks
 
 ```csharp
 private void ProcessTarget()
@@ -52,7 +52,7 @@ private void ProcessTarget()
 }
 ```
 
-### SerializeField Null Checks (Start/Awake)
+### SerializeField null checks (Start/Awake)
 
 ```csharp
 public class UIManager : MonoBehaviour
@@ -77,9 +77,9 @@ public class UIManager : MonoBehaviour
 
 ---
 
-## Try-Catch Patterns - P1
+## Try-catch patterns - P1
 
-### Resources.Load Error Handling
+### Resources.Load error handling
 
 ```csharp
 public bool LoadData(string path)
@@ -105,7 +105,7 @@ public bool LoadData(string path)
 }
 ```
 
-### File I/O Error Handling
+### File I/O error handling
 
 ```csharp
 public bool SaveGame(string filePath)
@@ -133,9 +133,9 @@ public bool SaveGame(string filePath)
 
 ---
 
-## Logging Guidelines - P1
+## Logging guidelines - P1
 
-### Log Level Usage
+### Log level usage
 
 ```csharp
 // Debug.Log: Normal information
@@ -164,7 +164,7 @@ catch (System.Exception e)
 }
 ```
 
-### Include Context in Logs
+### Include context in logs
 
 ```csharp
 // Bad: Insufficient information
@@ -174,7 +174,7 @@ Debug.LogError("Component is null");
 Debug.LogError($"[{GetType().Name}] targetComponent is null on GameObject: {gameObject.name}", this);
 ```
 
-### Log Format Rules
+### Log format rules
 
 ```csharp
 // [ClassName] Message
@@ -186,9 +186,9 @@ Debug.LogWarning($"[UIManager] PlayerHealth not found.", this);
 
 ---
 
-## OnValidate Validation - P1
+## OnValidate validation - P1
 
-### Inspector Setting Validation
+### Inspector setting validation
 
 ```csharp
 public class QuestManager : MonoBehaviour
@@ -217,9 +217,9 @@ public class QuestManager : MonoBehaviour
 
 ---
 
-## Early Return Pattern - P1
+## Early return pattern - P1
 
-### Guard Clause Usage
+### Guard clause usage
 
 ```csharp
 // Good: Early return for readability
@@ -267,9 +267,9 @@ public void ProcessQuest(QuestSO quest)
 
 ---
 
-## Assert Usage - P1
+## Assert usage - P1
 
-### Precondition Validation
+### Precondition validation
 
 ```csharp
 using UnityEngine.Assertions;
@@ -287,9 +287,9 @@ public void DealDamage(int damage)
 
 ---
 
-## Practical Example - P1
+## Practical example - P1
 
-### Complete Error Handling
+### Complete error handling
 
 ```csharp
 using UnityEngine;

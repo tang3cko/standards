@@ -17,11 +17,11 @@ Implement responsive UI layouts using Unity UI Toolkit's Flexbox system and Pane
 
 ---
 
-## Panel Settings Configuration - P1
+## Panel Settings configuration - P1
 
 Panel Settings control how UI Toolkit scales across different resolutions.
 
-### Recommended Settings
+### Recommended settings
 
 ```yaml
 # DefaultPanelSettings.asset
@@ -31,7 +31,7 @@ m_ScreenMatchMode: 0                      # Match Width Or Height
 m_Match: 0                                # Match width (PC landscape)
 ```
 
-### Scale Mode Options
+### Scale mode options
 
 | Mode | Value | Description | Use Case |
 |------|-------|-------------|----------|
@@ -39,7 +39,7 @@ m_Match: 0                                # Match width (PC landscape)
 | Constant Physical Size | 1 | Physical size scaling | Mobile/tablet |
 | **Scale With Screen Size** | 2 | **Resolution scaling** | **PC games (recommended)** |
 
-### Match Value
+### Match value
 
 - `0.0` = Match width (optimal for PC landscape)
 - `0.5` = Balance width and height (mobile)
@@ -49,7 +49,7 @@ m_Match: 0                                # Match width (PC landscape)
 
 ---
 
-## Supported Units - P1
+## Supported units - P1
 
 Unity UI Toolkit supports limited units compared to web CSS.
 
@@ -61,7 +61,7 @@ Unity UI Toolkit supports limited units compared to web CSS.
 | `%` | Percentage of parent | `width: 50%;` |
 | `0` | Zero (no unit needed) | `margin: 0;` |
 
-### Not Supported ❌
+### Not supported ❌
 
 | Unit | Description | Alternative |
 |------|-------------|-------------|
@@ -73,11 +73,11 @@ Unity UI Toolkit supports limited units compared to web CSS.
 
 ---
 
-## Flexbox Layout Patterns - P1
+## Flexbox layout patterns - P1
 
 Unity UI Toolkit uses Yoga (Flexbox subset) for layout.
 
-### Equal Distribution Pattern
+### Equal distribution pattern
 
 Use `flex-grow: 1` with `flex-basis: 0` for consistent distribution:
 
@@ -94,7 +94,7 @@ Use `flex-grow: 1` with `flex-basis: 0` for consistent distribution:
 }
 ```
 
-**UXML Example:**
+**UXML example:**
 
 ```xml
 <ui:VisualElement style="flex-direction: row;">
@@ -107,7 +107,7 @@ Use `flex-grow: 1` with `flex-basis: 0` for consistent distribution:
 </ui:VisualElement>
 ```
 
-### Nested Container Pattern
+### Nested container pattern
 
 Avoid absolute positioning; use nested Flexbox containers:
 
@@ -136,7 +136,7 @@ Avoid absolute positioning; use nested Flexbox containers:
 }
 ```
 
-### Responsive Panel Pattern
+### Responsive panel pattern
 
 Combine percentages with max-width/min-width:
 
@@ -157,7 +157,7 @@ Combine percentages with max-width/min-width:
 }
 ```
 
-### Ultrawide Support Pattern
+### Ultrawide support pattern
 
 Use max-width to prevent excessive stretching:
 
@@ -177,9 +177,9 @@ Use max-width to prevent excessive stretching:
 
 ---
 
-## Complete Responsive Example - P1
+## Complete responsive example - P1
 
-### Quest Board Panel
+### Quest board panel
 
 ```css
 /* QuestUI.uss */
@@ -208,9 +208,9 @@ Use max-width to prevent excessive stretching:
 
 ---
 
-## Flexbox Property Reference - P1
+## Flexbox property reference - P1
 
-### Container Properties
+### Container properties
 
 ```css
 .container {
@@ -221,7 +221,7 @@ Use max-width to prevent excessive stretching:
 }
 ```
 
-### Item Properties
+### Item properties
 
 ```css
 .item {
@@ -232,7 +232,7 @@ Use max-width to prevent excessive stretching:
 }
 ```
 
-### Common Patterns
+### Common patterns
 
 ```css
 /* Fill remaining space */
@@ -255,9 +255,9 @@ Use max-width to prevent excessive stretching:
 
 ---
 
-## Anti-Patterns - P1
+## Anti-patterns - P1
 
-### Pattern 1: Excessive Absolute Positioning
+### Pattern 1: Excessive absolute positioning
 
 ```css
 /* ❌ Bad: Absolute positioning for non-overlay elements */
@@ -280,7 +280,7 @@ Use max-width to prevent excessive stretching:
 }
 ```
 
-### Pattern 2: Fixed Pixel Value Abuse
+### Pattern 2: Fixed pixel value abuse
 
 ```css
 /* ❌ Bad: All fixed values */
@@ -305,7 +305,7 @@ Use max-width to prevent excessive stretching:
 }
 ```
 
-### Pattern 3: flex-grow Without flex-basis
+### Pattern 3: flex-grow without flex-basis
 
 ```css
 /* ❌ Bad: Distribution affected by content size */
@@ -326,17 +326,17 @@ Use max-width to prevent excessive stretching:
 
 ---
 
-## Media Query Alternative - P1
+## Media query alternative - P1
 
 **Unity UI Toolkit does not support CSS media queries.**
 
-### Alternative 1: Panel Settings Scaling (Recommended)
+### Alternative 1: Panel Settings scaling (recommended)
 
 ```yaml
 m_ScaleMode: 2  # Automatic scaling
 ```
 
-### Alternative 2: C# Dynamic Class Switching
+### Alternative 2: C# dynamic class switching
 
 ```csharp
 namespace ProjectName.UI
@@ -388,7 +388,7 @@ namespace ProjectName.UI
 }
 ```
 
-### Alternative 3: Multiple USS Files
+### Alternative 3: Multiple USS files
 
 ```csharp
 // Platform-specific USS switching
@@ -399,7 +399,7 @@ namespace ProjectName.UI
 
 ---
 
-## Resolution Testing Checklist - P1
+## Resolution testing checklist - P1
 
 Test your UI on these common resolutions:
 
@@ -413,7 +413,7 @@ Test your UI on these common resolutions:
 
 ---
 
-## Practical Example: Quest Progress HUD - P1
+## Practical example: Quest progress HUD - P1
 
 ```css
 /* QuestUI.uss */

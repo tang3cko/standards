@@ -16,11 +16,11 @@ Define proper usage of SyncVar for automatic state synchronization and ClientRpc
 
 ---
 
-## SyncVar Overview - P1
+## SyncVar overview - P1
 
 SyncVar automatically synchronizes values from server to clients, including late-joining clients.
 
-### Basic Pattern
+### Basic pattern
 
 ```csharp
 using Mirror;
@@ -83,7 +83,7 @@ namespace ProjectName.Player
 | **Bandwidth** | Efficient (only changes) | Per-call overhead |
 | **Hook** | Yes | No |
 
-### When to Use SyncVar
+### When to use SyncVar
 
 ```csharp
 // ✅ Good: Persistent state
@@ -97,7 +97,7 @@ private int currentHealth;
 private GameState currentState;
 ```
 
-### When to Use ClientRpc
+### When to use ClientRpc
 
 ```csharp
 // ✅ Good: Temporary events
@@ -122,9 +122,9 @@ private void RpcShowNotification(string message)
 
 ---
 
-## ScriptableObject Synchronization - P1
+## ScriptableObject synchronization - P1
 
-### Problem: Cannot Sync ScriptableObjects
+### Problem: cannot sync ScriptableObjects
 
 ```csharp
 // ❌ Bad: ScriptableObjects cannot be synced
@@ -132,7 +132,7 @@ private void RpcShowNotification(string message)
 private QuestSO selectedQuest; // Won't work!
 ```
 
-### Solution: Sync ID, Convert in Hook
+### Solution: sync ID, convert in hook
 
 ```csharp
 using Mirror;
@@ -207,9 +207,9 @@ namespace ProjectName.Quest
 
 ---
 
-## SyncVar Hook Behavior - P1
+## SyncVar hook behavior - P1
 
-### Important: Hooks Don't Fire on Server
+### Important: hooks don't fire on server
 
 ```csharp
 [SyncVar(hook = nameof(OnValueChanged))]
@@ -232,7 +232,7 @@ private void OnValueChanged(int oldValue, int newValue)
 }
 ```
 
-### Complete Pattern
+### Complete pattern
 
 ```csharp
 using Mirror;
@@ -274,7 +274,7 @@ namespace ProjectName.Game
 
 ---
 
-## ClientRpc Patterns - P1
+## ClientRpc patterns - P1
 
 ### Basic ClientRpc
 
@@ -330,9 +330,9 @@ namespace ProjectName.Quest
 
 ---
 
-## Late Join Support - P1
+## Late join support - P1
 
-### SyncVar Automatically Handles Late Join
+### SyncVar automatically handles late join
 
 ```csharp
 // Scenario:
@@ -346,7 +346,7 @@ namespace ProjectName.Quest
 private string selectedQuestID = "";
 ```
 
-### ClientRpc Does NOT Support Late Join
+### ClientRpc does NOT support late join
 
 ```csharp
 // Scenario:
@@ -364,9 +364,9 @@ private void RpcPlayExplosion(Vector3 position)
 
 ---
 
-## Performance Considerations - P1
+## Performance considerations - P1
 
-### Minimize SyncVar Changes
+### Minimize SyncVar changes
 
 ```csharp
 // ✅ Good: Update SyncVar only when necessary
@@ -387,7 +387,7 @@ private void Update()
 }
 ```
 
-### Batch Updates
+### Batch updates
 
 ```csharp
 // ✅ Good: Batch related updates

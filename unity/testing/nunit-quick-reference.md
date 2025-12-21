@@ -332,7 +332,7 @@ public void Method_LogsError_WhenInvalid()
 
 ---
 
-## Classic Model (Legacy) - P1
+## Classic model (legacy) - P1
 
 We do not recommend using the Classic Model. Use the Constraint Model instead.
 

@@ -16,7 +16,7 @@ Establish consistent and scalable naming conventions for UI Toolkit classes usin
 
 ---
 
-## BEM Overview - P1
+## BEM overview - P1
 
 BEM (Block Element Modifier) is a CSS naming convention consisting of three parts:
 
@@ -24,7 +24,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 .block__element--modifier
 ```
 
-### Naming Components
+### Naming components
 
 - **Block**: Independent component name (e.g., `quest-result`, `quest-board`)
 - **Element**: Part of a Block, connected with `__` (e.g., `quest-result__header`, `quest-result__button`)
@@ -32,7 +32,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 
 ---
 
-## Basic Pattern - P1
+## Basic pattern - P1
 
 ### Structure
 
@@ -67,9 +67,9 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 
 ---
 
-## Complete Example: Quest Result Panel - P1
+## Complete example: Quest result panel - P1
 
-### UXML Structure
+### UXML structure
 
 ```xml
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
@@ -125,7 +125,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 </ui:UXML>
 ```
 
-### USS Implementation
+### USS implementation
 
 ```css
 /* ========================================
@@ -255,7 +255,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 
 ## Benefits of BEM - P1
 
-### Scope Clarity
+### Scope clarity
 
 ```css
 /* ✅ Immediately clear: __status belongs to quest-result */
@@ -265,7 +265,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 .status { }
 ```
 
-### Collision Avoidance
+### Collision avoidance
 
 ```css
 /* ✅ No conflicts between different components */
@@ -298,9 +298,9 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 
 ---
 
-## Common Patterns - P1
+## Common patterns - P1
 
-### State Modifiers
+### State modifiers
 
 ```css
 /* Button states */
@@ -315,7 +315,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 .quest-item--failed { }
 ```
 
-### Theme Modifiers
+### Theme modifiers
 
 ```css
 /* Color themes */
@@ -329,7 +329,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 .button--large { }
 ```
 
-### Combined Modifiers
+### Combined modifiers
 
 ```xml
 <!-- Multiple modifiers can be applied together -->
@@ -338,9 +338,9 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 
 ---
 
-## Anti-Patterns - P1
+## Anti-patterns - P1
 
-### Avoid Generic Global Classes
+### Avoid generic global classes
 
 ```css
 /* ❌ Bad: Too generic */
@@ -356,7 +356,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 .quest-result__text { }
 ```
 
-### Avoid Deep Nesting
+### Avoid deep nesting
 
 ```css
 /* ❌ Bad: Too deep */
@@ -369,7 +369,7 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 .quest-result__stat { }
 ```
 
-### Avoid Modifier Without Base Class
+### Avoid modifier without base class
 
 ```xml
 <!-- ❌ Bad: Missing base class -->
@@ -381,9 +381,9 @@ BEM (Block Element Modifier) is a CSS naming convention consisting of three part
 
 ---
 
-## C# Integration - P1
+## C# integration - P1
 
-### Toggling Modifiers
+### Toggling modifiers
 
 ```csharp
 using UnityEngine;

@@ -1,4 +1,4 @@
-# Naming Conventions
+# Naming conventions
 
 ## Purpose
 
@@ -19,15 +19,15 @@ Consistent naming conventions improve code readability and maintainability.
 
 ---
 
-## Classes and Interfaces - P1
+## Classes and interfaces - P1
 
-### Basic Rules
+### Basic rules
 
 - Use PascalCase
 - Clear and descriptive names
 - Interfaces use `I` prefix
 
-### Implementation Examples
+### Implementation examples
 
 ```csharp
 // Classes
@@ -45,9 +45,9 @@ public class QuestSO : ScriptableObject { }
 
 ---
 
-## Variables and Fields - P1
+## Variables and fields - P1
 
-### Field Naming Rules
+### Field naming rules
 
 ```csharp
 public class Example
@@ -67,7 +67,7 @@ public class Example
 }
 ```
 
-### Local Variables
+### Local variables
 
 ```csharp
 public void ProcessData()
@@ -83,13 +83,13 @@ public void ProcessData()
 
 ## Methods - P1
 
-### Basic Rules
+### Basic rules
 
 - Use PascalCase
 - Start with verbs
 - Clear action names
 
-### Implementation Examples
+### Implementation examples
 
 ```csharp
 // Good: Start with verb, clear action
@@ -107,7 +107,7 @@ private void OnTriggerEnter(Collider other) { }
 private void OnValidate() { }
 ```
 
-### Bad Examples
+### Bad examples
 
 ```csharp
 // Bad: No verb
@@ -125,12 +125,12 @@ public void UpdPos() { }
 
 ## Properties - P1
 
-### Basic Rules
+### Basic rules
 
 - Use PascalCase
 - Nouns or adjectives
 
-### Implementation Examples
+### Implementation examples
 
 ```csharp
 public class Player
@@ -149,7 +149,7 @@ public class Player
 
 ## Events - P1
 
-### EventChannel Naming
+### EventChannel naming
 
 ```csharp
 // "on" prefix + past tense
@@ -158,7 +158,7 @@ public class Player
 [SerializeField] private CardEventChannelSO onCardPlayed;
 ```
 
-### C# Event Naming
+### C# event naming
 
 ```csharp
 // "On" prefix + past tense
@@ -170,7 +170,7 @@ public event Action<int> OnHealthChanged;
 
 ## Namespace - P1
 
-### Project Structure-Based Naming
+### Project structure-based naming
 
 ```csharp
 namespace ProjectName.Category
@@ -186,7 +186,7 @@ namespace ProjectName.Data        // ScriptableObject definitions
 
 ---
 
-## Unity-Specific Naming - P1
+## Unity-specific naming - P1
 
 ### ScriptableObject
 
@@ -216,9 +216,9 @@ public class PlayerRuntimeSetSO : ScriptableObject { }
 
 ---
 
-## Boolean Variable Naming - P1
+## Boolean variable naming - P1
 
-### Recommended Patterns
+### Recommended patterns
 
 ```csharp
 // "is", "has", "can", "should" prefixes

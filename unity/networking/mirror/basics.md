@@ -27,9 +27,9 @@ Define fundamental patterns and best practices for implementing multiplayer syst
 
 ---
 
-## Server Authority Pattern - P1
+## Server authority pattern - P1
 
-### Basic Principle
+### Basic principle
 
 The server is the single source of truth. Clients request actions, server validates and executes them.
 
@@ -107,7 +107,7 @@ namespace ProjectName.Quest
 }
 ```
 
-### Server Authority Benefits
+### Server authority benefits
 
 - **Cheat Prevention**: Clients cannot modify progress arbitrarily
 - **Consistency Guarantee**: Server is the single source of truth
@@ -115,7 +115,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Mirror Attributes - P1
+## Mirror attributes - P1
 
 ### [Server] / [ServerCallback]
 
@@ -195,7 +195,7 @@ private void OnTriggerEnter(Collider other)
 
 ## NetworkIdentity and RequireComponent - P1
 
-### Required Pattern
+### Required pattern
 
 All classes inheriting `NetworkBehaviour` require `NetworkIdentity`.
 
@@ -219,9 +219,9 @@ namespace ProjectName.Quest
 
 ---
 
-## EventChannel Integration - P1
+## EventChannel integration - P1
 
-### Server to Client Notifications
+### Server to client notifications
 
 ```csharp
 using Mirror;
@@ -253,7 +253,7 @@ namespace ProjectName.Quest
 }
 ```
 
-### EventChannel Handler with Server Check
+### EventChannel handler with server check
 
 ```csharp
 using Mirror;
@@ -299,9 +299,9 @@ namespace ProjectName.Quest
 
 ---
 
-## Best Practices - P1
+## Best practices - P1
 
-### 1. Always Validate on Server
+### 1. Always validate on server
 
 ```csharp
 // ✅ Good: Server validates
@@ -325,7 +325,7 @@ private void CmdPickupItem(uint itemNetId)
 }
 ```
 
-### 2. Use NetworkServer.active Check
+### 2. Use NetworkServer.active check
 
 ```csharp
 // ✅ Good: Check before server logic
@@ -344,7 +344,7 @@ private void HandleQuestEvent()
 }
 ```
 
-### 3. Follow Naming Conventions
+### 3. Follow naming conventions
 
 ```csharp
 // ✅ Good: Proper naming
@@ -362,7 +362,7 @@ private void RequestInteract(uint netId) { } // Won't work!
 private void ShowEffect() { } // Won't work!
 ```
 
-### 4. RequireComponent on All NetworkBehaviours
+### 4. RequireComponent on all NetworkBehaviours
 
 ```csharp
 // ✅ Good: RequireComponent
@@ -381,9 +381,9 @@ public class PlayerController : NetworkBehaviour
 
 ---
 
-## Common Patterns - P1
+## Common patterns - P1
 
-### Player Input Pattern
+### Player input pattern
 
 ```csharp
 using Mirror;

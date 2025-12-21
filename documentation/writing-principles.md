@@ -6,9 +6,9 @@ This document defines voice, tone, grammar, and style guidelines for technical d
 
 ---
 
-## Voice and Tone - P1
+## Voice and tone - P1
 
-### Conversational and Clear
+### Conversational and clear
 
 **Rule:**
 - Write in a conversational but professional tone
@@ -30,7 +30,7 @@ It is recommended that one should utilize EventChannels for the purpose of decou
 
 ---
 
-### Respectful and Professional
+### Respectful and professional
 
 **Rule:**
 - Be respectful of all readers
@@ -52,9 +52,9 @@ Obviously, everyone knows ScriptableObjects. If you don't, you shouldn't be read
 
 ---
 
-## Grammar and Style - P1
+## Grammar and style - P1
 
-### Active Voice
+### Active voice
 
 **Rule:**
 - Use active voice instead of passive voice
@@ -83,7 +83,7 @@ Publishers are decoupled from subscribers by EventChannels.
 
 ---
 
-### Second Person ("You")
+### Second person ("you")
 
 **Rule:**
 - Address the reader as "you" (second person)
@@ -112,7 +112,7 @@ We will use RuntimeSets to avoid `FindObjectsOfType()` calls.
 
 ---
 
-### Serial Comma (Oxford Comma)
+### Serial comma (Oxford comma)
 
 **Rule:**
 - Use serial comma before "and" or "or" in lists
@@ -137,7 +137,7 @@ You can implement health systems, inventory management and quest tracking.
 
 ---
 
-### Present Tense
+### Present tense
 
 **Rule:**
 - Use present tense for describing behavior
@@ -156,9 +156,9 @@ The system will log errors when validation fails.
 
 ---
 
-## Language and Clarity - P1
+## Language and clarity - P1
 
-### English Language
+### English language
 
 **Rule:**
 - Write all documentation in English
@@ -171,7 +171,7 @@ The system will log errors when validation fails.
 
 ---
 
-### Clear and Concise
+### Clear and concise
 
 **Rule:**
 - Avoid unnecessary words
@@ -192,7 +192,7 @@ It is generally considered a best practice to cache component references in the 
 
 ---
 
-### Avoid Jargon
+### Avoid jargon
 
 **Rule:**
 - Define technical terms on first use
@@ -215,7 +215,7 @@ Leverage the pub-sub paradigm via SO-based event buses for orthogonal system dec
 
 ## Accessibility - P2
 
-### Heading Hierarchy
+### Heading hierarchy
 
 **Rule:**
 - Use proper heading hierarchy (H1 → H2 → H3)
@@ -229,7 +229,7 @@ Leverage the pub-sub paradigm via SO-based event buses for orthogonal system dec
 
 ---
 
-### Alt Text for Images
+### Alt text for images
 
 **Rule:**
 - Provide descriptive alt text for all images
@@ -250,7 +250,7 @@ Leverage the pub-sub paradigm via SO-based event buses for orthogonal system dec
 
 ---
 
-### Link Text Clarity
+### Link text clarity
 
 **Rule:**
 - Use descriptive link text that explains the destination
@@ -271,7 +271,7 @@ Click [here](https://docs.unity3d.com/Manual/Profiler.html) for more information
 
 ---
 
-### Color and Contrast
+### Color and contrast
 
 **Rule (P3):**
 - Don't rely on color alone to convey meaning
@@ -296,9 +296,9 @@ Click [here](https://docs.unity3d.com/Manual/Profiler.html) for more information
 
 ---
 
-## Inclusive Language - P1
+## Inclusive language - P1
 
-### Avoid Ableist Terms
+### Avoid ableist terms
 
 **Rule:**
 - Avoid terms that reference disabilities in a negative way
@@ -316,7 +316,7 @@ Click [here](https://docs.unity3d.com/Manual/Profiler.html) for more information
 
 ---
 
-### Inclusive Technical Terms
+### Inclusive technical terms
 
 **Rule:**
 - Use inclusive alternatives for loaded terms
@@ -333,7 +333,7 @@ Click [here](https://docs.unity3d.com/Manual/Profiler.html) for more information
 
 ---
 
-### Gender-Neutral Language
+### Gender-neutral language
 
 **Rule:**
 - Use "they/their" for singular indefinite pronouns
@@ -357,9 +357,9 @@ The user can customize his settings in the preferences panel.
 
 ---
 
-## Formatting for Readability - P2
+## Formatting for readability - P2
 
-### Short Paragraphs
+### Short paragraphs
 
 **Rule:**
 - Keep paragraphs short (3-5 sentences)
@@ -382,7 +382,7 @@ EventChannels provide a decoupled communication pattern where publishers raise e
 
 ---
 
-### Bullet Points and Lists
+### Bullet points and lists
 
 **Rule:**
 - Use lists to present multiple items
@@ -408,7 +408,7 @@ EventChannels are beneficial because they reduce coupling and you can test them 
 
 ---
 
-### Code Formatting
+### Code formatting
 
 **Rule:**
 - Use inline code formatting for technical terms
@@ -419,9 +419,9 @@ See [Code Examples](code-examples.md) for detailed guidelines.
 
 ---
 
-## Word Choice - P2
+## Word choice - P2
 
-### Be Specific
+### Be specific
 
 **Rule:**
 - Use precise technical terms
@@ -441,7 +441,7 @@ Save the thing in `Awake()` to avoid calling the method a lot.
 
 ---
 
-### Use Positive Language
+### Use positive language
 
 **Rule:**
 - Focus on what to do, not just what to avoid
@@ -461,7 +461,7 @@ Don't use Singleton pattern. It's bad.
 
 ---
 
-### Consistent Terminology
+### Consistent terminology
 
 **Rule:**
 - Use the same term for the same concept throughout documentation
@@ -475,9 +475,9 @@ Don't use Singleton pattern. It's bad.
 
 ---
 
-## Numbers and Units - P3
+## Numbers and units - P3
 
-### Numbers in Text
+### Numbers in text
 
 **Rule:**
 - Spell out numbers one through nine
@@ -496,7 +496,7 @@ Version 2.1.0 includes five new features.
 
 ---
 
-### Units of Measurement
+### Units of measurement
 
 **Rule:**
 - Include units with numerical values

@@ -15,9 +15,9 @@ Manage dynamic collections of game objects using ScriptableObjects, avoiding exp
 
 ---
 
-## Dynamic Object Management - P1
+## Dynamic object management - P1
 
-### RuntimeSet Implementation
+### RuntimeSet implementation
 
 ```csharp
 using UnityEngine;
@@ -75,7 +75,7 @@ namespace ProjectName.Enemy
 
 ---
 
-## Object Registration - P1
+## Object registration - P1
 
 ### Register in OnEnable/OnStartClient
 
@@ -116,7 +116,7 @@ namespace ProjectName.Enemy
 }
 ```
 
-### Scene Cleanup
+### Scene cleanup
 
 ```csharp
 using UnityEngine;
@@ -144,7 +144,7 @@ namespace ProjectName.Core
 
 ---
 
-## Usage Examples - P1
+## Usage examples - P1
 
 ### Bad: Using FindObjectsOfType
 
@@ -206,7 +206,7 @@ namespace ProjectName.Core
 }
 ```
 
-### Event-Driven with RuntimeSet
+### Event-driven with RuntimeSet
 
 ```csharp
 namespace ProjectName.UI
@@ -249,7 +249,7 @@ namespace ProjectName.UI
 
 ## Benefits - P1
 
-### Performance Comparison
+### Performance comparison
 
 ```csharp
 // Bad: O(n) search every frame
@@ -269,7 +269,7 @@ void ProcessEnemies()
 }
 ```
 
-### Inspector Visibility
+### Inspector visibility
 
 ```csharp
 // You can inspect the RuntimeSet asset to see:
@@ -303,9 +303,9 @@ public class QuestManager : MonoBehaviour
 
 ---
 
-## Practical Example - P1
+## Practical example - P1
 
-### Complete Enemy Management System
+### Complete enemy management system
 
 ```csharp
 using UnityEngine;

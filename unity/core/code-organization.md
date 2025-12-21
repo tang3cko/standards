@@ -1,4 +1,4 @@
-# Code Organization & File Structure
+# Code organization and file structure
 
 ## Purpose
 
@@ -15,9 +15,9 @@ Consistent file structure and namespace design improve project maintainability a
 
 ---
 
-## Namespace Conventions - P1
+## Namespace conventions - P1
 
-### Project Structure-Based Namespace
+### Project structure-based namespace
 
 ```csharp
 namespace ProjectName.Category
@@ -32,7 +32,7 @@ namespace ProjectName.Core        // Core systems (FPS Counter, etc.)
 namespace ProjectName.Data        // ScriptableObject definitions
 ```
 
-### Implementation Example
+### Implementation example
 
 ```csharp
 using UnityEngine;
@@ -58,9 +58,9 @@ namespace ProjectName.Player
 
 ---
 
-## Directory Structure - P1
+## Directory structure - P1
 
-### Scripts Directory
+### Scripts directory
 
 ```
 Assets/_Project/Scripts/
@@ -77,7 +77,7 @@ Assets/_Project/Scripts/
 └── Weapon/                # Weapon-related
 ```
 
-### Scripts/ Classification Criteria
+### Scripts/ classification criteria
 
 **Feature Domain-Based**
 
@@ -97,9 +97,9 @@ Assets/_Project/Scripts/
 
 ---
 
-## ScriptableObject Placement - P1
+## ScriptableObject placement - P1
 
-### ScriptableObjects Directory
+### ScriptableObjects directory
 
 ```
 Assets/_Project/ScriptableObjects/
@@ -126,7 +126,7 @@ Assets/_Project/ScriptableObjects/
 └── Settings/              # GameSettingsSO, etc.
 ```
 
-### ScriptableObjects/ Classification Criteria
+### ScriptableObjects/ classification criteria
 
 - `Data/` - Static game data (enemy stats, weapon performance, audio categories)
 - `Events/` - Communication EventChannels (subdirectories by feature)
@@ -135,7 +135,7 @@ Assets/_Project/ScriptableObjects/
 
 ---
 
-## Prefabs Placement - P1
+## Prefabs placement - P1
 
 ```
 Assets/_Project/Prefabs/
@@ -148,15 +148,15 @@ Assets/_Project/Prefabs/
 
 ---
 
-## One File One Class Principle - P1
+## One file one class principle - P1
 
-### Basic Rule
+### Basic rule
 
 - One public class per file
 - Filename must match class name
 - Internal classes (private/internal) are exceptions
 
-### Implementation Example
+### Implementation example
 
 ```
 // Good
@@ -173,7 +173,7 @@ GameLogic.cs
   └─ public class ScoreManager { }    // Should be separate file
 ```
 
-### Exception: Closely Related Classes
+### Exception: closely related classes
 
 ```csharp
 // QuestSO.cs
@@ -199,9 +199,9 @@ public enum QuestType
 
 ---
 
-## File Structure Order - P1
+## File structure order - P1
 
-### Recommended Structure
+### Recommended structure
 
 ```csharp
 using UnityEngine;

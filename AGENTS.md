@@ -1,12 +1,18 @@
-# Coding Standards
+# Coding standards
+
+## Purpose
 
 Shared coding standards for Tang3cko projects.
+
+---
 
 ## Important
 
 - Think in English
 - Respond in user's language
 - Write documentation in English
+
+---
 
 ## Before editing
 

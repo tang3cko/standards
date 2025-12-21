@@ -17,7 +17,7 @@ Implement reactive state management using Tang3cko.ReactiveSO Variables for auto
 
 ## Variables vs EventChannels - P1
 
-### When to Use Variables
+### When to use Variables
 
 Use Variables when:
 
@@ -28,7 +28,7 @@ Use Variables when:
 ✅ Multiple systems need to read the same value
 ```
 
-### When to Use EventChannels
+### When to use EventChannels
 
 Use EventChannels when:
 
@@ -39,7 +39,7 @@ Use EventChannels when:
 ✅ Pure event-driven communication
 ```
 
-### Comparison Example
+### Comparison example
 
 **Variables: Stateful Data**
 
@@ -66,9 +66,9 @@ onEnemyKilled.RaiseEvent();  // Fire and forget
 
 ---
 
-## Variable Types - P1
+## Variable types - P1
 
-### Available Types
+### Available types
 
 | Variable Type | Use Case | Example |
 |---------------|----------|---------|
@@ -82,7 +82,7 @@ onEnemyKilled.RaiseEvent();  // Fire and forget
 
 ---
 
-## Basic Implementation - P1
+## Basic implementation - P1
 
 ### Creating a Variable
 
@@ -98,7 +98,7 @@ Right-click in Project window → Create → Event Channels → Channels → Int
 
 Select IntVariableSO asset → Assign IntEventChannelSO in "On Value Changed" field
 
-### Publisher Pattern
+### Publisher pattern
 
 ```csharp
 using UnityEngine;
@@ -135,7 +135,7 @@ namespace ProjectName.Core
 }
 ```
 
-### Subscriber Pattern
+### Subscriber pattern
 
 ```csharp
 using UnityEngine;
@@ -176,9 +176,9 @@ namespace ProjectName.UI
 
 ---
 
-## Value Change Detection - P1
+## Value change detection - P1
 
-### Automatic Event Firing
+### Automatic event firing
 
 Variables use `EqualityComparer<T>` to detect value changes:
 
@@ -189,7 +189,7 @@ playerScore.Value = 100;  // Does NOT raise event (same value)
 playerScore.Value = 150;  // Raises event
 ```
 
-### High-Frequency Updates
+### High-frequency updates
 
 Safe to use in Update loop - events only fire on actual changes:
 
@@ -203,7 +203,7 @@ private void Update()
 
 ---
 
-## EventChannel Assignment Patterns - P1
+## EventChannel assignment patterns - P1
 
 ### Pattern A: With EventChannel (Event-Driven)
 
@@ -228,7 +228,7 @@ onHealthChanged.OnEventRaised += PlayLowHealthSound;
 - Decoupled communication
 - Multiple subscribers
 
-### Pattern B: Without EventChannel (Polling)
+### Pattern B: Without EventChannel (polling)
 
 Use when only direct value reads are needed:
 
@@ -256,9 +256,9 @@ private void Update()
 
 ---
 
-## Naming Conventions - P1
+## Naming conventions - P1
 
-### Variable Assets
+### Variable assets
 
 Use noun form describing the data:
 
@@ -275,7 +275,7 @@ Use noun form describing the data:
 - score_player (use camelCase)
 ```
 
-### EventChannel Assets
+### EventChannel assets
 
 Use `on + PastTense` form:
 
@@ -288,9 +288,9 @@ Use `on + PastTense` form:
 
 ---
 
-## Practical Example - P1
+## Practical example - P1
 
-### Complete Health System
+### Complete health system
 
 ```csharp
 using UnityEngine;
@@ -395,7 +395,7 @@ namespace ProjectName.UI
 
 ## Benefits - P1
 
-### Centralized State
+### Centralized state
 
 ```csharp
 // Single source of truth
@@ -408,7 +408,7 @@ IntVariableSO playerScore;  // ScriptableObject asset
 // - AchievementManager (reads)
 ```
 
-### Persistent State
+### Persistent state
 
 ```csharp
 // Variables are ScriptableObject assets
@@ -416,7 +416,7 @@ IntVariableSO playerScore;  // ScriptableObject asset
 playerScore.Value = 1000;  // Additive scene loading preserves this value
 ```
 
-### Inspector Visibility
+### Inspector visibility
 
 ```
 Assets/_Project/ScriptableObjects/Variables/
@@ -444,9 +444,9 @@ Assert.AreEqual(1100, mockScore.Value);
 
 ---
 
-## Common Patterns - P1
+## Common patterns - P1
 
-### Multiple Variables with Shared EventChannel
+### Multiple Variables with shared EventChannel
 
 ```csharp
 // Two separate Variables
@@ -460,7 +460,7 @@ IntEventChannelSO onScoreChanged;
 // UI subscribes once, receives updates from both variables
 ```
 
-### Conditional EventChannel Assignment
+### Conditional EventChannel assignment
 
 ```csharp
 // Debug-only EventChannel for development
@@ -484,9 +484,9 @@ public float DebugValue
 
 ---
 
-## Anti-Patterns - P1
+## Anti-patterns - P1
 
-### Direct Variable Subscription
+### Direct Variable subscription
 
 **❌ Bad:**
 
@@ -509,7 +509,7 @@ onScoreChanged.OnEventRaised += UpdateUI;
 
 ---
 
-### Mixing Variables and Direct References
+### Mixing Variables and direct references
 
 **❌ Bad:**
 
@@ -537,7 +537,7 @@ public class GameManager : MonoBehaviour
 
 ---
 
-### Ignoring Initial Value Reset
+### Ignoring initial value reset
 
 **❌ Bad:**
 

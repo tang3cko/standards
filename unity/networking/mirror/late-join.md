@@ -16,9 +16,9 @@ Ensure proper state synchronization for players who join mid-game (late join) an
 
 ---
 
-## Late Join Scenarios - P1
+## Late join scenarios - P1
 
-### What is Late Join?
+### What is late join?
 
 Mirror allows players to connect while the game is already in progress. This is called "late join."
 
@@ -40,7 +40,7 @@ Time T1: Client2 joins (late)
 
 ---
 
-## State Synchronization Methods - P1
+## State synchronization methods - P1
 
 | Method | Late Join Support | Use Case | Example |
 |--------|-------------------|----------|---------|
@@ -53,7 +53,7 @@ Time T1: Client2 joins (late)
 
 ---
 
-## Recommended Pattern: EventChannel + SyncVar - P1
+## Recommended pattern: EventChannel + SyncVar - P1
 
 Maintain EventChannel decoupling while supporting late join.
 
@@ -163,9 +163,9 @@ namespace ProjectName.Quest
 
 ---
 
-## Flow Diagram - P1
+## Flow diagram - P1
 
-### Existing Clients
+### Existing clients
 
 ```
 1. Host: QuestBoardUI.AcceptQuest()
@@ -178,7 +178,7 @@ namespace ProjectName.Quest
    → onQuestSelected.RaiseEvent() [Fire on all clients]
 ```
 
-### Late-Joining Client (Joins at T1)
+### Late-joining client (joins at T1)
 
 ```
 1. Connects to server
@@ -190,9 +190,9 @@ namespace ProjectName.Quest
 
 ---
 
-## Implementation Notes - P1
+## Implementation notes - P1
 
-### Cannot Sync ScriptableObjects Directly
+### Cannot sync ScriptableObjects directly
 
 ```csharp
 // ❌ Bad: ScriptableObject cannot be synced
@@ -210,7 +210,7 @@ private void OnQuestIDChanged(string oldID, string newID)
 }
 ```
 
-### Server Hook Doesn't Fire
+### Server hook doesn't fire
 
 ```csharp
 private void HandleQuestSelectedLocal(QuestSO quest)
@@ -225,7 +225,7 @@ private void HandleQuestSelectedLocal(QuestSO quest)
 }
 ```
 
-### availableQuests Consistency
+### availableQuests consistency
 
 All clients must have the same questID → QuestSO mapping.
 
@@ -236,9 +236,9 @@ All clients must have the same questID → QuestSO mapping.
 
 ---
 
-## Disconnect Handling - P1
+## Disconnect handling - P1
 
-### Player Disconnect Detection
+### Player disconnect detection
 
 ```csharp
 using Mirror;
@@ -266,7 +266,7 @@ namespace ProjectName.Network
 }
 ```
 
-### Host Disconnect Handling
+### Host disconnect handling
 
 In Mirror, when the host (server) disconnects, **all clients are forcibly disconnected**.
 
@@ -299,23 +299,23 @@ namespace ProjectName.Quest
 
 ---
 
-## Late Join Checklist - P1
+## Late join checklist - P1
 
-### States Requiring Late Join Support
+### States requiring late join support
 
 - [ ] Quest selected flag → SyncVar + EventChannel
 - [ ] Player Ready state → SyncVar (NetworkRoomPlayer standard)
 - [ ] Game state (preparing/in-progress/completed) → SyncVar
 - [ ] Player HP, score, etc. → SyncVar
 
-### Events NOT Requiring Late Join Support
+### Events NOT requiring late join support
 
 - [ ] Effect playback → ClientRpc
 - [ ] Sound playback → ClientRpc
 - [ ] Temporary notifications/messages → ClientRpc
 - [ ] Animation triggers → ClientRpc
 
-### Disconnect Handling
+### Disconnect handling
 
 - [ ] RuntimeSet Add/Remove implementation (OnStartClient/OnStopClient)
 - [ ] Proper cleanup in OnStopServer (host disconnect)
@@ -323,7 +323,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Test Scenarios - P1
+## Test scenarios - P1
 
 | Test Case | Steps | Expected Result |
 |-----------|-------|-----------------|
