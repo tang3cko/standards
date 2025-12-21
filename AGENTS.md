@@ -1,8 +1,8 @@
-# Coding standards
+# Tang3cko Standards
 
 ## Purpose
 
-Shared coding standards for Tang3cko projects.
+Shared standards and Claude Code skills for Tang3cko projects.
 
 ---
 
