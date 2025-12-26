@@ -261,62 +261,53 @@ namespace ProjectName.Item
 
 ### RuntimeSet class definition
 
+Use the `RuntimeSetSO<T>` base class for custom component tracking:
+
 ```csharp
 using UnityEngine;
-using System.Collections.Generic;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Enemy
 {
     /// <summary>
     /// Enemy RuntimeSet for dynamic tracking
     /// </summary>
-    [CreateAssetMenu(fileName = "EnemyRuntimeSet", menuName = "ProjectName/RuntimeSet/Enemy")]
-    public class EnemyRuntimeSetSO : ScriptableObject
+    [CreateAssetMenu(fileName = "EnemyRuntimeSet", menuName = "Reactive SO/Runtime Sets/Enemy")]
+    public class EnemyRuntimeSetSO : RuntimeSetSO<EnemyController>
     {
-        private List<EnemyController> items = new List<EnemyController>();
+        // Base class provides:
+        // - Items (IReadOnlyList<T>)
+        // - Count
+        // - Add(T item)
+        // - Remove(T item)
+        // - Clear()
+        // - Contains(T item)
+        // Inspector-assignable EventChannels:
+        // - onItemsChanged (VoidEventChannelSO)
+        // - onCountChanged (IntEventChannelSO)
 
         /// <summary>
-        /// Read-only access to all enemies
+        /// Get the closest enemy to a position
         /// </summary>
-        public IReadOnlyList<EnemyController> Items => items;
-
-        /// <summary>
-        /// Add an enemy to the set
-        /// </summary>
-        public void Add(EnemyController enemy)
+        public EnemyController GetClosestTo(Vector3 position)
         {
-            if (enemy == null)
+            EnemyController closest = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var enemy in Items)
             {
-                Debug.LogWarning("[EnemyRuntimeSet] Attempted to add null enemy");
-                return;
+                if (enemy == null) continue;
+
+                float distance = Vector3.Distance(position, enemy.transform.position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = enemy;
+                }
             }
 
-            if (!items.Contains(enemy))
-            {
-                items.Add(enemy);
-            }
+            return closest;
         }
-
-        /// <summary>
-        /// Remove an enemy from the set
-        /// </summary>
-        public void Remove(EnemyController enemy)
-        {
-            items.Remove(enemy);
-        }
-
-        /// <summary>
-        /// Clear all enemies
-        /// </summary>
-        public void Clear()
-        {
-            items.Clear();
-        }
-
-        /// <summary>
-        /// Get count of active enemies
-        /// </summary>
-        public int Count => items.Count;
     }
 }
 ```
@@ -325,6 +316,7 @@ namespace ProjectName.Enemy
 
 ```csharp
 using UnityEngine;
+using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Enemy
 {
@@ -346,10 +338,38 @@ namespace ProjectName.Enemy
         }
     }
 
-    // Usage example
+    // Usage example with EventChannels
     public class EnemySpawner : MonoBehaviour
     {
+        [Header("RuntimeSet")]
         [SerializeField] private EnemyRuntimeSetSO enemySet;
+
+        [Header("Event Channels")]
+        [SerializeField] private VoidEventChannelSO onEnemiesChanged;
+        [SerializeField] private IntEventChannelSO onEnemyCountChanged;
+
+        private void OnEnable()
+        {
+            // Subscribe to EventChannels assigned to the RuntimeSet
+            onEnemiesChanged.OnEventRaised += HandleEnemiesChanged;
+            onEnemyCountChanged.OnEventRaised += HandleCountChanged;
+        }
+
+        private void OnDisable()
+        {
+            onEnemiesChanged.OnEventRaised -= HandleEnemiesChanged;
+            onEnemyCountChanged.OnEventRaised -= HandleCountChanged;
+        }
+
+        private void HandleEnemiesChanged()
+        {
+            Debug.Log($"Enemies changed. Current count: {enemySet.Count}");
+        }
+
+        private void HandleCountChanged(int newCount)
+        {
+            Debug.Log($"Enemy count: {newCount}");
+        }
 
         public void ProcessAllEnemies()
         {
@@ -561,8 +581,10 @@ Assets/_Project/ScriptableObjects/Data/Quest/
 
 ## References
 
-- [ScriptableObject Pattern](scriptableobject.md)
 - [Event Channels](event-channels.md)
+- [Variables System](variables.md)
 - [RuntimeSet Pattern](runtime-sets.md)
+- [ReactiveEntitySet Pattern](reactive-entity-sets.md)
+- [ScriptableObject Pattern](scriptableobject.md)
 - [Dependency Management](dependency-management.md)
 - [SpecKit Workflow](https://github.com/github/spec-kit)

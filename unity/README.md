@@ -23,10 +23,12 @@ This directory contains coding standards for Unity projects using C#. It covers 
 
 | Guide | Description |
 |-------|-------------|
+| [Architecture overview](architecture/README.md) | Pattern selection guide, relationship diagram |
 | [ScriptableObject](architecture/scriptableobject.md) | SO-driven architecture, data assets |
 | [Event channels](architecture/event-channels.md) | Tang3cko.ReactiveSO, decoupling |
 | [Variables](architecture/variables.md) | Reactive variables, auto-notification |
 | [Runtime sets](architecture/runtime-sets.md) | Dynamic object collections |
+| [Reactive entity sets](architecture/reactive-entity-sets.md) | Centralized entity state management |
 | [Dependency management](architecture/dependency-management.md) | Dependency injection priorities |
 | [Extension patterns](architecture/extension-patterns.md) | SpecKit workflow, feature additions |
 

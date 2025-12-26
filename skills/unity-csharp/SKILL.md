@@ -41,9 +41,11 @@ Read these files for complete standards:
 
 ### Architecture
 
+- [Architecture overview](../../unity/architecture/README.md) - Pattern selection guide
 - [ScriptableObject](../../unity/architecture/scriptableobject.md)
 - [Event channels](../../unity/architecture/event-channels.md)
 - [Variables](../../unity/architecture/variables.md)
 - [Runtime sets](../../unity/architecture/runtime-sets.md)
+- [Reactive entity sets](../../unity/architecture/reactive-entity-sets.md)
 - [Dependency management](../../unity/architecture/dependency-management.md)
 - [Extension patterns](../../unity/architecture/extension-patterns.md)

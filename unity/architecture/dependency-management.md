@@ -356,5 +356,7 @@ public class UIManager : MonoBehaviour
 ## References
 
 - [Event Channels](event-channels.md)
-- [ScriptableObject Pattern](scriptableobject.md)
+- [Variables System](variables.md)
 - [RuntimeSet Pattern](runtime-sets.md)
+- [ReactiveEntitySet Pattern](reactive-entity-sets.md)
+- [ScriptableObject Pattern](scriptableobject.md)
