@@ -296,5 +296,8 @@ namespace ProjectName.Quest
 ## References
 
 - [Event Channels](event-channels.md)
+- [Variables System](variables.md)
 - [RuntimeSet Pattern](runtime-sets.md)
+- [ReactiveEntitySet Pattern](reactive-entity-sets.md)
 - [Extension Patterns](extension-patterns.md)
+- [Dependency Management](dependency-management.md)

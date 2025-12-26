@@ -1,4 +1,4 @@
-# Reactive variables with Variables System
+# Reactive Variables with Variables System
 
 ## Purpose
 
@@ -11,7 +11,10 @@ Implement reactive state management using Tang3cko.ReactiveSO Variables for auto
 - [ ] Access values via Variable.Value property
 - [ ] Assign EventChannel optionally based on notification requirements
 - [ ] Use appropriate Variable type for data being stored
+- [ ] Create Variable assets via `Reactive SO/Variables/...`
 - [ ] Follow Variable naming conventions (noun form)
+- [ ] Use Variable Monitor Window for debugging (`Window/Reactive SO/Variable Monitor`)
+- [ ] Consider GPU Sync for shader-related variables
 
 ---
 
@@ -66,18 +69,24 @@ onEnemyKilled.RaiseEvent();  // Fire and forget
 
 ---
 
-## Variable types - P1
+## Built-in Variable types - P1
 
-### Available types
+### Available types (11 built-in)
+
+All types are provided by the package. Create assets via `Create → Reactive SO → Variables → [Type]`.
 
 | Variable Type | Use Case | Example |
 |---------------|----------|---------|
 | `IntVariableSO` | Integer values, counts, IDs | Score, kill count, level |
+| `LongVariableSO` | Large integer values | Experience points, currency |
 | `FloatVariableSO` | Decimal values, ratios | Health percentage, speed multiplier |
+| `DoubleVariableSO` | High-precision decimals | Scientific calculations, timers |
 | `BoolVariableSO` | Boolean flags, toggles | Game paused, feature enabled |
 | `StringVariableSO` | Text data, keys | Player name, active quest ID |
 | `Vector2VariableSO` | 2D positions, input | Mouse position, joystick input |
 | `Vector3VariableSO` | 3D positions, directions | Player position, look direction |
+| `QuaternionVariableSO` | Rotations | Camera rotation, object orientation |
+| `ColorVariableSO` | Color values | Theme color, player color |
 | `GameObjectVariableSO` | Object references | Active target, selected object |
 
 ---
@@ -88,11 +97,11 @@ onEnemyKilled.RaiseEvent();  // Fire and forget
 
 **1. Create Variable Asset**
 
-Right-click in Project window → Create → Event Channels → Variables → Int Variable
+Right-click in Project window → Create → Reactive SO → Variables → Int Variable
 
 **2. Create EventChannel Asset (Optional)**
 
-Right-click in Project window → Create → Event Channels → Channels → Int Event
+Right-click in Project window → Create → Reactive SO → Channels → Int Event
 
 **3. Assign EventChannel to Variable**
 
@@ -176,6 +185,74 @@ namespace ProjectName.UI
 
 ---
 
+## GPU Sync feature - P1
+
+### Overview
+
+Variables can automatically synchronize their values to shader global properties, enabling data-driven shader effects without manual scripting.
+
+### Supported types for GPU Sync
+
+| Variable Type | Shader Property Type |
+|---------------|---------------------|
+| `IntVariableSO` | `int` |
+| `FloatVariableSO` | `float` |
+| `BoolVariableSO` | `int` (0 or 1) |
+| `Vector2VariableSO` | `Vector2` |
+| `Vector3VariableSO` | `Vector3` |
+| `QuaternionVariableSO` | `Vector4` |
+| `ColorVariableSO` | `Color` |
+
+### Enabling GPU Sync
+
+1. Select Variable asset in Project window
+2. In Inspector, enable "GPU Sync Enabled"
+3. Enter shader property name (e.g., `_PlayerHealth`)
+
+### Example: Health-based shader effect
+
+**Variable Configuration:**
+- Type: `FloatVariableSO`
+- GPU Sync Enabled: ✓
+- Property Name: `_PlayerHealth`
+
+**Shader Code:**
+
+```hlsl
+// Shader receives value automatically
+float _PlayerHealth;
+
+fixed4 frag(v2f i) : SV_Target
+{
+    // Use health value for visual effect
+    fixed4 col = tex2D(_MainTex, i.uv);
+
+    // Red tint when health is low
+    if (_PlayerHealth < 0.3)
+    {
+        col.r += (0.3 - _PlayerHealth) * 2;
+    }
+
+    return col;
+}
+```
+
+**C# Code:**
+
+```csharp
+// Just update the Variable - shader receives value automatically
+playerHealth.Value = currentHealth / maxHealth;
+```
+
+### Use cases for GPU Sync
+
+- Player health affecting post-processing
+- Time-based shader animations
+- Game state affecting environment shaders
+- Color theme propagation to all materials
+
+---
+
 ## Value change detection - P1
 
 ### Automatic event firing
@@ -256,6 +333,29 @@ private void Update()
 
 ---
 
+## Debugging features - P1
+
+### Variable Monitor Window
+
+Access via `Window → Reactive SO → Variable Monitor` to monitor all Variables in real-time.
+
+Features:
+- View all Variable assets in project
+- Real-time value display during Play Mode
+- Filter by name or type
+- Click to select asset in Project window
+
+### Inspector debugging
+
+Select any Variable asset in Inspector during Play Mode to see:
+- Current runtime value (editable)
+- Initial value
+- "Reset to Initial" button
+- Subscriber list for assigned EventChannel
+- GPU Sync status and property name
+
+---
+
 ## Naming conventions - P1
 
 ### Variable assets
@@ -268,6 +368,8 @@ Use noun form describing the data:
 - playerHealth (FloatVariableSO)
 - isGamePaused (BoolVariableSO)
 - mousePosition (Vector2VariableSO)
+- cameraRotation (QuaternionVariableSO)
+- themeColor (ColorVariableSO)
 
 ❌ Bad:
 - onScoreChanged (use EventChannel for this)
@@ -422,12 +524,15 @@ playerScore.Value = 1000;  // Additive scene loading preserves this value
 Assets/_Project/ScriptableObjects/Variables/
 ├── PlayerScore.asset (IntVariableSO)
 ├── PlayerHealth.asset (FloatVariableSO)
+├── CameraRotation.asset (QuaternionVariableSO)
+├── ThemeColor.asset (ColorVariableSO)
 └── IsGameActive.asset (BoolVariableSO)
 ```
 
 - View current runtime value in Inspector during Play mode
 - "Reset to Initial" button for testing
 - Easily find all references to a variable
+- Monitor all variables in Variable Monitor Window
 
 ### Testability
 
@@ -569,6 +674,7 @@ private void Start()
 ## References
 
 - [Event Channels](event-channels.md)
-- [ScriptableObject Pattern](scriptableobject.md)
 - [RuntimeSet Pattern](runtime-sets.md)
+- [ReactiveEntitySet Pattern](reactive-entity-sets.md)
+- [ScriptableObject Pattern](scriptableobject.md)
 - [Dependency Management](dependency-management.md)

@@ -9,15 +9,18 @@ Implement event-driven architecture using Tang3cko.ReactiveSO for decoupled comm
 - [ ] Use EventChannels for decoupled communication
 - [ ] Subscribe in OnEnable, unsubscribe in OnDisable
 - [ ] Use null conditional operator when raising events
-- [ ] Create EventChannel ScriptableObject assets
+- [ ] Create EventChannel ScriptableObject assets via `Reactive SO/Channels/...`
 - [ ] Follow EventChannel naming conventions (on + PastTense)
-- [ ] Choose appropriate EventChannel type for data being passed
+- [ ] Choose appropriate built-in EventChannel type for data being passed
+- [ ] Use Event Monitor Window for debugging (`Window/Reactive SO/Event Monitor`)
 
 ---
 
 ## EventChannel pattern - P1
 
 ### Basic implementation
+
+Use built-in EventChannel types provided by the package. Custom EventChannels are only needed for complex data types.
 
 ```csharp
 using UnityEngine;
@@ -26,9 +29,10 @@ using Tang3cko.ReactiveSO;
 namespace ProjectName.Quest
 {
     /// <summary>
-    /// EventChannel for Quest-related events
+    /// Custom EventChannel for Quest-related events
+    /// Only needed when built-in types are insufficient
     /// </summary>
-    [CreateAssetMenu(fileName = "QuestEventChannel", menuName = "ProjectName/Events/Quest Event Channel")]
+    [CreateAssetMenu(fileName = "QuestEventChannel", menuName = "Reactive SO/Channels/Quest Event Channel")]
     public class QuestEventChannelSO : EventChannelSO<QuestSO>
     {
         // Tang3cko.ReactiveSO base class provides all functionality
@@ -109,27 +113,31 @@ namespace ProjectName.UI
 
 ---
 
-## EventChannel types - P1
+## Built-in EventChannel types - P1
 
-### Available types
+### Available types (12 built-in)
+
+All types are provided by the package. Create assets via `Create → Reactive SO → Channels → [Type]`.
 
 | EventChannel Type | Use Case | Example |
 |-------------------|----------|---------|
-| `VoidEventChannelSO` | No parameters | OnEnemyKilled, OnSettingsLoaded |
-| `IntEventChannelSO` | Integer values, enums | OnCoinEarned(amount), OnScoreChanged |
+| `VoidEventChannelSO` | No parameters | OnGameStart, OnEnemyKilled |
+| `IntEventChannelSO` | Integer values, enums | OnScoreChanged, OnLevelUp |
+| `LongEventChannelSO` | Large integer values | OnExperienceGained, OnCurrencyChanged |
 | `FloatEventChannelSO` | Decimal values, ratios | OnHealthChanged(0-1), OnSpeedModified |
+| `DoubleEventChannelSO` | High-precision decimals | OnTimerUpdated, OnDistanceCalculated |
 | `BoolEventChannelSO` | Boolean flags | OnToggleChanged, OnGamePaused |
 | `StringEventChannelSO` | Text data | OnMessageReceived, OnPlayerNameChanged |
-| Custom EventChannel | Complex data | OnEnemyDeath(EnemyData, Position) |
+| `Vector2EventChannelSO` | 2D positions, input | OnMouseMoved, OnJoystickInput |
+| `Vector3EventChannelSO` | 3D positions, directions | OnPlayerMoved, OnTargetChanged |
+| `QuaternionEventChannelSO` | Rotations | OnCameraRotated, OnObjectRotated |
+| `ColorEventChannelSO` | Color values | OnColorChanged, OnThemeUpdated |
+| `GameObjectEventChannelSO` | Object references | OnTargetSelected, OnObjectSpawned |
 
 ### VoidEventChannel example
 
 ```csharp
-// Definition
-[CreateAssetMenu(fileName = "VoidEventChannel", menuName = "ProjectName/Events/Void Event Channel")]
-public class VoidEventChannelSO : EventChannelSO { }
-
-// Publisher
+// Publisher - use built-in VoidEventChannelSO
 [SerializeField] private VoidEventChannelSO onGameStart;
 
 private void StartGame()
@@ -143,6 +151,11 @@ private void StartGame()
 private void OnEnable()
 {
     onGameStart.OnEventRaised += HandleGameStart;
+}
+
+private void OnDisable()
+{
+    onGameStart.OnEventRaised -= HandleGameStart;
 }
 
 private void HandleGameStart()
@@ -170,10 +183,50 @@ private void OnEnable()
     onCoinEarned.OnEventRaised += HandleCoinEarned;
 }
 
+private void OnDisable()
+{
+    onCoinEarned.OnEventRaised -= HandleCoinEarned;
+}
+
 private void HandleCoinEarned(int amount)
 {
     totalCoins += amount;
     UpdateCoinDisplay();
+}
+```
+
+### Vector3EventChannel example
+
+```csharp
+// Publisher
+[SerializeField] private Vector3EventChannelSO onPlayerMoved;
+
+private void Update()
+{
+    if (transform.hasChanged)
+    {
+        onPlayerMoved?.RaiseEvent(transform.position);
+        transform.hasChanged = false;
+    }
+}
+
+// Subscriber
+[SerializeField] private Vector3EventChannelSO onPlayerMoved;
+
+private void OnEnable()
+{
+    onPlayerMoved.OnEventRaised += HandlePlayerMoved;
+}
+
+private void OnDisable()
+{
+    onPlayerMoved.OnEventRaised -= HandlePlayerMoved;
+}
+
+private void HandlePlayerMoved(Vector3 position)
+{
+    // Update minimap, AI awareness, etc.
+    UpdateMinimapMarker(position);
 }
 ```
 
@@ -204,6 +257,11 @@ private void OnEnable()
     onGameEnd.OnEventRaised += HandleGameEnd;
 }
 
+private void OnDisable()
+{
+    onGameEnd.OnEventRaised -= HandleGameEnd;
+}
+
 private void HandleGameEnd(int reasonInt)
 {
     GameEndReason reason = (GameEndReason)reasonInt;
@@ -221,6 +279,83 @@ private void HandleGameEnd(int reasonInt)
             break;
     }
 }
+```
+
+---
+
+## Custom EventChannel types - P2
+
+### When to create custom types
+
+Create custom EventChannels only when:
+- Passing complex data structures
+- Passing multiple values together
+- Type safety is critical for the specific use case
+
+```csharp
+using UnityEngine;
+using Tang3cko.ReactiveSO;
+
+namespace ProjectName.Combat
+{
+    /// <summary>
+    /// Custom data for damage events
+    /// </summary>
+    [System.Serializable]
+    public struct DamageEventData
+    {
+        public GameObject target;
+        public int damage;
+        public Vector3 hitPoint;
+        public DamageType damageType;
+    }
+
+    public enum DamageType { Physical, Fire, Ice, Lightning }
+
+    /// <summary>
+    /// Custom EventChannel for complex damage events
+    /// </summary>
+    [CreateAssetMenu(fileName = "DamageEventChannel", menuName = "Reactive SO/Channels/Damage Event Channel")]
+    public class DamageEventChannelSO : EventChannelSO<DamageEventData>
+    {
+    }
+}
+```
+
+---
+
+## Debugging features - P1
+
+### Event Monitor Window
+
+Access via `Window → Reactive SO → Event Monitor` to monitor events in real-time during Play Mode.
+
+Features:
+- Real-time event logging
+- Filter by event channel name
+- View event values and timestamps
+- See listener counts
+- **Caller tracking** - shows which script raised the event
+- Export to CSV for analysis
+- Pause/resume logging
+
+### Inspector debugging
+
+Select any EventChannel asset in Inspector during Play Mode to see:
+- Current subscriber list with clickable GameObject references
+- Manual trigger button to test events
+- Subscriber count
+
+### Caller information
+
+EventChannels automatically track caller information for debugging:
+
+```csharp
+// CallerInfo includes:
+// - File path where RaiseEvent was called
+// - Line number
+// - Method name
+// Visible in Event Monitor Window
 ```
 
 ---
@@ -262,6 +397,11 @@ public class GameStatsManager : MonoBehaviour
         onEnemyKilled.OnEventRaised += IncrementKillCount;
     }
 
+    private void OnDisable()
+    {
+        onEnemyKilled.OnEventRaised -= IncrementKillCount;
+    }
+
     private void IncrementKillCount()
     {
         totalKills++;
@@ -276,6 +416,11 @@ public class QuestManager : MonoBehaviour
     private void OnEnable()
     {
         onEnemyKilled.OnEventRaised += CheckQuestProgress;
+    }
+
+    private void OnDisable()
+    {
+        onEnemyKilled.OnEventRaised -= CheckQuestProgress;
     }
 
     private void CheckQuestProgress()
@@ -296,6 +441,11 @@ public class AudioManager : MonoBehaviour
     private void OnEnable()
     {
         onEnemyKilled.OnEventRaised += PlayDeathSound;
+    }
+
+    private void OnDisable()
+    {
+        onEnemyKilled.OnEventRaised -= PlayDeathSound;
     }
 
     private void PlayDeathSound()
@@ -320,6 +470,7 @@ You can:
 - See all event channels in Project window
 - Find all objects using an event channel (Select asset → Find References In Scene)
 - Debug event flow by selecting the asset
+- Monitor events in Event Monitor Window
 
 ---
 
@@ -375,6 +526,8 @@ namespace ProjectName.Enemy
 
 ## References
 
-- [ScriptableObject Pattern](scriptableobject.md)
+- [Variables System](variables.md)
 - [RuntimeSet Pattern](runtime-sets.md)
+- [ReactiveEntitySet Pattern](reactive-entity-sets.md)
+- [ScriptableObject Pattern](scriptableobject.md)
 - [Dependency Management](dependency-management.md)
