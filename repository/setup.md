@@ -28,10 +28,14 @@ Brief project description.
 - Follow existing patterns and structure
 ```
 
-**Create symlink for Claude Code:**
+**Create symlinks for AI Agents:**
 
 ```bash
+# Claude Code
 ln -s AGENTS.md CLAUDE.md
+
+# Gemini CLI
+ln -s AGENTS.md GEMINI.md
 ```
 
 **Notes:**

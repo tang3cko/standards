@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Shared standards and Claude Code skills for Tang3cko projects.
+Shared standards, Claude Code skills, and Gemini CLI context for Tang3cko projects.
 
 ---
 

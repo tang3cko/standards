@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Shared standards and Claude Code skills for Tang3cko projects. Add as a Git submodule to maintain consistency across repositories.
+Shared standards, Claude Code skills, and Gemini CLI context for Tang3cko projects. Add as a Git submodule to maintain consistency across repositories.
 
 ---
 
@@ -16,7 +16,7 @@ Shared standards and Claude Code skills for Tang3cko projects. Add as a Git subm
 | [repository/](repository/) | Repository setup standards |
 | [unity/](unity/) | Unity and C# coding standards |
 
-### Claude Code skills
+### AI Agent Skills
 
 | Skill | Description |
 |-------|-------------|
