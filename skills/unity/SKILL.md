@@ -27,7 +27,8 @@ What are you doing?
 │   ├─ Per-entity state → [Reactive entity sets](./references/architecture/reactive-entity-sets.md)
 │   ├─ RES + Job System → [RES Job System](./references/architecture/reactive-entity-sets-job-system.md)
 │   ├─ RES persistence → [RES Persistence](./references/architecture/reactive-entity-sets-persistence.md)
-│   └─ Data assets → [ScriptableObject](./references/architecture/scriptableobject.md)
+│   ├─ Data assets → [ScriptableObject](./references/architecture/scriptableobject.md)
+│   └─ Command pattern → [Actions](./references/architecture/actions.md)
 │
 ├─▶ Writing/reviewing tests
 │   ├─ Testing principles → [Principles](./references/testing/principles.md)
@@ -165,6 +166,7 @@ Examples:
 - [Reactive entity sets](./references/architecture/reactive-entity-sets.md) - Per-entity state, O(1) lookup
 - [RES Job System](./references/architecture/reactive-entity-sets-job-system.md) - Orchestrator, Burst, parallel processing
 - [RES Persistence](./references/architecture/reactive-entity-sets-persistence.md) - Snapshot, restore, save/load
+- [Actions](./references/architecture/actions.md) - Command pattern, reusable behaviors
 - [Dependency management](./references/architecture/dependency-management.md) - DI priorities
 - [Extension patterns](./references/architecture/extension-patterns.md) - SpecKit workflow
 

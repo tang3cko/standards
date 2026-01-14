@@ -4,6 +4,53 @@
 
 Implement event-driven architecture using Tang3cko.ReactiveSO for decoupled communication between game systems.
 
+---
+
+## Design philosophy - P1
+
+### Observer pattern with ScriptableObjects
+
+EventChannels implement the Observer pattern using ScriptableObject assets as the communication medium.
+
+**Traditional Unity:**
+
+```
+Publisher → Direct reference → Subscriber
+             (tight coupling)
+```
+
+**EventChannel pattern:**
+
+```
+Publisher → ScriptableObject Asset → Subscriber(s)
+             (complete decoupling)
+```
+
+### Key insight
+
+**The publisher doesn't know who receives the event, and subscribers don't know who sent it.**
+
+This enables:
+- **N:N communication** - Multiple publishers, multiple subscribers
+- **Scene independence** - Communication across scenes
+- **Hot swappable** - Change wiring in Inspector without code
+- **Testable** - Easy to mock events in tests
+
+### Stateless by design
+
+EventChannels are **fire-and-forget**. They don't store values:
+
+```csharp
+// EventChannel: Notification only
+onEnemyKilled.RaiseEvent();  // No value stored
+
+// If you need to store the value, use Variable instead
+// Variable: State + notification
+playerScore.Value = 100;  // Stores value AND notifies
+```
+
+---
+
 ## Checklist
 
 - [ ] Use EventChannels for decoupled communication
@@ -357,6 +404,34 @@ EventChannels automatically track caller information for debugging:
 // - Method name
 // Visible in Event Monitor Window
 ```
+
+### OnAnyEventRaised static event
+
+Static event for global event monitoring (Editor only):
+
+```csharp
+#if UNITY_EDITOR
+private void OnEnable()
+{
+    EventChannelSO.OnAnyEventRaised += HandleAnyEventRaised;
+}
+
+private void OnDisable()
+{
+    EventChannelSO.OnAnyEventRaised -= HandleAnyEventRaised;
+}
+
+private void HandleAnyEventRaised(EventChannelSO channel, object value, CallerInfo callerInfo)
+{
+    Debug.Log($"Event raised: {channel.name} with value {value} from {callerInfo}");
+}
+#endif
+```
+
+Use cases:
+- Custom debugging tools
+- Analytics integration
+- Event logging systems
 
 ---
 
