@@ -35,10 +35,8 @@ Shared coding standards and Claude Code skills for Tang3cko projects.
 In Claude Code, use the `/plugin` command:
 
 ```
-/plugin add https://github.com/tang3cko/coding-standards
+/plugin marketplace add tang3cko/standards
 ```
-
-See [Claude Code Plugins Documentation](https://code.claude.com/docs/en/plugins) for details.
 
 ---
 
