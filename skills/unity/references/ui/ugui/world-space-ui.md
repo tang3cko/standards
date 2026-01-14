@@ -34,6 +34,18 @@ Define implementation patterns for uGUI World Space Canvas to display UI element
 - **HUD elements** - Use UI Toolkit instead
 - **Settings panels** - Use UI Toolkit instead
 
+### Note: UI Toolkit World Space (Unity 6.2+)
+
+Unity 6.2 introduced World Space support for UI Toolkit. However:
+
+- Still maturing - not considered production-ready yet
+- VR/XR: Good integration with XR Interaction Toolkit
+- Unity continues investing in uGUI for World Space use cases
+
+**Recommendation**: For new Unity 6.2+ projects, evaluate UI Toolkit World Space for consistency. For production or Unity 6.1 and earlier, continue using uGUI.
+
+See: [Unity UI Toolkit World Space Guide](https://unity.com/resources/how-to-create-world-space-ui-toolkit)
+
 ---
 
 ## Basic template - P1

@@ -14,7 +14,7 @@ Follow Unity-specific conventions and patterns to ensure framerate-independent b
 - [ ] Use `OnCollisionEnter` for physical impacts
 - [ ] Cache `GetComponent` calls in `Awake`
 - [ ] Subscribe to events in `OnEnable`, unsubscribe in `OnDisable`
-- [ ] Cache `WaitForSeconds` in coroutines
+- [ ] Choose async pattern: Awaitable (Unity 6+), UniTask, or Coroutines
 - [ ] Use `OnValidate` for Inspector validation
 
 ---
@@ -494,7 +494,27 @@ public class FindMethods : MonoBehaviour
 
 ---
 
-## Coroutines - P1
+## Async patterns - P1
+
+Unity offers multiple approaches for asynchronous operations. Choose based on your project's needs.
+
+### Comparison
+
+| Approach | Unity Version | Pros | Cons |
+|----------|---------------|------|------|
+| **Coroutines** | All | Simple, no dependencies, familiar | No try-catch, harder to compose |
+| **Awaitable** | Unity 6+ | Built-in, zero dependencies, try-catch | Limited features (no WhenAll) |
+| **UniTask** | Any (package) | Full-featured, performant, allocation-free | External dependency |
+
+### Recommendation
+
+- **Libraries**: Use `Awaitable` (zero external dependencies)
+- **Apps/Games**: Use `UniTask` for production (full-featured)
+- **Legacy/Simple**: Use Coroutines (still valid)
+
+---
+
+## Coroutines - P2
 
 ### Basic pattern
 
@@ -564,6 +584,195 @@ public class CoroutineControl : MonoBehaviour
             SpawnEnemy();
             yield return new WaitForSeconds(2f);
         }
+    }
+}
+```
+
+---
+
+## Awaitable (Unity 6+) - P1
+
+Unity 6 introduces `Awaitable` as a built-in async/await solution.
+
+### Basic pattern
+
+```csharp
+using UnityEngine;
+
+public class AwaitableExample : MonoBehaviour
+{
+    private async void Start()
+    {
+        await SpawnEnemiesAsync();
+    }
+
+    private async Awaitable SpawnEnemiesAsync()
+    {
+        while (true)
+        {
+            SpawnEnemy();
+            await Awaitable.WaitForSecondsAsync(1f);
+        }
+    }
+
+    private void SpawnEnemy()
+    {
+        Debug.Log("Enemy spawned");
+    }
+}
+```
+
+### Awaitable equivalents
+
+| Coroutine | Awaitable |
+|-----------|-----------|
+| `yield return null` | `await Awaitable.NextFrameAsync()` |
+| `yield return new WaitForSeconds(1f)` | `await Awaitable.WaitForSecondsAsync(1f)` |
+| `yield return new WaitForEndOfFrame()` | `await Awaitable.EndOfFrameAsync()` |
+| `yield return new WaitForFixedUpdate()` | `await Awaitable.FixedUpdateAsync()` |
+
+### Error handling with try-catch
+
+```csharp
+private async Awaitable LoadDataAsync()
+{
+    try
+    {
+        await Awaitable.WaitForSecondsAsync(1f);
+        // Load data...
+    }
+    catch (System.Exception ex)
+    {
+        Debug.LogError($"Load failed: {ex.Message}");
+    }
+}
+```
+
+### Cancellation
+
+```csharp
+using System.Threading;
+
+public class CancellableAsync : MonoBehaviour
+{
+    private CancellationTokenSource cts;
+
+    private async void Start()
+    {
+        cts = new CancellationTokenSource();
+        await SpawnLoopAsync(cts.Token);
+    }
+
+    private async Awaitable SpawnLoopAsync(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            SpawnEnemy();
+            await Awaitable.WaitForSecondsAsync(1f, token);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
+    }
+}
+```
+
+### Limitations
+
+Awaitable lacks some Task features:
+- No `WhenAll` / `WhenAny` (wrap in Task if needed)
+- Unity Test Framework doesn't recognize Awaitable return type
+
+```csharp
+// Workaround: Wrap in Task for WhenAll
+using System.Threading.Tasks;
+
+private async Task WaitAllExample()
+{
+    await Task.WhenAll(
+        LoadDataAsync().AsTask(),
+        LoadTexturesAsync().AsTask()
+    );
+}
+```
+
+---
+
+## UniTask - P1
+
+For production apps/games, [UniTask](https://github.com/Cysharp/UniTask) provides a complete async solution.
+
+### Installation
+
+```
+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
+```
+
+### Basic pattern
+
+```csharp
+using Cysharp.Threading.Tasks;
+
+public class UniTaskExample : MonoBehaviour
+{
+    private async void Start()
+    {
+        await SpawnEnemiesAsync();
+    }
+
+    private async UniTask SpawnEnemiesAsync()
+    {
+        while (true)
+        {
+            SpawnEnemy();
+            await UniTask.Delay(1000);  // milliseconds
+        }
+    }
+}
+```
+
+### UniTask advantages
+
+```csharp
+using Cysharp.Threading.Tasks;
+using System.Threading;
+
+public class UniTaskAdvanced : MonoBehaviour
+{
+    private CancellationTokenSource cts;
+
+    private async UniTaskVoid Start()
+    {
+        cts = new CancellationTokenSource();
+
+        // WhenAll support
+        await UniTask.WhenAll(
+            LoadDataAsync(),
+            LoadTexturesAsync()
+        );
+
+        // Frame-aware delays
+        await UniTask.DelayFrame(10);
+        await UniTask.Yield(PlayerLoopTiming.PreUpdate);
+    }
+
+    private async UniTask LoadDataAsync()
+    {
+        await UniTask.Delay(1000, cancellationToken: cts.Token);
+    }
+
+    private async UniTask LoadTexturesAsync()
+    {
+        await UniTask.Delay(500, cancellationToken: cts.Token);
+    }
+
+    private void OnDestroy()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
     }
 }
 ```

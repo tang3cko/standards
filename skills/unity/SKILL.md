@@ -17,6 +17,8 @@ What are you doing?
 │   ├─ File/folder structure → [Code organization](./references/core/code-organization.md)
 │   ├─ Error handling → [Error handling](./references/core/error-handling.md)
 │   ├─ Performance issues → [Performance](./references/core/performance.md)
+│   ├─ Async (Awaitable/UniTask) → [Unity specifics](./references/core/unity-specifics.md)
+│   ├─ Input handling → [Input System](./references/core/input-system.md)
 │   └─ Unity-specific patterns → [Unity specifics](./references/core/unity-specifics.md)
 │
 ├─▶ Designing architecture/data flow
@@ -113,7 +115,7 @@ public void MethodName_Condition_ExpectedResult()
 | Mode | Use for |
 |------|---------|
 | Edit Mode | Pure logic, no MonoBehaviour lifecycle |
-| Play Mode | MonoBehaviour, Physics, Coroutines |
+| Play Mode | MonoBehaviour, Physics, Coroutines/Async |
 
 ### UI quick reference (P1)
 
@@ -153,7 +155,8 @@ Examples:
 - [Error handling](./references/core/error-handling.md) - Null safety, try-catch patterns
 - [Comments documentation](./references/core/comments-documentation.md) - XML docs, Tooltip, Header
 - [Performance](./references/core/performance.md) - Caching, pooling, Update optimization
-- [Unity specifics](./references/core/unity-specifics.md) - deltaTime, RequireComponent, Colliders
+- [Unity specifics](./references/core/unity-specifics.md) - Async patterns, deltaTime, RequireComponent
+- [Input System](./references/core/input-system.md) - InputReader pattern, Input Action Assets
 
 ### Architecture (Tang3cko.ReactiveSO)
 
