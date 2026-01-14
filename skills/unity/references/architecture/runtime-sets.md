@@ -628,5 +628,5 @@ See [ReactiveEntitySet Pattern](reactive-entity-sets.md) for centralized state m
 - [Event Channels](event-channels.md)
 - [Variables System](variables.md)
 - [ReactiveEntitySet Pattern](reactive-entity-sets.md)
-- [ScriptableObject Pattern](scriptableobject.md)
+- [Design Principles](design-principles.md)
 - [Dependency Management](dependency-management.md)

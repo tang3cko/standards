@@ -20,6 +20,7 @@ What are you doing?
 │   └─ Unity-specific patterns → [Unity specifics](./references/core/unity-specifics.md)
 │
 ├─▶ Designing architecture/data flow
+│   ├─ Design philosophy → [Design principles](./references/architecture/design-principles.md)
 │   ├─ Pattern selection → [Architecture overview](./references/architecture/overview.md)
 │   ├─ Event-driven communication → [Event channels](./references/architecture/event-channels.md)
 │   ├─ Reactive state → [Variables](./references/architecture/variables.md)
@@ -27,7 +28,6 @@ What are you doing?
 │   ├─ Per-entity state → [Reactive entity sets](./references/architecture/reactive-entity-sets.md)
 │   ├─ RES + Job System → [RES Job System](./references/architecture/reactive-entity-sets-job-system.md)
 │   ├─ RES persistence → [RES Persistence](./references/architecture/reactive-entity-sets-persistence.md)
-│   ├─ Data assets → [ScriptableObject](./references/architecture/scriptableobject.md)
 │   └─ Command pattern → [Actions](./references/architecture/actions.md)
 │
 ├─▶ Writing/reviewing tests
@@ -66,6 +66,8 @@ What are you doing?
 
 ### Architecture pattern selection (P1)
 
+**Core principles:** Observability, Asset-based DI, DOD (see [Design principles](./references/architecture/design-principles.md))
+
 ```
 Need communication between systems?
 ├─ Store current value? → Variable (IntVariableSO, FloatVariableSO)
@@ -74,9 +76,6 @@ Need communication between systems?
 Track active objects in scene?
 ├─ Need per-object state? → ReactiveEntitySet
 └─ Simple tracking? → RuntimeSet
-
-Store game data/configuration?
-└─ Use ScriptableObject (immutable data assets)
 
 Dependency priority:
 1. EventChannel (decoupled)
@@ -158,8 +157,8 @@ Examples:
 
 ### Architecture (Tang3cko.ReactiveSO)
 
+- [Design principles](./references/architecture/design-principles.md) - Observability, Asset-based DI, DOD, Set Theory
 - [Overview](./references/architecture/overview.md) - Pattern selection flowchart, comparison table
-- [ScriptableObject](./references/architecture/scriptableobject.md) - Data assets, CreateAssetMenu
 - [Event channels](./references/architecture/event-channels.md) - Decoupled communication
 - [Variables](./references/architecture/variables.md) - Reactive state, auto-notification
 - [Runtime sets](./references/architecture/runtime-sets.md) - Object tracking without Find
