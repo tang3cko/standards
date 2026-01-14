@@ -265,5 +265,5 @@ namespace ProjectName.Category
 ## References
 
 - [Naming Conventions](naming-conventions.md)
-- [ScriptableObject Patterns](../architecture/scriptableobject.md)
+- [Design Principles](../architecture/design-principles.md)
 - [EventChannel Patterns](../architecture/event-channels.md)

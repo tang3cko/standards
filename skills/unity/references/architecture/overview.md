@@ -4,6 +4,8 @@
 
 Guide for selecting the appropriate ScriptableObject-based architecture pattern. All patterns are built on Tang3cko.ReactiveSO package.
 
+**Prerequisite:** Read [Design Principles](design-principles.md) first to understand the foundational philosophy (Observability, Asset-based DI, DOD, Set Theory).
+
 ---
 
 ## Pattern relationship diagram - P1
@@ -84,11 +86,6 @@ START: What do you need?
 │       └─▶ NO: Use RuntimeSet
 │                → Simple collection + iteration + count
 │
-├─▶ "Store game data/configuration"
-│   │
-│   └─▶ Use ScriptableObject
-│        → Immutable data assets (items, quests, enemies)
-│
 └─▶ "Manage dependencies"
     │
     └─▶ See Dependency Priority:
@@ -109,7 +106,6 @@ START: What do you need?
 | **Actions** | None | On execute | N/A | Reusable commands |
 | **RuntimeSet** | None | EventChannel | Iteration | Object tracking |
 | **ReactiveEntitySet** | Per-entity | Per-entity + EventChannel | O(1) by ID | Entity state management |
-| **ScriptableObject** | Immutable | None | Asset reference | Data configuration |
 
 ---
 
@@ -268,36 +264,6 @@ entitySet.SubscribeToEntity(entityId, (oldState, newState) => { });
 
 ---
 
-### ScriptableObject (Data)
-
-**Purpose:** Immutable game data and configuration
-
-**When to use:**
-- Define item stats, quest data, enemy configurations
-- Share data across multiple instances (100 enemies share 1 EnemyDataSO)
-- Designer-friendly Inspector editing
-- Hot reload during Play mode
-
-**Key features:**
-- Data-logic separation
-- Memory efficient (shared references)
-- Inspector-based configuration
-- CreateAssetMenu for easy asset creation
-
-**Example:**
-```csharp
-[CreateAssetMenu(menuName = "ProjectName/Data/Enemy")]
-public class EnemyDataSO : ScriptableObject
-{
-    public int maxHealth = 100;
-    public float moveSpeed = 3f;
-}
-```
-
-→ [ScriptableObject Pattern](scriptableobject.md)
-
----
-
 ## Common combinations - P1
 
 ### Health system (Variable + EventChannel)
@@ -350,6 +316,7 @@ EnemyEntitySetSO (enemyStates)
 
 ## References
 
+- [Design Principles](design-principles.md) - Foundational philosophy
 - [Event Channels](event-channels.md)
 - [Variables System](variables.md)
 - [Actions](actions.md) - Command pattern
@@ -357,6 +324,5 @@ EnemyEntitySetSO (enemyStates)
 - [ReactiveEntitySet Pattern](reactive-entity-sets.md)
 - [RES Job System](reactive-entity-sets-job-system.md) - Orchestrator, Burst
 - [RES Persistence](reactive-entity-sets-persistence.md) - Snapshot, save/load
-- [ScriptableObject Pattern](scriptableobject.md)
 - [Dependency Management](dependency-management.md)
 - [Extension Patterns](extension-patterns.md)

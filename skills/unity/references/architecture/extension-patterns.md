@@ -585,6 +585,6 @@ Assets/_Project/ScriptableObjects/Data/Quest/
 - [Variables System](variables.md)
 - [RuntimeSet Pattern](runtime-sets.md)
 - [ReactiveEntitySet Pattern](reactive-entity-sets.md)
-- [ScriptableObject Pattern](scriptableobject.md)
+- [Design Principles](design-principles.md)
 - [Dependency Management](dependency-management.md)
 - [SpecKit Workflow](https://github.com/github/spec-kit)

@@ -519,4 +519,4 @@ Assets/_Project/ScriptableObjects/Actions/
 
 - [Event Channels](event-channels.md) - For notification-style communication
 - [Variables System](variables.md) - Reactive state
-- [ScriptableObject Pattern](scriptableobject.md) - Data assets
+- [Design Principles](design-principles.md)
