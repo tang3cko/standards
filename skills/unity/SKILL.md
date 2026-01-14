@@ -25,6 +25,8 @@ What are you doing?
 │   ├─ Reactive state → [Variables](./references/architecture/variables.md)
 │   ├─ Object tracking → [Runtime sets](./references/architecture/runtime-sets.md)
 │   ├─ Per-entity state → [Reactive entity sets](./references/architecture/reactive-entity-sets.md)
+│   ├─ RES + Job System → [RES Job System](./references/architecture/reactive-entity-sets-job-system.md)
+│   ├─ RES persistence → [RES Persistence](./references/architecture/reactive-entity-sets-persistence.md)
 │   └─ Data assets → [ScriptableObject](./references/architecture/scriptableobject.md)
 │
 ├─▶ Writing/reviewing tests
@@ -161,6 +163,8 @@ Examples:
 - [Variables](./references/architecture/variables.md) - Reactive state, auto-notification
 - [Runtime sets](./references/architecture/runtime-sets.md) - Object tracking without Find
 - [Reactive entity sets](./references/architecture/reactive-entity-sets.md) - Per-entity state, O(1) lookup
+- [RES Job System](./references/architecture/reactive-entity-sets-job-system.md) - Orchestrator, Burst, parallel processing
+- [RES Persistence](./references/architecture/reactive-entity-sets-persistence.md) - Snapshot, restore, save/load
 - [Dependency management](./references/architecture/dependency-management.md) - DI priorities
 - [Extension patterns](./references/architecture/extension-patterns.md) - SpecKit workflow
 

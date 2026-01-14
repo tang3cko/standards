@@ -312,6 +312,8 @@ EnemyEntitySetSO (enemyStates)
 - [Variables System](variables.md)
 - [RuntimeSet Pattern](runtime-sets.md)
 - [ReactiveEntitySet Pattern](reactive-entity-sets.md)
+- [RES Job System](reactive-entity-sets-job-system.md) - Orchestrator, Burst
+- [RES Persistence](reactive-entity-sets-persistence.md) - Snapshot, save/load
 - [ScriptableObject Pattern](scriptableobject.md)
 - [Dependency Management](dependency-management.md)
 - [Extension Patterns](extension-patterns.md)
