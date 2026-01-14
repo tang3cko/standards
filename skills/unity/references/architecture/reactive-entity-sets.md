@@ -1,261 +1,265 @@
-# ReactiveEntitySet Pattern
+# Reactive Entity Sets
 
 ## Purpose
 
-Implement centralized state management for game entities using ScriptableObjects, providing ID-based entity lookup, per-entity state tracking, and scene-persistent data with O(1) performance.
-
-## Checklist
-
-- [ ] Use ReactiveEntitySet for centralized entity state management
-- [ ] Define custom data struct for entity state (must be a value type)
-- [ ] Create ReactiveEntitySetSO asset via `Reactive SO/Reactive Entity Sets/...`
-- [ ] Use `ReactiveEntity<TData>` base class for automatic lifecycle management
-- [ ] Subscribe to per-entity events with `SubscribeToEntity`
-- [ ] Assign EventChannels for set-level notifications (optional)
-- [ ] Use unique entity IDs for lookups
-- [ ] Consider scene persistence requirements
+Centralized per-entity state management using ScriptableObjects. Provides O(1) ID-based lookup, automatic change notifications, and scene-persistent data with clean separation between data and visualization.
 
 ---
 
-## ReactiveEntitySet vs RuntimeSet - P1
+## Design philosophy - P1
 
-### When to use ReactiveEntitySet
+### Entity-Object-View model
 
-```
-✅ Per-entity state management (health, mana, status effects)
-✅ ID-based entity lookup (get entity by ID)
-✅ Scene-persistent state (state survives scene reloads)
-✅ Complex state updates with per-entity events
-✅ Centralized data for external systems (UI, AI, networking)
-```
+RES inverts Unity's traditional ownership pattern.
 
-### When to use RuntimeSet
+**Traditional Unity:**
 
 ```
-✅ Simple object tracking (no per-entity state)
-✅ Iterate over all active objects
-✅ Simple add/remove lifecycle
-✅ No need for ID-based lookup
+GameObject owns its data
+  └── MonoBehaviour holds state
+      └── Destroyed with GameObject
 ```
+
+**RES pattern:**
+
+```
+ScriptableObject owns the data (persistent)
+  └── Entity = logical unit with ID and state
+      └── GameObject = view (displays data, doesn't own it)
+          └── Can be destroyed without losing state
+```
+
+### Key insight
+
+Entity existence is determined by RES registration, not GameObject existence.
+
+| Concept | Description |
+|---------|-------------|
+| Entity | Logical unit with ID and state, exists in RES |
+| Object | Runtime representation (GameObject), can exist independently |
+| View | GameObject that displays entity data but doesn't own it |
+
+### What this enables
+
+- **Cross-scene persistence** - State survives scene transitions without DontDestroyOnLoad
+- **Network synchronization** - Entity can exist before visual representation spawns
+- **Object pooling** - Reuse GameObjects while maintaining entity identity
+
+---
+
+## When to use - P1
+
+### Use RES when
+
+- Per-entity state management (health, mana, status effects)
+- ID-based lookup without Find operations
+- State must persist across scenes
+- External systems need entity data (UI, AI, networking)
+
+### Use RuntimeSet when
+
+- Simple object tracking (no per-entity state)
+- Iterate over all active objects
+- No ID-based lookup needed
 
 ### Comparison
 
 | Feature | RuntimeSet | ReactiveEntitySet |
 |---------|------------|-------------------|
-| State storage | None | Per-entity data |
-| Lookup | Iteration | O(1) by ID |
-| Events | EventChannel-based | Per-entity + EventChannel |
-| Persistence | Scene lifecycle | ScriptableObject |
+| Stores | Object references | Per-entity data |
+| Lookup | Iteration O(n) | ID-based O(1) |
+| Per-entity state | No | Yes |
+| Events | Collection level | Per-entity + collection |
 | Use case | Object tracking | State management |
 
 ---
 
-## Core concepts - P1
+## Data struct rules - P1
 
-### Architecture overview
+### Requirements
 
+RES data must be a struct with:
+
+- `unmanaged` constraint (no managed references)
+- **Fields only** (no properties, no methods)
+- All logic in external pure functions
+
+### Correct
+
+```csharp
+[Serializable]
+public struct EnemyState
+{
+    public int health;
+    public int maxHealth;
+    public bool isStunned;
+    public float stunEndTime;
+}
 ```
-ReactiveEntitySetSO<TData>
-├── Sparse Set data structure (O(1) operations)
-├── Per-entity state storage
-├── Inspector-assignable EventChannels:
-│   ├── OnItemAdded (IntEventChannelSO) - raised with entity ID
-│   ├── OnItemRemoved (IntEventChannelSO) - raised with entity ID
-│   ├── OnDataChanged (IntEventChannelSO) - raised with entity ID
-│   └── OnSetChanged (VoidEventChannelSO) - raised on any change
-└── Per-entity subscription via SubscribeToEntity()
 
-ReactiveEntity<TData>
-├── Automatic registration on OnEnable
-├── Automatic unregistration on OnDisable
-├── State access via protected State property
-└── OnStateChanged event for per-entity observers
+### Wrong
+
+```csharp
+[Serializable]
+public struct EnemyState
+{
+    public int health;
+    public int maxHealth;
+
+    // NG: Property is logic, even if read-only
+    public float HealthPercent => (float)health / maxHealth;
+
+    // NG: Method
+    public void TakeDamage(int damage) { health -= damage; }
+}
 ```
 
-### Data flow
+### Logic separation
 
+All calculation logic belongs in separate utility classes as pure functions.
+
+```csharp
+public static class EnemyStateCalculator
+{
+    public static float GetHealthPercent(EnemyState state)
+        => state.maxHealth > 0 ? (float)state.health / state.maxHealth : 0f;
+
+    public static EnemyState ApplyDamage(EnemyState state, int damage)
+    {
+        state.health = Mathf.Max(0, state.health - damage);
+        return state;
+    }
+
+    public static EnemyState ApplyStun(EnemyState state, float duration)
+    {
+        state.isStunned = true;
+        state.stunEndTime = Time.time + duration;
+        return state;
+    }
+}
 ```
-Entity spawns
-    ↓
-ReactiveEntity.OnEnable()
-    ↓
-EntitySet.Register(owner, initialData)
-    ↓
-OnItemAdded EventChannel fires (if assigned)
-    ↓
-Entity updates state
-    ↓
-EntitySet.SetData(owner, newData)
-    ↓
-Per-entity callback fires (if subscribed via SubscribeToEntity)
-OnDataChanged EventChannel fires (if assigned)
-    ↓
-UI/Systems react to state change
+
+Usage with RES:
+
+```csharp
+entitySet.UpdateData(entityId, state =>
+    EnemyStateCalculator.ApplyDamage(state, damage));
 ```
 
 ---
 
-## Basic implementation - P1
+## What data belongs in RES - P1
 
-### Defining entity data
+### Include
+
+Data computed or managed by **external systems**.
+
+| Data | Computed By | Reason |
+|------|-------------|--------|
+| health | Damage system | External logic modifies |
+| maxHealth | Configuration | Reference data |
+| isStunned | Status effect system | External logic controls |
+| buffMultiplier | Buff system | External logic modifies |
+
+### Exclude
+
+Data owned by **GameObject itself**.
+
+| Data | Owned By | Reason |
+|------|----------|--------|
+| Position | Transform | GameObject owns |
+| Rotation | Transform | GameObject owns |
+| Scale | Transform | GameObject owns |
+
+### Exception: Server-authoritative networking
+
+When server computes position, RES becomes the authoritative source.
 
 ```csharp
-using System;
-
-namespace ProjectName.Enemy
+[Serializable]
+public struct NetworkEntityState
 {
-    /// <summary>
-    /// State data for enemy entities (must be a struct)
-    /// </summary>
-    [Serializable]
-    public struct EnemyStateData
-    {
-        public int health;
-        public int maxHealth;
-        public bool isStunned;
-        public float stunEndTime;
+    public float3 position;    // Server-computed, OK in RES
+    public quaternion rotation; // Server-computed, OK in RES
+    public int health;
+}
+```
 
-        public float HealthPercent => maxHealth > 0 ? (float)health / maxHealth : 0f;
-        public bool IsDead => health <= 0;
+In this case, GameObject's Transform is a **view** of the authoritative position in RES.
+
+---
+
+## Usage patterns - P1
+
+### Pattern 1: Standalone data management
+
+Pure data management without GameObjects. Ideal for simulations, AI systems, networking.
+
+```csharp
+public class SimulationManager : MonoBehaviour
+{
+    [SerializeField] private UnitStateSetSO unitSet;
+
+    private void Start()
+    {
+        // Register entities with int IDs
+        for (int i = 0; i < 10000; i++)
+        {
+            unitSet.Register(i, new UnitState
+            {
+                health = 100,
+                teamId = i % 4
+            });
+        }
+    }
+
+    private void Update()
+    {
+        // Update all entities
+        foreach (var id in unitSet.EntityIds)
+        {
+            unitSet.UpdateData(id, state =>
+            {
+                // Simulation logic
+                return state;
+            });
+        }
+    }
+
+    private void OnDestroy()
+    {
+        unitSet.Clear();
     }
 }
 ```
 
-### Creating ReactiveEntitySetSO
+### Pattern 2: MonoBehaviour backend
+
+Using `ReactiveEntity<T>` for automatic lifecycle management.
 
 ```csharp
-using UnityEngine;
-using System.Collections.Generic;
-using Tang3cko.ReactiveSO;
-
-namespace ProjectName.Enemy
+public class Enemy : ReactiveEntity<EnemyState>
 {
-    /// <summary>
-    /// Centralized state management for all enemies
-    /// </summary>
-    [CreateAssetMenu(fileName = "EnemyEntitySet", menuName = "Reactive SO/Reactive Entity Sets/Enemy")]
-    public class EnemyEntitySetSO : ReactiveEntitySetSO<EnemyStateData>
+    [SerializeField] private EnemyStateSetSO enemySet;
+    [SerializeField] private int maxHealth = 100;
+
+    protected override ReactiveEntitySetSO<EnemyState> Set => enemySet;
+
+    protected override EnemyState InitialState => new EnemyState
     {
-        // Base class provides:
-        // - Register(MonoBehaviour owner, TData initialData)
-        // - Register(int id, TData initialData)
-        // - Unregister(MonoBehaviour owner)
-        // - Unregister(int id)
-        // - GetData(MonoBehaviour owner) / GetData(int id)
-        // - TryGetData(MonoBehaviour owner, out TData) / TryGetData(int id, out TData)
-        // - SetData(MonoBehaviour owner, TData) / SetData(int id, TData)
-        // - UpdateData(MonoBehaviour owner, Func<TData, TData>)
-        // - Contains(MonoBehaviour owner) / Contains(int id)
-        // - SubscribeToEntity(int id, Action<TData, TData>)
-        // - UnsubscribeFromEntity(int id, Action<TData, TData>)
-        // - Count, EntityIds, Data, Clear(), ForEach()
-        // Inspector-assignable EventChannels:
-        // - OnItemAdded (IntEventChannelSO)
-        // - OnItemRemoved (IntEventChannelSO)
-        // - OnDataChanged (IntEventChannelSO)
-        // - OnSetChanged (VoidEventChannelSO)
+        health = maxHealth,
+        maxHealth = maxHealth,
+        isStunned = false
+    };
 
-        /// <summary>
-        /// Get total health of all enemies
-        /// </summary>
-        public int GetTotalHealth()
-        {
-            int total = 0;
-            foreach (var entityId in EntityIds)
-            {
-                if (TryGetData(entityId, out var state))
-                {
-                    total += state.health;
-                }
-            }
-            return total;
-        }
+    // Auto Register on OnEnable
+    // Auto Unregister on OnDisable
 
-        /// <summary>
-        /// Get all enemies below health threshold
-        /// </summary>
-        public List<int> GetLowHealthEnemies(float threshold)
-        {
-            var result = new List<int>();
-            foreach (var entityId in EntityIds)
-            {
-                if (TryGetData(entityId, out var state) && state.HealthPercent < threshold)
-                {
-                    result.Add(entityId);
-                }
-            }
-            return result;
-        }
-    }
-}
-```
-
-### Manual registration pattern
-
-```csharp
-using UnityEngine;
-using Tang3cko.ReactiveSO;
-
-namespace ProjectName.Enemy
-{
-    /// <summary>
-    /// Enemy with manual ReactiveEntitySet integration
-    /// </summary>
-    public class Enemy : MonoBehaviour
+    public void TakeDamage(int damage)
     {
-        [Header("Entity Set")]
-        [SerializeField] private EnemyEntitySetSO entitySet;
+        State = EnemyStateCalculator.ApplyDamage(State, damage);
 
-        [Header("Settings")]
-        [SerializeField] private int maxHealth = 100;
-
-        private int entityId;
-
-        private void OnEnable()
-        {
-            entityId = GetInstanceID();
-
-            var initialState = new EnemyStateData
-            {
-                health = maxHealth,
-                maxHealth = maxHealth,
-                isStunned = false,
-                stunEndTime = 0f
-            };
-
-            entitySet.Register(entityId, initialState);
-        }
-
-        private void OnDisable()
-        {
-            entitySet.Unregister(entityId);
-        }
-
-        public void TakeDamage(int damage)
-        {
-            if (entitySet.TryGetData(entityId, out var state))
-            {
-                state.health = Mathf.Max(0, state.health - damage);
-                entitySet.SetData(entityId, state);
-
-                if (state.IsDead)
-                {
-                    Die();
-                }
-            }
-        }
-
-        public void ApplyStun(float duration)
-        {
-            if (entitySet.TryGetData(entityId, out var state))
-            {
-                state.isStunned = true;
-                state.stunEndTime = Time.time + duration;
-                entitySet.SetData(entityId, state);
-            }
-        }
-
-        private void Die()
+        if (State.health <= 0)
         {
             Destroy(gameObject);
         }
@@ -263,442 +267,149 @@ namespace ProjectName.Enemy
 }
 ```
 
-### Using ReactiveEntity base class
+---
 
-For cleaner code, extend `ReactiveEntity<TData>`:
+## Basic API - P1
+
+### Creating the asset
 
 ```csharp
-using UnityEngine;
-using Tang3cko.ReactiveSO;
-
-namespace ProjectName.Enemy
+[CreateAssetMenu(
+    fileName = "EnemyStateSet",
+    menuName = "Reactive SO/Reactive Entity Sets/Enemy State")]
+public class EnemyStateSetSO : ReactiveEntitySetSO<EnemyState>
 {
-    /// <summary>
-    /// Enemy using ReactiveEntity base class for automatic lifecycle
-    /// </summary>
-    public class EnemyEntity : ReactiveEntity<EnemyStateData>
-    {
-        [SerializeField] private EnemyEntitySetSO entitySet;
-        [SerializeField] private int maxHealth = 100;
-
-        // Required: specify which set to use
-        protected override ReactiveEntitySetSO<EnemyStateData> Set => entitySet;
-
-        // Required: specify initial state
-        protected override EnemyStateData InitialState => new EnemyStateData
-        {
-            health = maxHealth,
-            maxHealth = maxHealth,
-            isStunned = false,
-            stunEndTime = 0f
-        };
-
-        public void TakeDamage(int damage)
-        {
-            var state = State;
-            state.health = Mathf.Max(0, state.health - damage);
-            State = state;  // Automatically triggers events
-
-            if (state.IsDead)
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        public void ApplyStun(float duration)
-        {
-            var state = State;
-            state.isStunned = true;
-            state.stunEndTime = Time.time + duration;
-            State = state;
-        }
-
-        // Optional: cleanup before unregistration
-        protected override void OnBeforeUnregister()
-        {
-            Debug.Log($"Enemy dying with {State.health} HP");
-        }
-    }
 }
 ```
 
----
+### Registration
 
-## State change events - P1
+```csharp
+// With int ID
+entitySet.Register(entityId, initialState);
+entitySet.Unregister(entityId);
+
+// With MonoBehaviour (uses GetInstanceID internally)
+entitySet.Register(this, initialState);
+entitySet.Unregister(this);
+```
+
+### Data access
+
+```csharp
+// Read
+var state = entitySet.GetData(entityId);
+
+// Safe read
+if (entitySet.TryGetData(entityId, out var state))
+{
+    // Use state
+}
+
+// Write (triggers events)
+entitySet.SetData(entityId, newState);
+
+// Update (functional pattern, recommended)
+entitySet.UpdateData(entityId, state =>
+{
+    state.health -= damage;
+    return state;
+});
+```
 
 ### Per-entity subscription
 
-Use `SubscribeToEntity` for per-entity state change callbacks:
-
 ```csharp
-using UnityEngine;
-using Tang3cko.ReactiveSO;
+// Subscribe to specific entity
+entitySet.SubscribeToEntity(entityId, OnStateChanged);
 
-namespace ProjectName.UI
+// Always unsubscribe
+entitySet.UnsubscribeFromEntity(entityId, OnStateChanged);
+
+// Callback receives old and new state
+private void OnStateChanged(EnemyState oldState, EnemyState newState)
 {
-    /// <summary>
-    /// Health bar that tracks a specific enemy
-    /// </summary>
-    public class EnemyHealthBar : MonoBehaviour
+    if (newState.health < oldState.health)
     {
-        [Header("Entity Set")]
-        [SerializeField] private EnemyEntitySetSO entitySet;
-
-        [Header("UI")]
-        [SerializeField] private UnityEngine.UI.Image fillImage;
-
-        private int trackedEntityId;
-
-        public void SetTrackedEntity(int entityId)
-        {
-            // Unsubscribe from previous entity
-            if (trackedEntityId != 0)
-            {
-                entitySet.UnsubscribeFromEntity(trackedEntityId, OnStateChanged);
-            }
-
-            trackedEntityId = entityId;
-
-            // Subscribe to new entity (callback receives oldState, newState)
-            entitySet.SubscribeToEntity(entityId, OnStateChanged);
-
-            // Update immediately
-            if (entitySet.TryGetData(entityId, out var state))
-            {
-                UpdateHealthBar(state);
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (trackedEntityId != 0)
-            {
-                entitySet.UnsubscribeFromEntity(trackedEntityId, OnStateChanged);
-            }
-        }
-
-        // Callback signature: Action<TData, TData> (oldState, newState)
-        private void OnStateChanged(EnemyStateData oldState, EnemyStateData newState)
-        {
-            UpdateHealthBar(newState);
-
-            // Can compare old and new state
-            if (newState.health < oldState.health)
-            {
-                Debug.Log($"Took {oldState.health - newState.health} damage");
-            }
-        }
-
-        private void UpdateHealthBar(EnemyStateData state)
-        {
-            fillImage.fillAmount = state.HealthPercent;
-        }
+        // Took damage
     }
 }
 ```
 
-### Using ReactiveEntity.OnStateChanged event
+### Set-level events (via Inspector)
 
-When using `ReactiveEntity<TData>` base class:
+Assign EventChannels to ReactiveEntitySetSO in Inspector:
 
-```csharp
-using UnityEngine;
-using Tang3cko.ReactiveSO;
-
-namespace ProjectName.UI
-{
-    public class EnemyStatusUI : MonoBehaviour
-    {
-        [SerializeField] private EnemyEntity trackedEnemy;
-        [SerializeField] private UnityEngine.UI.Image healthFill;
-
-        private void OnEnable()
-        {
-            if (trackedEnemy != null)
-            {
-                // ReactiveEntity exposes OnStateChanged event
-                trackedEnemy.OnStateChanged += HandleStateChanged;
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (trackedEnemy != null)
-            {
-                trackedEnemy.OnStateChanged -= HandleStateChanged;
-            }
-        }
-
-        private void HandleStateChanged(EnemyStateData oldState, EnemyStateData newState)
-        {
-            healthFill.fillAmount = newState.HealthPercent;
-        }
-    }
-}
-```
-
-### Set-level EventChannel notifications
-
-Assign EventChannels in the ReactiveEntitySet Inspector for set-level notifications:
-
-```csharp
-using UnityEngine;
-using Tang3cko.ReactiveSO;
-
-namespace ProjectName.Core
-{
-    /// <summary>
-    /// Tracks all enemy spawns and deaths via EventChannels
-    /// </summary>
-    public class EnemyTracker : MonoBehaviour
-    {
-        [Header("Event Channels")]
-        [SerializeField] private IntEventChannelSO onEnemyAdded;
-        [SerializeField] private IntEventChannelSO onEnemyRemoved;
-
-        private void OnEnable()
-        {
-            // Subscribe to EventChannels assigned to the EntitySet
-            onEnemyAdded.OnEventRaised += HandleEnemySpawned;
-            onEnemyRemoved.OnEventRaised += HandleEnemyRemoved;
-        }
-
-        private void OnDisable()
-        {
-            onEnemyAdded.OnEventRaised -= HandleEnemySpawned;
-            onEnemyRemoved.OnEventRaised -= HandleEnemyRemoved;
-        }
-
-        private void HandleEnemySpawned(int entityId)
-        {
-            Debug.Log($"Enemy spawned: {entityId}");
-        }
-
-        private void HandleEnemyRemoved(int entityId)
-        {
-            Debug.Log($"Enemy removed: {entityId}");
-        }
-    }
-}
-```
-
----
-
-## UpdateData pattern - P1
-
-Use `UpdateData` for safer state modifications:
-
-```csharp
-// Using SetData (read-modify-write)
-if (entitySet.TryGetData(entityId, out var state))
-{
-    state.health -= damage;
-    entitySet.SetData(entityId, state);
-}
-
-// Using UpdateData (functional approach)
-entitySet.UpdateData(entityId, state => {
-    state.health -= damage;
-    return state;
-});
-
-// Using UpdateData with MonoBehaviour
-entitySet.UpdateData(this, state => {
-    state.health = Mathf.Max(0, state.health - damage);
-    state.isStunned = damage > 50;
-    return state;
-});
-```
-
----
-
-## ID management - P1
-
-### Using InstanceID
-
-For simple cases, use Unity's InstanceID:
-
-```csharp
-private void OnEnable()
-{
-    entityId = GetInstanceID();
-    entitySet.Register(entityId, initialState);
-}
-```
-
-### Using MonoBehaviour directly
-
-For convenience, use MonoBehaviour overloads:
-
-```csharp
-private void OnEnable()
-{
-    // MonoBehaviour.GetInstanceID() is used internally
-    entitySet.Register(this, initialState);
-}
-
-private void OnDisable()
-{
-    entitySet.Unregister(this);
-}
-
-public void TakeDamage(int damage)
-{
-    if (entitySet.TryGetData(this, out var state))
-    {
-        state.health -= damage;
-        entitySet.SetData(this, state);
-    }
-}
-```
-
-### Using persistent IDs
-
-For save/load systems, use persistent IDs:
-
-```csharp
-using UnityEngine;
-
-namespace ProjectName.Enemy
-{
-    public class PersistentEnemy : MonoBehaviour
-    {
-        [SerializeField] private EnemyEntitySetSO entitySet;
-        [SerializeField] private int persistentId;  // Set in Inspector or loaded from save
-
-        private void OnEnable()
-        {
-            // Use persistent ID for save/load compatibility
-            entitySet.Register(persistentId, LoadOrCreateState());
-        }
-
-        private EnemyStateData LoadOrCreateState()
-        {
-            if (SaveSystem.TryLoadEnemyState(persistentId, out var savedState))
-            {
-                return savedState;
-            }
-
-            return new EnemyStateData { health = 100, maxHealth = 100 };
-        }
-    }
-}
-```
-
----
-
-## Performance characteristics - P1
-
-### Sparse Set data structure
-
-ReactiveEntitySet uses a Sparse Set internally for O(1) operations:
-
-| Operation | Time Complexity |
-|-----------|-----------------|
-| Register | O(1) |
-| Unregister | O(1) |
-| GetData | O(1) |
-| SetData | O(1) |
-| Iteration | O(n) where n = registered entities |
-
-### Memory efficiency
-
-```csharp
-// PagedSparseArray allocates memory in pages
-// Only allocates pages for used ID ranges
-// Efficient for sparse ID distributions
-
-// Example: IDs 1, 2, 3, 1000, 1001
-// Only allocates 2 pages (0-255 and 768-1023)
-// Not 1002 individual slots
-```
-
----
-
-## Scene persistence - P1
-
-### State survives scene changes
-
-ReactiveEntitySet data is stored in ScriptableObjects:
-
-```csharp
-// Enemy in Scene A registers state
-entitySet.Register(entityId, stateData);
-
-// Scene B loads additively
-// State is still accessible
-if (entitySet.TryGetData(entityId, out var state))
-{
-    // State persists across scenes
-}
-```
-
-### Cleanup on scene unload
-
-```csharp
-public class SceneCleanup : MonoBehaviour
-{
-    [SerializeField] private EnemyEntitySetSO entitySet;
-
-    private void OnDestroy()
-    {
-        // Clear all entity data when scene unloads
-        entitySet.Clear();
-    }
-}
-```
+- `OnItemAdded` (IntEventChannelSO) - Entity registered
+- `OnItemRemoved` (IntEventChannelSO) - Entity unregistered
+- `OnDataChanged` (IntEventChannelSO) - Entity state changed
+- `OnSetChanged` (VoidEventChannelSO) - Any change occurred
 
 ---
 
 ## Anti-patterns - P1
 
-### Direct state mutation
-
-**❌ Bad:**
+### Direct mutation without SetData
 
 ```csharp
-// Getting state and modifying directly doesn't trigger events
+// NG: Changes not saved to RES
 var state = entitySet.GetData(entityId);
-state.health -= damage;  // State not actually updated in the set!
-```
+state.health -= damage;
+// state is a copy, RES not updated!
 
-**✅ Good:**
-
-```csharp
-// Always use SetData or UpdateData to trigger events
-if (entitySet.TryGetData(entityId, out var state))
+// OK: Use SetData or UpdateData
+entitySet.UpdateData(entityId, state =>
 {
-    state.health -= damage;
-    entitySet.SetData(entityId, state);  // Triggers per-entity and EventChannel callbacks
-}
-
-// Or use UpdateData
-entitySet.UpdateData(entityId, state => {
     state.health -= damage;
     return state;
 });
 ```
 
-### Forgetting to unsubscribe
-
-**❌ Bad:**
+### Logic in struct
 
 ```csharp
-private void OnEnable()
+// NG: Logic belongs in external utility
+public struct EnemyState
 {
-    entitySet.SubscribeToEntity(entityId, OnStateChanged);
+    public float HealthPercent => (float)health / maxHealth;
 }
-// Missing OnDisable - memory leak!
+
+// OK: External pure function
+public static class EnemyStateCalculator
+{
+    public static float GetHealthPercent(EnemyState state) => ...;
+}
 ```
 
-**✅ Good:**
+### Transform data in RES
 
 ```csharp
+// NG: GameObject owns Transform
+public struct EnemyState
+{
+    public Vector3 position;
+    public Quaternion rotation;
+}
+
+// OK: Only external-computed data
+public struct EnemyState
+{
+    public int health;
+    public bool isStunned;
+}
+```
+
+### Forgetting to unsubscribe
+
+```csharp
+// NG: Memory leak
 private void OnEnable()
 {
     entitySet.SubscribeToEntity(entityId, OnStateChanged);
 }
+// Missing OnDisable!
 
+// OK: Always unsubscribe
 private void OnDisable()
 {
     entitySet.UnsubscribeFromEntity(entityId, OnStateChanged);
@@ -709,8 +420,7 @@ private void OnDisable()
 
 ## References
 
-- [RuntimeSet Pattern](runtime-sets.md)
-- [Event Channels](event-channels.md)
-- [Variables System](variables.md)
-- [ScriptableObject Pattern](scriptableobject.md)
-- [Dependency Management](dependency-management.md)
+- [Job System Integration](reactive-entity-sets-job-system.md) - Orchestrator, double buffering, Burst
+- [Persistence](reactive-entity-sets-persistence.md) - Snapshot, restore, save/load
+- [RuntimeSet Pattern](runtime-sets.md) - Object tracking without per-entity state
+- [Event Channels](event-channels.md) - Set-level notifications
