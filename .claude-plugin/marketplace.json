@@ -28,12 +28,12 @@
       ]
     },
     {
-      "name": "mirror-networking",
-      "description": "Mirror networking rules for Unity multiplayer games",
+      "name": "repository-setup",
+      "description": "Repository setup rules including AGENTS.md, Renovate configuration",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/mirror-networking"
+        "./skills/repository-setup"
       ]
     },
     {
@@ -44,7 +44,7 @@
       "skills": [
         "./skills/unity",
         "./skills/documentation",
-        "./skills/mirror-networking"
+        "./skills/repository-setup"
       ]
     }
   ]
