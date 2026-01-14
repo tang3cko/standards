@@ -2,61 +2,43 @@
 
 ## Purpose
 
-Shared standards, Claude Code skills, and Gemini CLI context for Tang3cko projects. Add as a Git submodule to maintain consistency across repositories.
+Shared coding standards and Claude Code skills for Tang3cko projects.
 
 ---
 
 ## Contents
 
-### Standards
-
-| Directory | Description |
-|-----------|-------------|
-| [documentation/](documentation/) | Documentation writing standards |
-| [repository/](repository/) | Repository setup standards |
-| [unity/](unity/) | Unity and C# coding standards |
-
 ### AI Agent Skills
 
 | Skill | Description |
 |-------|-------------|
-| [unity-csharp](skills/unity-csharp/) | Unity C# naming, architecture, performance |
-| [mirror-networking](skills/mirror-networking/) | Mirror multiplayer patterns |
-| [unity-ui](skills/unity-ui/) | UI Toolkit, uGUI, accessibility |
-| [unity-testing](skills/unity-testing/) | NUnit, FIRST principles, test patterns |
+| [unity](skills/unity/) | Unity C# standards, ScriptableObject architecture (Tang3cko.ReactiveSO), testing, UI |
 | [documentation](skills/documentation/) | Technical writing standards |
+| [repository-setup](skills/repository-setup/) | Repository setup and configuration |
+
+### Other
+
+| Directory | Description |
+|-----------|-------------|
+| [unity/networking/mirror/](unity/networking/mirror/) | Mirror networking reference (legacy) |
+
+---
+
+## TODO
+
+- [ ] Mirror networking: Convert to skill or remove (currently legacy reference only)
 
 ---
 
 ## Installation
 
-```bash
-# Add as submodule
-git submodule add https://github.com/tang3cko/coding-standards.git docs/standards
+In Claude Code, use the `/plugin` command:
 
-# Clone with submodules
-git clone --recurse-submodules <your-project-url>
-
-# Initialize submodules in existing clone
-git submodule update --init --recursive
+```
+/plugin add https://github.com/tang3cko/coding-standards
 ```
 
----
-
-## Skills setup
-
-Link skills to enable automatic context loading in Claude Code.
-
-```bash
-# Create skills directory
-mkdir -p .claude/skills
-
-# Link skills (adjust path based on submodule location)
-ln -s ../../docs/standards/skills/unity-csharp .claude/skills/unity-csharp
-ln -s ../../docs/standards/skills/documentation .claude/skills/documentation
-```
-
-See [repository/setup.md](repository/setup.md) for detailed setup instructions.
+See [Claude Code Plugins Documentation](https://code.claude.com/docs/en/plugins) for details.
 
 ---
 
@@ -70,18 +52,9 @@ Each standard uses priority levels to indicate importance:
 
 ---
 
-## Updates
-
-```bash
-git submodule update --remote docs/standards
-```
-
----
-
 ## References
 
-- [Google Developer Documentation Style Guide](https://developers.google.com/style)
-- [Microsoft Writing Style Guide](https://learn.microsoft.com/en-us/style-guide/)
+- [Tang3cko.ReactiveSO](https://github.com/tang3cko/ReactiveSO) - ScriptableObject-based reactive architecture
 - [Unity Manual](https://docs.unity3d.com/Manual/)
 - [C# Coding Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
 - [Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills)
