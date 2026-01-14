@@ -4,6 +4,60 @@
 
 Manage dynamic collections of game objects using ScriptableObjects, avoiding expensive Find operations and enabling efficient iteration over active objects.
 
+---
+
+## Design philosophy - P1
+
+### Self-registering collections
+
+RuntimeSets solve the "how do I find all X?" problem without expensive Find operations.
+
+**Traditional Unity:**
+
+```
+GameManager wants all enemies
+         ↓
+FindObjectsOfType<Enemy>()  ← O(n) scene scan every call
+         ↓
+Performance problem
+```
+
+**RuntimeSet pattern:**
+
+```
+Enemy OnEnable() → enemySet.Add(this)
+Enemy OnDisable() → enemySet.Remove(this)
+         ↓
+GameManager → enemySet.Items  ← O(1) direct access
+```
+
+### Key insight
+
+**Objects register themselves. The collection doesn't search for them.**
+
+Benefits:
+- **O(1) access** - No searching, direct list access
+- **Self-maintaining** - Add/remove lifecycle matches GameObject lifecycle
+- **Scene-agnostic** - Works across additive scenes
+- **Inspector visible** - See registered items in Editor
+
+### Simple collection, no per-item state
+
+RuntimeSets track **object references only**. They don't store per-item state:
+
+```csharp
+// RuntimeSet: Object tracking
+enemySet.Add(this);      // Tracks reference
+enemySet.Remove(this);   // Removes reference
+enemySet.Items           // Iterate all
+
+// If you need per-entity state, use ReactiveEntitySet instead
+entitySet.Register(id, state);  // Tracks ID + state
+entitySet.SetData(id, newState); // Updates state
+```
+
+---
+
 ## Checklist
 
 - [ ] Use RuntimeSets instead of FindObjectsOfType or FindGameObjectsWithTag
@@ -364,6 +418,40 @@ Select any RuntimeSet asset in Inspector during Play Mode to see:
 - Current item count
 - List of all registered items (clickable)
 - Clear button for testing
+
+### OnAnyOperationPerformed static event
+
+Static event for global runtime set monitoring (Editor only):
+
+```csharp
+#if UNITY_EDITOR
+private void OnEnable()
+{
+    RuntimeSetSO.OnAnyOperationPerformed += HandleAnyOperation;
+}
+
+private void OnDisable()
+{
+    RuntimeSetSO.OnAnyOperationPerformed -= HandleAnyOperation;
+}
+
+private void HandleAnyOperation(RuntimeSetSO set, string operation, string details)
+{
+    Debug.Log($"RuntimeSet operation: {set.name} - {operation} ({details})");
+}
+#endif
+```
+
+Operation string values:
+- `"Added"` - Item added to set
+- `"Removed"` - Item removed from set
+- `"Cleared"` - Set cleared
+- `"DestroyItems"` - All items destroyed (GameObjectRuntimeSetSO only)
+
+Use cases:
+- Custom debugging tools
+- Operation logging
+- Analytics integration
 
 ---
 

@@ -68,6 +68,12 @@ START: What do you need?
 │                (VoidEventChannelSO, IntEventChannelSO, etc.)
 │                → Fire-and-forget notification
 │
+├─▶ "Reusable, configurable commands"
+│   │
+│   └─▶ Use Actions
+│        (ActionSO, ActionSO<T>)
+│        → Command pattern, Inspector-configurable behaviors
+│
 ├─▶ "Track active objects in scene"
 │   │
 │   └─▶ Need per-object state?
@@ -100,6 +106,7 @@ START: What do you need?
 |---------|-------|--------------|--------|----------|
 | **EventChannel** | None | Broadcast | N/A | System communication |
 | **Variable** | Single value | On change | Direct | Shared state (score, health) |
+| **Actions** | None | On execute | N/A | Reusable commands |
 | **RuntimeSet** | None | EventChannel | Iteration | Object tracking |
 | **ReactiveEntitySet** | Per-entity | Per-entity + EventChannel | O(1) by ID | Entity state management |
 | **ScriptableObject** | Immutable | None | Asset reference | Data configuration |
@@ -133,6 +140,41 @@ onEnemyKilled.OnEventRaised += HandleEnemyKilled;
 ```
 
 → [Event Channels](event-channels.md)
+
+---
+
+### Actions
+
+**Purpose:** Data-driven reusable commands (Command pattern)
+
+**When to use:**
+- Quest rewards, event tables, dialogue responses
+- Configurable behaviors (spawn effects, play sounds)
+- Commands triggered from multiple systems
+- Designer-tweakable logic without code changes
+
+**Key features:**
+- Inspector-configurable parameters
+- Automatic caller tracking for debugging
+- Monitor Window integration
+- `ActionSO` (parameterless) and `ActionSO<T>` (with parameter)
+
+**Example:**
+```csharp
+// Definition
+[CreateAssetMenu(menuName = "Game/Actions/Spawn Effect")]
+public class SpawnEffectAction : ActionSO
+{
+    [SerializeField] private GameObject prefab;
+
+    public override void Execute(...) { ... }
+}
+
+// Usage
+rewardAction?.Execute();
+```
+
+→ [Actions](actions.md)
 
 ---
 
@@ -310,6 +352,7 @@ EnemyEntitySetSO (enemyStates)
 
 - [Event Channels](event-channels.md)
 - [Variables System](variables.md)
+- [Actions](actions.md) - Command pattern
 - [RuntimeSet Pattern](runtime-sets.md)
 - [ReactiveEntitySet Pattern](reactive-entity-sets.md)
 - [RES Job System](reactive-entity-sets-job-system.md) - Orchestrator, Burst

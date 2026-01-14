@@ -207,7 +207,21 @@ Variables can automatically synchronize their values to shader global properties
 
 1. Select Variable asset in Project window
 2. In Inspector, enable "GPU Sync Enabled"
-3. Enter shader property name (e.g., `_PlayerHealth`)
+3. Enter shader property name (MUST start with underscore `_`)
+
+**Important:** Shader property names MUST start with underscore (`_`).
+
+```csharp
+// OK: Property name starts with underscore
+_PlayerHealth
+_TimeScale
+_DamageIntensity
+
+// NG: Property name without underscore (will not work)
+PlayerHealth
+TimeScale
+DamageIntensity
+```
 
 ### Example: Health-based shader effect
 
@@ -353,6 +367,34 @@ Select any Variable asset in Inspector during Play Mode to see:
 - "Reset to Initial" button
 - Subscriber list for assigned EventChannel
 - GPU Sync status and property name
+
+### OnAnyValueChanged static event
+
+Static event for global value monitoring (Editor only):
+
+```csharp
+#if UNITY_EDITOR
+private void OnEnable()
+{
+    VariableSO.OnAnyValueChanged += HandleAnyValueChanged;
+}
+
+private void OnDisable()
+{
+    VariableSO.OnAnyValueChanged -= HandleAnyValueChanged;
+}
+
+private void HandleAnyValueChanged(VariableSO variable, object oldValue, object newValue)
+{
+    Debug.Log($"Variable changed: {variable.name} from {oldValue} to {newValue}");
+}
+#endif
+```
+
+Use cases:
+- Custom debugging tools
+- State change logging
+- Analytics integration
 
 ---
 
