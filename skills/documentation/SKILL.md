@@ -7,9 +7,28 @@ description: Technical documentation writing standards. Covers writing style, do
 
 Apply Tang3cko documentation standards when writing technical documentation.
 
+## Decision tree
+
+```
+What are you doing?
+│
+├─▶ Writing new documentation
+│   ├─ Voice and tone → [Writing principles](./references/writing-principles.md)
+│   └─ Document layout → [Document structure](./references/document-structure.md)
+│
+├─▶ Formatting questions
+│   ├─ Markdown syntax → [Markdown formatting](./references/markdown-formatting.md)
+│   └─ File/folder naming → [File organization](./references/file-organization.md)
+│
+└─▶ Adding code examples
+    └─ Code style in docs → [Code examples](./references/code-examples.md)
+```
+
+---
+
 ## Quick reference
 
-### Language and style
+### Language and style (P1)
 
 - Write in English (American spelling)
 - Use active voice, present tense
@@ -17,7 +36,7 @@ Apply Tang3cko documentation standards when writing technical documentation.
 - Keep sentences short (one idea per sentence)
 - Use serial comma (A, B, and C)
 
-### Markdown formatting
+### Markdown formatting (P1)
 
 - Headings: ATX-style (`#`, `##`), sentence case
 - Lists: Use `-` (not `*` or `+`)
@@ -25,30 +44,32 @@ Apply Tang3cko documentation standards when writing technical documentation.
 - Inline code: Backticks for code, class names, methods
 - Sections: Separate with `---` horizontal rules
 
-### File naming
+### File naming (P1)
 
 - Use kebab-case: `api-reference.md`
 - Keep under 30 characters
 - Max 3-4 directory levels
 
-### Document structure
+### Document structure (P1)
 
 1. Purpose section (what the document covers)
 2. Main content with H2/H3 hierarchy
 3. References section at end
 
-### Priority levels
+---
+
+## Priority levels
 
 - **P1 (Required)**: Must follow
 - **P2 (Recommended)**: Should follow
 - **P3 (Optional)**: Nice-to-have
 
-## Detailed guides
+---
 
-Read these files for complete standards:
+## References
 
-- [Writing principles](../../documentation/writing-principles.md)
-- [Document structure](../../documentation/document-structure.md)
-- [Markdown formatting](../../documentation/markdown-formatting.md)
-- [File organization](../../documentation/file-organization.md)
-- [Code examples](../../documentation/code-examples.md)
+- [Writing principles](./references/writing-principles.md) - Voice, tone, grammar, style
+- [Document structure](./references/document-structure.md) - Standard document organization
+- [Markdown formatting](./references/markdown-formatting.md) - Markdown syntax rules
+- [File organization](./references/file-organization.md) - File naming, directory structure
+- [Code examples](./references/code-examples.md) - Writing clear code examples
