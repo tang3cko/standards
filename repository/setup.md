@@ -87,10 +87,8 @@ mkdir -p .claude/skills
 **Link required skills:**
 
 ```bash
-# Unity projects
-ln -s ../../docs/05_standards/skills/unity-csharp .claude/skills/unity-csharp
-ln -s ../../docs/05_standards/skills/unity-testing .claude/skills/unity-testing
-ln -s ../../docs/05_standards/skills/unity-ui .claude/skills/unity-ui
+# Unity projects (includes C#, testing, UI, architecture)
+ln -s ../../docs/05_standards/skills/unity .claude/skills/unity
 
 # Mirror networking projects
 ln -s ../../docs/05_standards/skills/mirror-networking .claude/skills/mirror-networking
@@ -103,9 +101,7 @@ ln -s ../../docs/05_standards/skills/documentation .claude/skills/documentation
 
 | Skill | Use case |
 |-------|----------|
-| `unity-csharp` | C# coding standards, naming, architecture |
-| `unity-testing` | NUnit, FIRST principles, test patterns |
-| `unity-ui` | UI Toolkit, uGUI, accessibility |
+| `unity` | C# coding standards, architecture, testing, UI |
 | `mirror-networking` | Mirror multiplayer patterns |
 | `documentation` | Technical writing standards |
 
@@ -114,6 +110,7 @@ ln -s ../../docs/05_standards/skills/documentation .claude/skills/documentation
 - Skills are auto-invoked by Claude based on context
 - Only link skills relevant to your project
 - Symlinks are relative to `.claude/skills/` directory
+- `unity` skill uses Progressive Disclosure (loads references on-demand)
 
 ---
 
