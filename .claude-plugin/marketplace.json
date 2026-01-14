@@ -1,0 +1,51 @@
+{
+  "name": "tang3cko-standards",
+  "owner": {
+    "name": "Tang3cko",
+    "email": "tang3cko@gmail.com"
+  },
+  "metadata": {
+    "description": "Tang3cko rules for Unity development and documentation",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "unity",
+      "description": "Unity C# rules including naming conventions, ScriptableObject architecture, testing, and UI patterns",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/unity"
+      ]
+    },
+    {
+      "name": "documentation",
+      "description": "Technical documentation writing rules for markdown files",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/documentation"
+      ]
+    },
+    {
+      "name": "mirror-networking",
+      "description": "Mirror networking rules for Unity multiplayer games",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/mirror-networking"
+      ]
+    },
+    {
+      "name": "all",
+      "description": "All Tang3cko rules bundled together",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/unity",
+        "./skills/documentation",
+        "./skills/mirror-networking"
+      ]
+    }
+  ]
+}
