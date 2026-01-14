@@ -68,16 +68,19 @@ public class Timer : MonoBehaviour
 ### When NOT to use Time.deltaTime
 
 ```csharp
+// InputReader callback - fires once on jump action
+// See input-system.md for InputReaderSO setup
+
 // Bad: Don't use Time.deltaTime for instant actions
-if (Input.GetKeyDown(KeyCode.Space))
+private void HandleJump()
 {
-    jumpForce += 10f * Time.deltaTime;  // Wrong! This is instant action
+    jumpForce += 10f * Time.deltaTime;  // Wrong! Jump fires once, not per-frame
 }
 
 // Good: Instant actions don't need deltaTime
-if (Input.GetKeyDown(KeyCode.Space))
+private void HandleJump()
 {
-    ApplyJumpForce(10f);
+    ApplyJumpForce(10f);  // Correct! Apply full force instantly
 }
 ```
 
@@ -156,15 +159,27 @@ public class VisualEffect : MonoBehaviour
 ```csharp
 public class InputHandler : MonoBehaviour
 {
-    // Good: Input handling in Update
+    [SerializeField] private InputReaderSO inputReader;
+
+    private void OnEnable()
+    {
+        inputReader.OnJumpEvent += HandleJump;
+    }
+
+    private void OnDisable()
+    {
+        inputReader.OnJumpEvent -= HandleJump;
+    }
+
+    // Discrete input: handle in callback (fires at input time)
+    private void HandleJump()
+    {
+        Jump();
+    }
+
+    // Good: Camera movement in Update
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
-
-        // Good: Camera movement in Update
         UpdateCameraPosition();
     }
 }
@@ -175,26 +190,38 @@ public class InputHandler : MonoBehaviour
 ```csharp
 public class PlayerPhysics : MonoBehaviour
 {
+    [SerializeField] private InputReaderSO inputReader;
     [SerializeField] private float moveForce = 10f;
+
     private Rigidbody rb;
+    private Vector2 moveInput;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    // Good: Physics in FixedUpdate
-    private void FixedUpdate()
+    private void OnEnable()
     {
-        Vector3 movement = GetMovementInput();
-        rb.AddForce(movement * moveForce);
+        inputReader.OnMoveEvent += HandleMove;
     }
 
-    private Vector3 GetMovementInput()
+    private void OnDisable()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        return new Vector3(horizontal, 0, vertical);
+        inputReader.OnMoveEvent -= HandleMove;
+    }
+
+    // Continuous input: cache value from event
+    private void HandleMove(Vector2 input)
+    {
+        moveInput = input;
+    }
+
+    // Good: Physics in FixedUpdate using cached input
+    private void FixedUpdate()
+    {
+        Vector3 movement = new Vector3(moveInput.x, 0, moveInput.y);
+        rb.AddForce(movement * moveForce);
     }
 }
 ```
@@ -680,7 +707,7 @@ public class CancellableAsync : MonoBehaviour
 }
 ```
 
-### Limitations
+### Limitations - P2
 
 Awaitable lacks some Task features:
 - No `WhenAll` / `WhenAny` (wrap in Task if needed)

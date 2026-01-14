@@ -91,5 +91,4 @@ ln -s AGENTS.md GEMINI.md
 
 ## References
 
-- [AGENTS.md Specification](https://agents.md/)
 - [Renovate Setup](renovate.md)
