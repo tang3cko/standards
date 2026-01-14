@@ -61,9 +61,9 @@ public class Example
     // Private fields: camelCase
     private bool isMoving;
 
-    // Constants: UPPER_SNAKE_CASE or PascalCase
+    // Constants: UPPER_SNAKE_CASE (recommended)
     private const float MAX_HEALTH = 100f;
-    private const int MaxPlayers = 4;
+    private const int MAX_PLAYERS = 4;
 }
 ```
 
