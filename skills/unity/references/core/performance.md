@@ -210,7 +210,7 @@ private void ProcessEnemies()
 // Bad: Polling in Update
 private void Update()
 {
-    if (Input.GetKeyDown(KeyCode.E))
+    if (interactKeyPressed)  // Checking flag every frame
     {
         Interact();
     }
@@ -219,24 +219,32 @@ private void Update()
     UpdateScoreUI();   // Every frame
 }
 
-// Good: Event-Driven
+// Good: Event-Driven (InputReader + EventChannel)
+[SerializeField] private InputReaderSO inputReader;
 [SerializeField] private FloatEventChannelSO onHealthChanged;
 [SerializeField] private IntEventChannelSO onScoreChanged;
 
 private void OnEnable()
 {
+    inputReader.OnInteractEvent += HandleInteract;
     onHealthChanged.OnEventRaised += UpdateHealthUI;
     onScoreChanged.OnEventRaised += UpdateScoreUI;
 }
 
-private void Update()
+private void OnDisable()
 {
-    // Only input handling
-    if (Input.GetKeyDown(KeyCode.E))
-    {
-        Interact();
-    }
+    inputReader.OnInteractEvent -= HandleInteract;
+    onHealthChanged.OnEventRaised -= UpdateHealthUI;
+    onScoreChanged.OnEventRaised -= UpdateScoreUI;
 }
+
+// Input handled via event callback - no polling
+private void HandleInteract()
+{
+    Interact();
+}
+
+// No Update() needed - fully event-driven
 ```
 
 ---

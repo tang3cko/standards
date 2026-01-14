@@ -198,8 +198,3 @@ Examples:
 ### Accessibility
 
 - [Font size guidelines](./references/ui/accessibility/font-size-guidelines.md) - Platform-specific minimums
-
-### Examples
-
-- [Good examples](./references/examples/good/) - Recommended patterns
-- [Anti-patterns](./references/examples/anti-patterns/) - What to avoid

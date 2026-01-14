@@ -289,10 +289,12 @@ Click [here](https://docs.unity3d.com/Manual/Profiler.html) for more information
 **❌ Bad:**
 
 ```markdown
-<span style="color: green">Good:</span> Use EventChannels.
+Good: Use EventChannels.
 
-<span style="color: red">Bad:</span> Use Singleton pattern.
+Bad: Use Singleton pattern.
 ```
+
+(Without symbols, readers cannot distinguish good from bad at a glance)
 
 ---
 
