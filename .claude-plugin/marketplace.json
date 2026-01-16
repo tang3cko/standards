@@ -6,16 +6,72 @@
   },
   "metadata": {
     "description": "Tang3cko rules for Unity development and documentation",
-    "version": "1.0.0"
+    "version": "2.0.0"
   },
   "plugins": [
     {
-      "name": "unity",
-      "description": "Unity C# rules including naming conventions, ScriptableObject architecture, testing, and UI patterns",
+      "name": "unity-core",
+      "description": "Unity C# core rules: naming, code organization, comments, error handling, performance, async, input system",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/unity"
+        "./skills/unity-naming",
+        "./skills/unity-code-organization",
+        "./skills/unity-comments",
+        "./skills/unity-error-handling",
+        "./skills/unity-performance",
+        "./skills/unity-async",
+        "./skills/unity-input-system"
+      ]
+    },
+    {
+      "name": "unity-architecture",
+      "description": "Unity ScriptableObject architecture: EventChannels, Variables, RuntimeSets, ReactiveEntitySets, Actions",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/unity-architecture-overview",
+        "./skills/unity-design-principles",
+        "./skills/unity-event-channels",
+        "./skills/unity-variables",
+        "./skills/unity-runtime-sets",
+        "./skills/unity-reactive-entity-sets",
+        "./skills/unity-res-job-system",
+        "./skills/unity-res-persistence",
+        "./skills/unity-actions",
+        "./skills/unity-dependency-management",
+        "./skills/unity-extension-patterns"
+      ]
+    },
+    {
+      "name": "unity-testing",
+      "description": "Unity testing rules: NUnit, Edit/Play Mode, test doubles, assembly definitions, common pitfalls",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/unity-testing-principles",
+        "./skills/unity-test-modes",
+        "./skills/unity-testing-patterns",
+        "./skills/unity-nunit",
+        "./skills/unity-test-doubles",
+        "./skills/unity-test-assemblies",
+        "./skills/unity-testing-pitfalls"
+      ]
+    },
+    {
+      "name": "unity-ui",
+      "description": "Unity UI rules: UI Toolkit (BEM, USS, UXML), uGUI best practices, World Space UI, accessibility",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/unity-bem-naming",
+        "./skills/unity-design-tokens",
+        "./skills/unity-uss-responsive",
+        "./skills/unity-uxml",
+        "./skills/unity-ugui-best-practices",
+        "./skills/unity-world-space-ui",
+        "./skills/unity-billboard",
+        "./skills/unity-font-sizes"
       ]
     },
     {
@@ -37,12 +93,85 @@
       ]
     },
     {
+      "name": "unity-all",
+      "description": "All Unity rules bundled together (core, architecture, testing, UI)",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/unity-naming",
+        "./skills/unity-code-organization",
+        "./skills/unity-comments",
+        "./skills/unity-error-handling",
+        "./skills/unity-performance",
+        "./skills/unity-async",
+        "./skills/unity-input-system",
+        "./skills/unity-architecture-overview",
+        "./skills/unity-design-principles",
+        "./skills/unity-event-channels",
+        "./skills/unity-variables",
+        "./skills/unity-runtime-sets",
+        "./skills/unity-reactive-entity-sets",
+        "./skills/unity-res-job-system",
+        "./skills/unity-res-persistence",
+        "./skills/unity-actions",
+        "./skills/unity-dependency-management",
+        "./skills/unity-extension-patterns",
+        "./skills/unity-testing-principles",
+        "./skills/unity-test-modes",
+        "./skills/unity-testing-patterns",
+        "./skills/unity-nunit",
+        "./skills/unity-test-doubles",
+        "./skills/unity-test-assemblies",
+        "./skills/unity-testing-pitfalls",
+        "./skills/unity-bem-naming",
+        "./skills/unity-design-tokens",
+        "./skills/unity-uss-responsive",
+        "./skills/unity-uxml",
+        "./skills/unity-ugui-best-practices",
+        "./skills/unity-world-space-ui",
+        "./skills/unity-billboard",
+        "./skills/unity-font-sizes"
+      ]
+    },
+    {
       "name": "all",
       "description": "All Tang3cko rules bundled together",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/unity",
+        "./skills/unity-naming",
+        "./skills/unity-code-organization",
+        "./skills/unity-comments",
+        "./skills/unity-error-handling",
+        "./skills/unity-performance",
+        "./skills/unity-async",
+        "./skills/unity-input-system",
+        "./skills/unity-architecture-overview",
+        "./skills/unity-design-principles",
+        "./skills/unity-event-channels",
+        "./skills/unity-variables",
+        "./skills/unity-runtime-sets",
+        "./skills/unity-reactive-entity-sets",
+        "./skills/unity-res-job-system",
+        "./skills/unity-res-persistence",
+        "./skills/unity-actions",
+        "./skills/unity-dependency-management",
+        "./skills/unity-extension-patterns",
+        "./skills/unity-testing-principles",
+        "./skills/unity-test-modes",
+        "./skills/unity-testing-patterns",
+        "./skills/unity-nunit",
+        "./skills/unity-test-doubles",
+        "./skills/unity-test-assemblies",
+        "./skills/unity-testing-pitfalls",
+        "./skills/unity-bem-naming",
+        "./skills/unity-design-tokens",
+        "./skills/unity-uss-responsive",
+        "./skills/unity-uxml",
+        "./skills/unity-ugui-best-practices",
+        "./skills/unity-world-space-ui",
+        "./skills/unity-billboard",
+        "./skills/unity-font-sizes",
         "./skills/documentation",
         "./skills/repository-setup"
       ]

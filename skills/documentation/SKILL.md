@@ -1,64 +1,345 @@
 ---
 name: documentation
-description: Technical documentation writing standards. Covers writing style, document structure, markdown formatting, file organization, and code examples. Use when writing or editing markdown documentation.
+description: Technical documentation standards. Writing style, markdown formatting, file organization. Use when writing or editing markdown files.
 ---
 
-# Documentation writing standards
+# Documentation Writing Standards
 
-Apply Tang3cko documentation standards when writing technical documentation.
+## Purpose
 
-## Decision tree
+Apply Tang3cko documentation standards when writing technical documentation. This skill covers voice, tone, markdown formatting, file organization, and code examples.
 
-```
-What are you doing?
-│
-├─▶ Writing new documentation
-│   ├─ Voice and tone → [Writing principles](./references/writing-principles.md)
-│   └─ Document layout → [Document structure](./references/document-structure.md)
-│
-├─▶ Formatting questions
-│   ├─ Markdown syntax → [Markdown formatting](./references/markdown-formatting.md)
-│   └─ File/folder naming → [File organization](./references/file-organization.md)
-│
-└─▶ Adding code examples
-    └─ Code style in docs → [Code examples](./references/code-examples.md)
-```
+## Checklist
+
+- [ ] Write in English (American spelling)
+- [ ] Use active voice, present tense
+- [ ] Address reader as "you"
+- [ ] Use sentence case for headings
+- [ ] Use `-` for unordered lists
+- [ ] Always specify language in code blocks
+- [ ] Use kebab-case for file names
 
 ---
 
-## Quick reference
+## Writing principles - P1
 
-### Language and style (P1)
+### Voice and tone
 
-- Write in English (American spelling)
-- Use active voice, present tense
-- Address reader as "you"
-- Keep sentences short (one idea per sentence)
-- Use serial comma (A, B, and C)
+- Write in a conversational but professional tone
+- Be direct and to the point
+- Avoid overly formal or academic language
 
-### Markdown formatting (P1)
+```markdown
+✅ Good:
+Use EventChannels to decouple systems. This approach makes testing easier.
 
-- Headings: ATX-style (`#`, `##`), sentence case
-- Lists: Use `-` (not `*` or `+`)
-- Code blocks: Always specify language (```csharp)
-- Inline code: Backticks for code, class names, methods
-- Sections: Separate with `---` horizontal rules
+❌ Bad:
+It is recommended that one should utilize EventChannels for the purpose of decoupling systems.
+```
 
-### File naming (P1)
+### Active voice
 
-- Use kebab-case: `api-reference.md`
+Use active voice instead of passive voice:
+
+```markdown
+✅ Good (Active):
+The `GameManager` handles the game state transitions.
+You can cache component references in `Awake()`.
+
+❌ Bad (Passive):
+Game state transitions are handled by the `GameManager`.
+Component references can be cached in `Awake()`.
+```
+
+### Second person ("you")
+
+Address the reader as "you":
+
+```markdown
+✅ Good:
+You should validate SerializeFields in `OnValidate()`.
+
+❌ Bad:
+One should validate SerializeFields in `OnValidate()`.
+```
+
+### Serial comma
+
+Use serial comma before "and" or "or" in lists:
+
+```markdown
+✅ Good:
+This system uses ScriptableObjects, EventChannels, and RuntimeSets.
+
+❌ Bad:
+This system uses ScriptableObjects, EventChannels and RuntimeSets.
+```
+
+---
+
+## Document structure - P1
+
+### Standard structure
+
+```markdown
+# Title
+
+## Purpose
+
+Brief explanation of what this document covers.
+
+---
+
+## Section 1
+
+Content...
+
+---
+
+## Section 2
+
+Content...
+
+---
+
+## References
+
+- [Related Document](path/to/doc.md)
+```
+
+### Section rules
+
+- Single H1 heading at document start
+- Use sentence case (e.g., "Error handling patterns" not "Error Handling Patterns")
+- Use H2 (`##`) for main sections
+- Use H3 (`###`) for subsections
+- Separate major H2 sections with `---` horizontal rules
+- Don't skip heading levels (H1 → H3)
+
+---
+
+## Markdown formatting - P1
+
+### Headings
+
+- Use ATX-style (`#`) headings
+- Add one space after `#` symbols
+- Use sentence case
+
+```markdown
+✅ Good:
+## Error handling patterns
+
+❌ Bad:
+## Error Handling Patterns
+```
+
+### Code blocks
+
+- Always specify language identifier in lowercase
+- Add blank lines before and after code blocks
+
+````markdown
+✅ Good:
+```csharp
+public class Example : MonoBehaviour
+{
+    // Code
+}
+```
+
+❌ Bad:
+```
+public class Example
+```
+````
+
+Supported languages: `csharp`, `json`, `yaml`, `xml`, `bash`, `markdown`
+
+### Inline code
+
+Use single backticks for class names, methods, variables:
+
+```markdown
+✅ Good:
+The `PlayerHealth` class uses the `TakeDamage()` method.
+
+❌ Bad:
+The PlayerHealth class uses the TakeDamage() method.
+```
+
+### Lists
+
+Use `-` (hyphen) for unordered lists:
+
+```markdown
+✅ Good:
+- First item
+- Second item
+  - Nested item
+
+❌ Bad:
+* First item
++ Second item
+```
+
+### Links
+
+Use descriptive link text:
+
+```markdown
+✅ Good:
+See the [Unity Scripting API](https://docs.unity3d.com/ScriptReference/) for details.
+
+❌ Bad:
+Click [here](https://docs.unity3d.com/ScriptReference/) for details.
+```
+
+---
+
+## File organization - P1
+
+### File naming
+
+- Use kebab-case: `naming-conventions.md`
 - Keep under 30 characters
-- Max 3-4 directory levels
+- No spaces, underscores, or special characters
 
-### Document structure (P1)
+```
+✅ Good:
+naming-conventions.md
+event-channels.md
 
-1. Purpose section (what the document covers)
-2. Main content with H2/H3 hierarchy
-3. References section at end
+❌ Bad:
+Naming_Conventions.md
+eventChannels.md
+```
+
+### Directory structure
+
+- Organize files by type or topic
+- Limit directory depth to 3-4 levels maximum
+- Use numbered prefixes for ordering: `00_overview/`, `01_architecture/`
+
+```
+docs/
+├── 00_overview/
+├── 01_architecture/
+├── 02_game-design/
+├── 03_development/
+│   └── testing/
+└── 05_standards/
+```
+
+### Directory naming
+
+- Use kebab-case for directory names
+- Keep names short and descriptive
 
 ---
 
-## Priority levels
+## Code examples - P1
+
+### Namespace rules
+
+Always use `ProjectName` as the namespace placeholder:
+
+```csharp
+// ✅ Good
+namespace ProjectName.Core
+{
+    public class GameManager : MonoBehaviour { }
+}
+
+// ❌ Bad
+namespace MyGame.Core
+{
+    public class GameManager : MonoBehaviour { }
+}
+```
+
+### Good vs bad format
+
+Show bad examples before good examples with emojis:
+
+````markdown
+**❌ Bad:**
+
+```csharp
+// Hidden dependency
+GameManager.Instance.UpdateScore();
+```
+
+**✅ Good:**
+
+```csharp
+// Dependencies visible in Inspector
+[SerializeField] private IntEventChannelSO onScoreChanged;
+```
+````
+
+### Provide context
+
+Include class declaration and necessary imports:
+
+```csharp
+// ❌ Bad: Isolated snippet
+currentHealth -= damage;
+
+// ✅ Good: Full context
+using UnityEngine;
+
+namespace ProjectName.Core
+{
+    public class PlayerHealth : MonoBehaviour
+    {
+        [SerializeField] private IntEventChannelSO onHealthChanged;
+        private int currentHealth;
+
+        public void TakeDamage(int damage)
+        {
+            currentHealth -= damage;
+            onHealthChanged?.RaiseEvent(currentHealth);
+        }
+    }
+}
+```
+
+---
+
+## Inclusive language - P1
+
+### Avoid ableist terms
+
+| Avoid | Use Instead |
+|-------|-------------|
+| sanity check | validation check |
+| crazy, insane | unexpected, complex |
+| dummy | placeholder, mock |
+
+### Inclusive technical terms
+
+| Avoid | Use Instead |
+|-------|-------------|
+| whitelist/blacklist | allowlist/blocklist |
+| master/slave | primary/replica |
+| master branch | main branch |
+
+### Gender-neutral language
+
+Use "they/their" for singular indefinite pronouns:
+
+```markdown
+✅ Good:
+When a developer creates a component, they should follow naming conventions.
+
+❌ Bad:
+When a developer creates a component, he should follow naming conventions.
+```
+
+---
+
+## Priority levels - P1
 
 - **P1 (Required)**: Must follow
 - **P2 (Recommended)**: Should follow
@@ -66,10 +347,15 @@ What are you doing?
 
 ---
 
-## References
+## Quick reference - P1
 
-- [Writing principles](./references/writing-principles.md) - Voice, tone, grammar, style
-- [Document structure](./references/document-structure.md) - Standard document organization
-- [Markdown formatting](./references/markdown-formatting.md) - Markdown syntax rules
-- [File organization](./references/file-organization.md) - File naming, directory structure
-- [Code examples](./references/code-examples.md) - Writing clear code examples
+| Category | Standard |
+|----------|----------|
+| Language | English (American spelling) |
+| Voice | Active voice |
+| Person | Second person ("you") |
+| Comma | Serial comma (A, B, and C) |
+| Headings | ATX-style, sentence case |
+| Lists | Use `-` (hyphen) |
+| File names | kebab-case, under 30 chars |
+| Code blocks | Always specify language |
