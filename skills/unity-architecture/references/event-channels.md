@@ -1,5 +1,20 @@
 # EventChannel details
 
+## Built-in EventChannel types
+
+| Type | Use Case | Example |
+|------|----------|---------|
+| `VoidEventChannelSO` | No parameters | OnGameStart, OnEnemyKilled |
+| `IntEventChannelSO` | Integer values, enums | OnScoreChanged, OnLevelUp |
+| `FloatEventChannelSO` | Decimal values, ratios | OnHealthChanged |
+| `BoolEventChannelSO` | Boolean flags | OnToggleChanged, OnGamePaused |
+| `StringEventChannelSO` | Text data | OnMessageReceived |
+| `Vector2EventChannelSO` | 2D positions, input | OnMouseMoved |
+| `Vector3EventChannelSO` | 3D positions | OnPlayerMoved |
+| `GameObjectEventChannelSO` | Object references | OnTargetSelected |
+
+---
+
 ## Custom EventChannel types
 
 Create custom EventChannels when passing complex data structures.

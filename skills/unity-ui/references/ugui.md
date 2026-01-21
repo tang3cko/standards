@@ -331,6 +331,38 @@ namespace ProjectName.UI
 
 ---
 
+## Button to EventChannel pattern
+
+Convert uGUI button clicks to EventChannel events:
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+using Tang3cko.ReactiveSO;
+
+namespace ProjectName.UI
+{
+    public class ButtonEventChannel : MonoBehaviour
+    {
+        [SerializeField] private VoidEventChannelSO onButtonPressed;
+        [SerializeField] private Button button;
+
+        private void Start()
+        {
+            if (button != null)
+                button.onClick.AddListener(HandleButtonClick);
+        }
+
+        private void HandleButtonClick()
+        {
+            onButtonPressed?.RaiseEvent();
+        }
+    }
+}
+```
+
+---
+
 ## Common pitfalls
 
 ### Forgetting to unsubscribe
