@@ -203,5 +203,6 @@ private void HandleHealthChanged(float health)
 | RuntimeSet details | [runtime-sets.md](references/runtime-sets.md) | Object tracking |
 | ReactiveEntitySet | [reactive-entity-sets.md](references/reactive-entity-sets.md) | Per-entity state, ECS-like patterns |
 | Actions | [actions.md](references/actions.md) | Command pattern |
+| Extension patterns | [extension-patterns.md](references/extension-patterns.md) | Adding new EventChannel/RuntimeSet types |
 | Dependency management | [dependency-management.md](references/dependency-management.md) | Refactoring from Singleton |
 | Design principles | [design-principles.md](references/design-principles.md) | Observability, data-oriented design |

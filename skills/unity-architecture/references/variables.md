@@ -1,5 +1,19 @@
 # Variable details
 
+## Built-in Variable types
+
+| Type | Use Case | Example |
+|------|----------|---------|
+| `IntVariableSO` | Integer values, counts | Score, kill count, level |
+| `FloatVariableSO` | Decimal values, ratios | Health percentage, speed |
+| `BoolVariableSO` | Boolean flags | Game paused, feature enabled |
+| `StringVariableSO` | Text data | Player name, active quest ID |
+| `Vector2VariableSO` | 2D positions | Mouse position |
+| `Vector3VariableSO` | 3D positions | Player position |
+| `ColorVariableSO` | Color values | Theme color |
+
+---
+
 ## Variables vs EventChannels
 
 | Use Variables when | Use EventChannels when |
