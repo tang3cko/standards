@@ -1,6 +1,10 @@
 ---
 name: unity-core
-description: Unity C# fundamentals. Naming (PascalCase, camelCase), project structure, error handling, performance, async (Awaitable, UniTask), Input System. Use when writing or reviewing C# code in Unity.
+description: Unity C# fundamentals. Naming, project structure, error handling, performance, async, Input System. Use when writing or reviewing C# code in Unity. Triggers on "Unity C#", "命名規則", "naming convention", "パフォーマンス", "async", "Input System".
+model: sonnet
+context: fork
+agent: general-purpose
+allowed-tools: Read, Glob, Grep, Edit, Write
 ---
 
 # Unity C# Fundamentals

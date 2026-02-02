@@ -1,6 +1,8 @@
 ---
 name: documentation
-description: Technical documentation standards. Writing style, markdown formatting, file organization. Use when writing or editing markdown files.
+description: Technical documentation standards. Writing style, markdown formatting, file organization. Use when writing or editing markdown files. Triggers on "ドキュメント", "documentation", "README", "markdown", "docs", "文書作成".
+model: haiku
+allowed-tools: Read, Glob, Grep
 ---
 
 # Documentation Writing Standards

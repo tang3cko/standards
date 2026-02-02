@@ -5,89 +5,15 @@
     "email": "tang3cko@gmail.com"
   },
   "metadata": {
-    "description": "Tang3cko rules for Unity development and documentation",
-    "version": "3.0.0"
+    "description": "Tang3cko standards for Unity development and documentation",
+    "version": "4.0.0"
   },
   "plugins": [
     {
-      "name": "unity-core",
-      "description": "Unity C# fundamentals: naming, code organization, comments, error handling, performance, async, input system",
+      "name": "tang3cko-standards",
+      "description": "Tang3cko shared skills for Unity development, documentation, and repository setup",
       "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/unity-core"
-      ]
-    },
-    {
-      "name": "unity-architecture",
-      "description": "Unity architecture patterns: ScriptableObject, EventChannels, Variables, RuntimeSets, dependency injection, Singleton alternatives",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/unity-architecture"
-      ]
-    },
-    {
-      "name": "unity-testing",
-      "description": "Unity testing: NUnit, Edit/Play Mode, test doubles, Humble Object pattern, assembly definitions",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/unity-testing"
-      ]
-    },
-    {
-      "name": "unity-ui",
-      "description": "Unity UI: UI Toolkit (BEM, USS, UXML), uGUI, World Space UI, accessibility",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/unity-ui"
-      ]
-    },
-    {
-      "name": "documentation",
-      "description": "Technical documentation writing rules for markdown files",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/documentation"
-      ]
-    },
-    {
-      "name": "repository-setup",
-      "description": "Repository setup rules including AGENTS.md, Renovate configuration",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/repository-setup"
-      ]
-    },
-    {
-      "name": "unity-all",
-      "description": "All Unity rules bundled together (core, architecture, testing, UI)",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/unity-core",
-        "./skills/unity-architecture",
-        "./skills/unity-testing",
-        "./skills/unity-ui"
-      ]
-    },
-    {
-      "name": "all",
-      "description": "All Tang3cko rules bundled together",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/unity-core",
-        "./skills/unity-architecture",
-        "./skills/unity-testing",
-        "./skills/unity-ui",
-        "./skills/documentation",
-        "./skills/repository-setup"
-      ]
+      "strict": false
     }
   ]
 }
