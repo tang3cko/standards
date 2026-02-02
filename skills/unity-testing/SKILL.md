@@ -1,6 +1,10 @@
 ---
 name: unity-testing
-description: Unity testing fundamentals. NUnit, Edit Mode vs Play Mode, FIRST principles, test doubles (Mock/Stub/Spy), Humble Object pattern, assembly definitions. Use when writing or reviewing unit tests in Unity.
+description: Unity testing fundamentals. NUnit, Edit/Play Mode, FIRST principles, test doubles, Humble Object pattern. Use when writing or reviewing unit tests in Unity. Triggers on "テスト", "test", "NUnit", "TDD", "モック", "mock", "ユニットテスト".
+model: sonnet
+context: fork
+agent: general-purpose
+allowed-tools: Read, Glob, Grep, Edit, Write
 ---
 
 # Unity Testing

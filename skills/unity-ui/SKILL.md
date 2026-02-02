@@ -1,6 +1,10 @@
 ---
 name: unity-ui
-description: Unity UI implementation. UI Toolkit (UXML, USS, BEM naming, design tokens), uGUI (World Space, billboard), accessibility (font sizes, contrast). Use when creating or styling UI in Unity.
+description: Unity UI implementation. UI Toolkit (UXML, USS, BEM), uGUI (World Space), accessibility. Use when creating or styling UI in Unity. Triggers on "UI", "UI Toolkit", "uGUI", "USS", "UXML", "BEM", "アクセシビリティ", "accessibility".
+model: sonnet
+context: fork
+agent: general-purpose
+allowed-tools: Read, Glob, Grep, Edit, Write
 ---
 
 # Unity UI

@@ -1,6 +1,10 @@
 ---
 name: unity-architecture
-description: Unity architecture design patterns. ScriptableObject patterns, dependency injection, event-driven design, Singleton alternatives, decoupling strategies. Use when designing system architecture, managing dependencies, or choosing communication patterns in Unity.
+description: Unity architecture patterns. ScriptableObject, EventChannel, RuntimeSet, dependency injection, Singleton alternatives. Use when designing system architecture or choosing communication patterns. Triggers on "アーキテクチャ", "architecture", "ScriptableObject", "EventChannel", "RuntimeSet", "依存性注入", "DI".
+model: sonnet
+context: fork
+agent: general-purpose
+allowed-tools: Read, Glob, Grep, Edit, Write
 ---
 
 # Unity Architecture
