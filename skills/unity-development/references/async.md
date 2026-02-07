@@ -1,6 +1,10 @@
-# Async patterns
+# Async Patterns
 
-## Comparison
+Async patterns for Unity: Coroutines, Awaitable (Unity 6+), and UniTask.
+
+---
+
+## Comparison - P1
 
 | Approach | Unity Version | Pros | Cons |
 |----------|---------------|------|------|
@@ -13,7 +17,9 @@
 - Apps/Games: Use UniTask (full-featured)
 - Legacy/Simple: Use Coroutines
 
-## Coroutines
+---
+
+## Coroutines - P1
 
 ```csharp
 public class CoroutineExample : MonoBehaviour
@@ -64,7 +70,56 @@ public void StopSpawning()
 }
 ```
 
-## Awaitable (Unity 6+)
+---
+
+## Cancellation - P1
+
+```csharp
+private CancellationTokenSource cts;
+
+private async void Start()
+{
+    cts = new CancellationTokenSource();
+    await SpawnLoopAsync(cts.Token);
+}
+
+private async Awaitable SpawnLoopAsync(CancellationToken token)
+{
+    while (!token.IsCancellationRequested)
+    {
+        SpawnEnemy();
+        await Awaitable.WaitForSecondsAsync(1f, token);
+    }
+}
+
+private void OnDestroy()
+{
+    cts?.Cancel();
+    cts?.Dispose();
+}
+```
+
+---
+
+## Time.deltaTime Usage - P1
+
+```csharp
+// Good: Framerate-independent movement
+private void Update()
+{
+    transform.position += Vector3.forward * moveSpeed * Time.deltaTime;
+}
+
+// Don't use for instant actions
+private void HandleJump()
+{
+    ApplyJumpForce(10f);  // Full force, no deltaTime
+}
+```
+
+---
+
+## Awaitable (Unity 6+) - P2
 
 ```csharp
 private async void Start()
@@ -107,34 +162,9 @@ private async Awaitable LoadDataAsync()
 }
 ```
 
-### Cancellation
+---
 
-```csharp
-private CancellationTokenSource cts;
-
-private async void Start()
-{
-    cts = new CancellationTokenSource();
-    await SpawnLoopAsync(cts.Token);
-}
-
-private async Awaitable SpawnLoopAsync(CancellationToken token)
-{
-    while (!token.IsCancellationRequested)
-    {
-        SpawnEnemy();
-        await Awaitable.WaitForSecondsAsync(1f, token);
-    }
-}
-
-private void OnDestroy()
-{
-    cts?.Cancel();
-    cts?.Dispose();
-}
-```
-
-## UniTask
+## UniTask - P2
 
 Installation:
 ```
@@ -164,37 +194,10 @@ await UniTask.DelayFrame(10);
 await UniTask.Yield(PlayerLoopTiming.PreUpdate);
 ```
 
-## Time.deltaTime usage
+---
 
-```csharp
-// Good: Framerate-independent movement
-private void Update()
-{
-    transform.position += Vector3.forward * moveSpeed * Time.deltaTime;
-}
+## References
 
-// Don't use for instant actions
-private void HandleJump()
-{
-    ApplyJumpForce(10f);  // Full force, no deltaTime
-}
-```
-
-## Update vs FixedUpdate
-
-| Method | Use Cases |
-|--------|-----------|
-| **Update** | Input, Camera, UI, Timers |
-| **FixedUpdate** | Rigidbody, AddForce, Physics |
-
-```csharp
-// Cache input from events, apply in FixedUpdate
-private Vector2 moveInput;
-
-private void HandleMove(Vector2 input) => moveInput = input;
-
-private void FixedUpdate()
-{
-    rb.AddForce(new Vector3(moveInput.x, 0, moveInput.y) * moveForce);
-}
-```
+- [performance.md](performance.md) - Coroutine caching, event-driven updates
+- [error-handling.md](error-handling.md) - Error handling in async code
+- [input-system.md](input-system.md) - Input handling patterns

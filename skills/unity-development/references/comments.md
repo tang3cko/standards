@@ -1,6 +1,46 @@
-# Comments and documentation
+# Comments and Documentation
 
-## XML documentation comments
+XML documentation, Unity attributes, and inline comments.
+
+---
+
+## Header Attribute - P1
+
+```csharp
+public class PlayerStats : MonoBehaviour
+{
+    [Header("Base Stats")]
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float moveSpeed = 5f;
+
+    [Header("Combat Stats")]
+    [SerializeField] private float attackPower = 10f;
+    [SerializeField] private float defense = 5f;
+
+    [Header("Event Channels")]
+    [SerializeField] private VoidEventChannelSO onDeath;
+    [SerializeField] private FloatEventChannelSO onHealthChanged;
+}
+```
+
+---
+
+## Tooltip Attribute - P1
+
+```csharp
+[Header("Base Stats")]
+
+[Tooltip("Player's maximum health")]
+[SerializeField] private float maxHealth = 100f;
+
+[Tooltip("Movement speed per second (meters)")]
+[Range(1f, 10f)]
+[SerializeField] private float moveSpeed = 5f;
+```
+
+---
+
+## XML Documentation Comments - P2
 
 ### Class documentation
 
@@ -41,39 +81,39 @@ public int CurrentHealth { get; private set; }
 public bool IsAlive => CurrentHealth > 0;
 ```
 
-## Header attribute
+---
+
+## When NOT to Document - P2
+
+**Self-explanatory code:**
 
 ```csharp
-public class PlayerStats : MonoBehaviour
+// Bad
+public Vector3 GetPosition() => transform.position;
+
+// Good: Method name is descriptive
+public Vector3 GetPlayerPosition() => transform.position;
+```
+
+**Unity standard methods:**
+
+```csharp
+// Bad
+/// <summary>
+/// Awake method
+/// </summary>
+private void Awake() { }
+
+// Good: No comment needed
+private void Awake()
 {
-    [Header("Base Stats")]
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float moveSpeed = 5f;
-
-    [Header("Combat Stats")]
-    [SerializeField] private float attackPower = 10f;
-    [SerializeField] private float defense = 5f;
-
-    [Header("Event Channels")]
-    [SerializeField] private VoidEventChannelSO onDeath;
-    [SerializeField] private FloatEventChannelSO onHealthChanged;
+    // Only comment initialization logic if needed
 }
 ```
 
-## Tooltip attribute
+---
 
-```csharp
-[Header("Base Stats")]
-
-[Tooltip("Player's maximum health")]
-[SerializeField] private float maxHealth = 100f;
-
-[Tooltip("Movement speed per second (meters)")]
-[Range(1f, 10f)]
-[SerializeField] private float moveSpeed = 5f;
-```
-
-## Inline comments
+## Inline Comments - P3
 
 **Good: Explaining complex logic**
 
@@ -100,7 +140,7 @@ StartCoroutine(UpdateUINextFrame());
 **Bad: Obvious code**
 
 ```csharp
-// Bad: Unnecessary comment
+// Bad
 // Increase player health
 health += 10;
 
@@ -108,7 +148,9 @@ health += 10;
 playerHealth.Heal(10);
 ```
 
-## TODO comments
+---
+
+## TODO Comments - P3
 
 ```csharp
 // TODO: Add DOTween animation in Phase 2
@@ -122,30 +164,10 @@ public override void OnStopServer() { }
 private void Update() { }
 ```
 
-## When NOT to document
+---
 
-**Self-explanatory code:**
+## References
 
-```csharp
-// Bad: Unnecessary
-public Vector3 GetPosition() => transform.position;
-
-// Good: Method name is descriptive
-public Vector3 GetPlayerPosition() => transform.position;
-```
-
-**Unity standard methods:**
-
-```csharp
-// Bad: Unnecessary
-/// <summary>
-/// Awake method
-/// </summary>
-private void Awake() { }
-
-// Good: No comment needed
-private void Awake()
-{
-    // Only comment initialization logic if needed
-}
-```
+- [_core-rules.md](_core-rules.md) - File structure order
+- [naming.md](naming.md) - Naming conventions
+- [code-organization.md](code-organization.md) - File organization

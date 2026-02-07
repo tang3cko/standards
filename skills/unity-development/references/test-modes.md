@@ -1,16 +1,22 @@
 # Test Modes: Edit Mode vs Play Mode
 
-## Decision tree
+Edit Mode vs Play Mode test decision guide.
+
+---
+
+## Decision Tree - P1
 
 ```
 Does your code depend on Unity lifecycle (Awake, Start, Update)?
-├─ YES → Use Play Mode Tests
-└─ NO → Does it require Physics/Animation/Scene?
-    ├─ YES → Use Play Mode Tests
-    └─ NO → Use Edit Mode Tests ← Prefer this
+├─ YES -> Use Play Mode Tests
+└─ NO -> Does it require Physics/Animation/Scene?
+    ├─ YES -> Use Play Mode Tests
+    └─ NO -> Use Edit Mode Tests <- Prefer this
 ```
 
-## Comparison table
+---
+
+## Comparison Table - P1
 
 | Feature | Edit Mode | Play Mode |
 |---------|-----------|-----------|
@@ -22,7 +28,25 @@ Does your code depend on Unity lifecycle (Awake, Start, Update)?
 | Animation | No | Yes |
 | Scenes | No | Yes |
 
-## Edit Mode tests
+### Performance impact
+
+**Edit Mode:**
+```
+Test execution: ~0.5ms
+100 tests: ~50ms
+1000 tests: ~500ms
+```
+
+**Play Mode:**
+```
+Unity Player initialization: ~2-5 seconds
+Test execution: ~100ms-1000ms per test
+100 tests: ~30-60 seconds
+```
+
+---
+
+## Edit Mode Tests - P1
 
 ### Characteristics
 
@@ -54,7 +78,9 @@ public class CardValidatorTests
 }
 ```
 
-## Play Mode tests
+---
+
+## Play Mode Tests - P1
 
 ### Characteristics
 
@@ -92,25 +118,9 @@ public class GameManagerTests
 }
 ```
 
-## Performance impact
+---
 
-### Edit Mode performance
-
-```
-Test execution: ~0.5ms
-100 tests: ~50ms
-1000 tests: ~500ms
-```
-
-### Play Mode performance
-
-```
-Unity Player initialization: ~2-5 seconds
-Test execution: ~100ms-1000ms per test
-100 tests: ~30-60 seconds
-```
-
-## Best practices
+## Best Practices - P2
 
 **Extract logic to pure C# for Edit Mode testing:**
 
@@ -146,3 +156,12 @@ public IEnumerator TestGameObject()
     yield return null;
 }
 ```
+
+---
+
+## References
+
+- [testing.md](testing.md) - Testing overview
+- [principles.md](principles.md) - FIRST principles, AAA pattern
+- [patterns.md](patterns.md) - Humble Object pattern for testable code
+- [assemblies.md](assemblies.md) - Test assembly setup for each mode

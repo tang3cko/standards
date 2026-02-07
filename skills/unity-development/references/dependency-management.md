@@ -1,12 +1,17 @@
-# Dependency management
+# Dependency Management
 
-## Priority order
+Dependency injection priority order and patterns.
+For quick reference, see [_core-rules.md](_core-rules.md).
+
+---
+
+## Priority Order - P1
 
 ```
-1. EventChannel (Highest) ← Complete decoupling
-2. SerializeField         ← Explicit dependencies
-3. FindFirstObjectByType  ← SerializeField fallback only
-4. Singleton (Last Resort)← Truly global state only
+1. EventChannel (Highest) <- Complete decoupling
+2. SerializeField         <- Explicit dependencies
+3. FindFirstObjectByType  <- SerializeField fallback only
+4. Singleton (Last Resort)<- Truly global state only
 ```
 
 ### Why this order?
@@ -17,7 +22,9 @@
 4. **Parallel Development** - Less file conflicts
 5. **Testability** - Quality assurance possible
 
-## EventChannel pattern (Priority 1)
+---
+
+## EventChannel Pattern - P1
 
 ```csharp
 // Publisher doesn't know who receives
@@ -48,7 +55,9 @@ public class GameStatsManager : MonoBehaviour
 }
 ```
 
-## SerializeField pattern (Priority 2)
+---
+
+## SerializeField Pattern - P2
 
 ```csharp
 public class UIManager : MonoBehaviour
@@ -73,7 +82,9 @@ public class UIManager : MonoBehaviour
 }
 ```
 
-## Singleton pattern (Priority 4 - Last Resort)
+---
+
+## Singleton Pattern - P2
 
 ### When to use Singleton
 
@@ -88,7 +99,7 @@ Use ONLY when ALL four conditions are met:
 |-------|----------------|--------|
 | `GameManager` | Yes | Game-wide state, referenced everywhere |
 | `EnemyPoolManager` | Yes | All spawners reference it |
-| `GameStatsManager` | No | Only 2-3 references → Use SerializeField |
+| `GameStatsManager` | No | Only 2-3 references -> Use SerializeField |
 | `AudioManager` | No | Access via EventChannel |
 
 ### Implementation
@@ -122,16 +133,18 @@ public class GameManager : MonoBehaviour
 }
 ```
 
-## Refactoring example
+---
+
+## Refactoring Example - P2
 
 ### Before (Singleton)
 
 ```csharp
+// Bad: Hidden dependency
 public class UIManager : MonoBehaviour
 {
     private void Update()
     {
-        // Hidden dependency
         float time = GameStatsManager.Instance.CurrentGameTime;
         timerText.text = FormatTime(time);
     }
@@ -141,11 +154,9 @@ public class UIManager : MonoBehaviour
 ### After (SerializeField + EventChannel)
 
 ```csharp
+// Good: Explicit, event-driven
 public class UIManager : MonoBehaviour
 {
-    [Header("Dependencies")]
-    [SerializeField] private GameStatsManager gameStatsManager;
-
     [Header("Event Channels")]
     [SerializeField] private FloatEventChannelSO onGameTimeChanged;
 
@@ -166,22 +177,11 @@ public class UIManager : MonoBehaviour
 }
 ```
 
-## Comparison: Singleton vs SerializeField
+---
 
-### Visibility
+## References
 
-**Singleton:** Dependencies not visible in code or Inspector
-
-**SerializeField:** Dependencies immediately visible in Inspector
-
-### Testing
-
-**Singleton:**
-- Can only test in Play mode
-- Cannot use mocks/stubs
-- No CI/CD automated tests
-
-**SerializeField:**
-- Test in Edit mode or Play mode
-- Can inject mock objects
-- Automated test suites possible
+- [_core-rules.md](_core-rules.md) - Dependency priority quick reference
+- [architecture.md](architecture.md) - Architecture decision tree
+- [event-channels.md](event-channels.md) - EventChannel details
+- [design-principles.md](design-principles.md) - Asset-based DI principles

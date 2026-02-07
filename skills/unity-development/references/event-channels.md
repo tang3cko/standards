@@ -1,6 +1,10 @@
-# EventChannel details
+# EventChannel Details
 
-## Built-in EventChannel types
+EventChannel pub/sub pattern for decoupled communication.
+
+---
+
+## Built-in EventChannel Types - P1
 
 | Type | Use Case | Example |
 |------|----------|---------|
@@ -15,24 +19,7 @@
 
 ---
 
-## Custom EventChannel types
-
-Create custom EventChannels when passing complex data structures.
-
-```csharp
-using UnityEngine;
-using Tang3cko.ReactiveSO;
-
-namespace ProjectName.Quest
-{
-    [CreateAssetMenu(fileName = "QuestEventChannel", menuName = "Reactive SO/Channels/Quest Event Channel")]
-    public class QuestEventChannelSO : EventChannelSO<QuestSO>
-    {
-    }
-}
-```
-
-## Complete example
+## Usage Pattern - P1
 
 ```csharp
 using UnityEngine;
@@ -75,10 +62,75 @@ namespace ProjectName.Enemy
 }
 ```
 
-## Debugging
+---
 
-Access Event Monitor via `Window → Reactive SO → Event Monitor`:
+## Custom EventChannel Types - P2
+
+Create custom EventChannels when passing complex data structures.
+
+```csharp
+using UnityEngine;
+using Tang3cko.ReactiveSO;
+
+namespace ProjectName.Quest
+{
+    [CreateAssetMenu(fileName = "QuestEventChannel", menuName = "Reactive SO/Channels/Quest Event Channel")]
+    public class QuestEventChannelSO : EventChannelSO<QuestSO>
+    {
+    }
+}
+```
+
+### Creating a new custom EventChannel
+
+```csharp
+using UnityEngine;
+using Tang3cko.ReactiveSO;
+
+namespace ProjectName.Item
+{
+    [CreateAssetMenu(fileName = "ItemEventChannel", menuName = "ProjectName/Events/Item Event Channel")]
+    public class ItemEventChannelSO : EventChannelSO<ItemSO>
+    {
+    }
+}
+```
+
+Usage:
+
+```csharp
+// Publisher
+[SerializeField] private ItemEventChannelSO onItemAcquired;
+public void Pickup() => onItemAcquired?.RaiseEvent(item);
+
+// Subscriber
+private void OnEnable() => onItemAcquired.OnEventRaised += HandleItemAcquired;
+private void OnDisable() => onItemAcquired.OnEventRaised -= HandleItemAcquired;
+```
+
+### CreateAssetMenu conventions
+
+| Category | Menu Path |
+|----------|-----------|
+| Data SO | `"ProjectName/Data/Category/Name"` |
+| RuntimeSet | `"ProjectName/RuntimeSet/TypeName"` |
+| EventChannel | `"ProjectName/Events/TypeName Event Channel"` |
+
+---
+
+## Debugging - P2
+
+Access Event Monitor via `Window -> Reactive SO -> Event Monitor`:
 - Real-time event logging
 - Filter by event channel name
 - View event values and timestamps
 - Caller tracking
+
+---
+
+## References
+
+- [_core-rules.md](_core-rules.md) - Dependency priority order
+- [dependency-management.md](dependency-management.md) - EventChannel as priority 1 pattern
+- [variables.md](variables.md) - Variables vs EventChannels comparison
+- [architecture.md](architecture.md) - Architecture decision tree

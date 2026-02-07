@@ -1,6 +1,10 @@
 # Testing Principles
 
-## FIRST principles
+FIRST principles, AAA pattern, and TDD workflow for Unity testing.
+
+---
+
+## FIRST Principles - P1
 
 ### Fast
 
@@ -68,7 +72,7 @@ Write tests before or immediately after implementation.
 
 ---
 
-## AAA pattern
+## AAA Pattern - P1
 
 Structure every test using Arrange-Act-Assert.
 
@@ -92,7 +96,7 @@ public void PlayCard_ValidCard_ReturnsSuccess()
 
 ---
 
-## TDD workflow
+## TDD Workflow - P2
 
 Test-Driven Development follows Red-Green-Refactor.
 
@@ -140,7 +144,7 @@ public class Calculator
 
 ---
 
-## Core rules
+## Core Rules - P1
 
 ### Rule 1: Test only YOUR code
 
@@ -164,3 +168,12 @@ public void ThirdPartyLibrary_Works() { }
 ### Rule 3: One logical assertion per test
 
 ### Rule 4: Prefer Edit Mode over Play Mode
+
+---
+
+## References
+
+- [testing.md](testing.md) - Testing overview
+- [patterns.md](patterns.md) - Testing patterns (Humble Object, Builder, DI)
+- [test-modes.md](test-modes.md) - Edit Mode vs Play Mode guide
+- [pitfalls.md](pitfalls.md) - Common testing mistakes

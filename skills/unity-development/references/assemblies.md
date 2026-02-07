@@ -1,6 +1,10 @@
 # Assembly Definitions for Tests
 
-## Folder structure
+Test assembly definition setup for Edit Mode and Play Mode tests.
+
+---
+
+## Folder Structure - P1
 
 ```
 Assets/_Project/
@@ -21,7 +25,9 @@ Assets/_Project/
             └── Daifugo.Tests.Runtime.asmdef
 ```
 
-## Edit Mode test assembly
+---
+
+## Edit Mode Test Assembly - P1
 
 File: `Tests/Editor/Core/Daifugo.Core.Tests.Editor.asmdef`
 
@@ -57,7 +63,9 @@ File: `Tests/Editor/Core/Daifugo.Core.Tests.Editor.asmdef`
 | `precompiledReferences` | `["nunit.framework.dll"]` | NUnit framework |
 | `autoReferenced` | `false` | Prevent accidental dependencies |
 
-## Play Mode test assembly
+---
+
+## Play Mode Test Assembly - P1
 
 File: `Tests/Runtime/Daifugo.Tests.Runtime.asmdef`
 
@@ -94,14 +102,18 @@ File: `Tests/Runtime/Daifugo.Tests.Runtime.asmdef`
 | `references` | Production assemblies | + UnityEngine/Editor.TestRunner |
 | `defineConstraints` | `[]` | `["UNITY_INCLUDE_TESTS"]` |
 
-## Creating test assembly (easy way)
+---
+
+## Creating Test Assembly (Easy Way) - P2
 
 1. Open Test Runner (`Window > General > Test Runner`)
 2. Select `EditMode` tab
 3. Click "Create EditMode Test Assembly Folder"
 4. Unity creates folder and asmdef with correct settings
 
-## Common issues
+---
+
+## Common Issues - P2
 
 ### Tests not appearing
 
@@ -132,7 +144,9 @@ File: `Tests/Runtime/Daifugo.Tests.Runtime.asmdef`
 ]
 ```
 
-## Quick checklist
+---
+
+## Quick Checklist - P1
 
 For each test assembly:
 
@@ -144,3 +158,11 @@ For each test assembly:
 - [ ] Edit Mode: `includePlatforms: ["Editor"]`
 - [ ] Play Mode: `UNITY_INCLUDE_TESTS` define constraint
 - [ ] Tests appear in Test Runner
+
+---
+
+## References
+
+- [testing.md](testing.md) - Testing overview
+- [test-modes.md](test-modes.md) - Edit Mode vs Play Mode decision
+- [nunit.md](nunit.md) - NUnit attributes and assertions

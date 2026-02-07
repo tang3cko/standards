@@ -1,6 +1,10 @@
 # Common Testing Pitfalls
 
-## Summary
+Common testing mistakes and how to avoid them.
+
+---
+
+## Summary - P1
 
 | Pitfall | Solution |
 |---------|----------|
@@ -15,7 +19,7 @@
 
 ---
 
-## Pitfall 1: Testing implementation details
+## Pitfall 1: Testing Implementation Details - P1
 
 ### Problem
 
@@ -48,7 +52,7 @@ public void ProcessCard_ValidCard_UpdatesState()
 
 ---
 
-## Pitfall 2: Over-mocking
+## Pitfall 2: Over-Mocking - P1
 
 ### Problem
 
@@ -70,7 +74,7 @@ var validator = Substitute.For<IRuleValidator>();  // Mock only complex dependen
 
 ---
 
-## Pitfall 3: Shared mutable state
+## Pitfall 3: Shared Mutable State - P1
 
 ### Problem
 
@@ -106,7 +110,7 @@ public void Setup()
 
 ---
 
-## Pitfall 4: Not cleaning up
+## Pitfall 4: Not Cleaning Up - P1
 
 ### Problem
 
@@ -156,7 +160,7 @@ public void Teardown()
 
 ---
 
-## Pitfall 5: Testing Unity framework
+## Pitfall 5: Testing Unity Framework - P1
 
 ### Problem
 
@@ -184,7 +188,7 @@ public void CalculateDistance_ReturnsCorrectValue()
 
 ---
 
-## Pitfall 6: Logic in MonoBehaviour
+## Pitfall 6: Logic in MonoBehaviour - P1
 
 ### Problem
 
@@ -223,7 +227,7 @@ public class GameManager : MonoBehaviour
 
 ---
 
-## Pitfall 7: Unnecessary Play Mode
+## Pitfall 7: Unnecessary Play Mode - P1
 
 ### Problem
 
@@ -252,7 +256,7 @@ public void SimpleCalculation()
 
 ---
 
-## Pitfall 8: Multiple unrelated assertions
+## Pitfall 8: Multiple Unrelated Assertions - P1
 
 ### Problem
 
@@ -289,3 +293,12 @@ public void Player_TakesDamage_ReducesHealth()
     Assert.That(player.Health, Is.EqualTo(90));
 }
 ```
+
+---
+
+## References
+
+- [testing.md](testing.md) - Testing overview
+- [principles.md](principles.md) - FIRST principles
+- [patterns.md](patterns.md) - Humble Object pattern
+- [test-doubles.md](test-doubles.md) - Proper use of test doubles

@@ -1,6 +1,10 @@
 # Test Patterns
 
-## Humble Object Pattern
+Testing patterns: Humble Object, Builder, Factory, and DI.
+
+---
+
+## Humble Object Pattern - P1
 
 The most important pattern for making MonoBehaviour code testable.
 
@@ -87,7 +91,7 @@ public void PlayCard_ValidCard_ReturnsSuccess()
 
 ---
 
-## Test Data Builder Pattern
+## Test Data Builder Pattern - P2
 
 ### The problem
 
@@ -138,7 +142,7 @@ public void CanPlay_8Cut_AlwaysReturnsTrue()
 
 ---
 
-## Factory Pattern
+## Factory Pattern - P2
 
 ### Simple factory
 
@@ -179,7 +183,7 @@ public void Shuffle_FullDeck_Randomizes()
 
 ---
 
-## Dependency Injection
+## Dependency Injection Pattern - P2
 
 ### Interface-based DI
 
@@ -230,7 +234,7 @@ public void Update_DecreasesRemainingTime()
 
 ---
 
-## Pattern comparison
+## Pattern Comparison - P1
 
 | Pattern | Purpose | Benefit |
 |---------|---------|---------|
@@ -238,3 +242,12 @@ public void Update_DecreasesRemainingTime()
 | Test Data Builder | Create test objects | Reduce duplication |
 | Factory | Consistent test data | DRY principle |
 | Dependency Injection | Mock dependencies | Isolation |
+
+---
+
+## References
+
+- [testing.md](testing.md) - Testing overview
+- [principles.md](principles.md) - FIRST principles, AAA pattern
+- [test-doubles.md](test-doubles.md) - Test double types and usage
+- [pitfalls.md](pitfalls.md) - Common testing mistakes

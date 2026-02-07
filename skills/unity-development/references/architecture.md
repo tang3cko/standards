@@ -1,37 +1,37 @@
 # Architecture Patterns
 
-Architecture patterns for scalable, testable Unity projects.
+Architecture decision tree and ScriptableObject pattern overview.
 
 ---
 
-## Architecture Decision
+## Architecture Decision Tree - P1
 
 ```
 What problem are you solving?
 │
-├─▶ "Systems need to communicate"
-│   ├─▶ Tight coupling OK? → Direct reference (SerializeField)
-│   └─▶ Need decoupling?
-│       ├─▶ Fire-and-forget → EventChannel
-│       └─▶ Query current state → Variable
+├──> "Systems need to communicate"
+│   ├──> Tight coupling OK? -> Direct reference (SerializeField)
+│   └──> Need decoupling?
+│       ├──> Fire-and-forget -> EventChannel
+│       └──> Query current state -> Variable
 │
-├─▶ "Need global access to something"
-│   ├─▶ Static data (configs)? → ScriptableObject
-│   ├─▶ Runtime service? → Service Locator or DI
-│   └─▶ Truly unique manager? → Singleton (last resort)
+├──> "Need global access to something"
+│   ├──> Static data (configs)? -> ScriptableObject
+│   ├──> Runtime service? -> Service Locator or DI
+│   └──> Truly unique manager? -> Singleton (last resort)
 │
-├─▶ "Track objects in scene"
-│   ├─▶ Find at runtime → RuntimeSet
-│   └─▶ Known at design time → SerializeField
+├──> "Track objects in scene"
+│   ├──> Find at runtime -> RuntimeSet
+│   └──> Known at design time -> SerializeField
 │
-└─▶ "Large-scale entity simulation"
-    ├─▶ < 1000 entities → Traditional OOP
-    └─▶ 1000+ entities → ECS or Data-Oriented Design
+└──> "Large-scale entity simulation"
+    ├──> < 1000 entities -> Traditional OOP
+    └──> 1000+ entities -> ECS or Data-Oriented Design
 ```
 
 ---
 
-## Approach Comparison
+## Approach Comparison - P1
 
 | Approach | Coupling | Testability | Use Case |
 |----------|----------|-------------|----------|
@@ -45,7 +45,7 @@ What problem are you solving?
 
 ---
 
-## ScriptableObject Patterns
+## ScriptableObject Patterns - P1
 
 | Need | Pattern | Example |
 |------|---------|---------|
@@ -57,7 +57,7 @@ What problem are you solving?
 
 ---
 
-## Singleton Alternatives
+## Singleton Alternatives - P2
 
 ### Why Avoid Singleton?
 
@@ -96,3 +96,13 @@ Use ONLY when ALL conditions are met:
 2. Same lifecycle as entire application
 3. Truly global state
 4. Referenced from 10+ locations
+
+---
+
+## References
+
+- [design-principles.md](design-principles.md) - Three design pillars
+- [dependency-management.md](dependency-management.md) - Dependency injection patterns
+- [event-channels.md](event-channels.md) - EventChannel details
+- [variables.md](variables.md) - Variable pattern details
+- [runtime-sets.md](runtime-sets.md) - RuntimeSet pattern details
