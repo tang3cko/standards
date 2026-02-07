@@ -13,7 +13,6 @@ Shared coding standards and Claude Code skills for Tang3cko projects.
 | Skill | Description |
 |-------|-------------|
 | [unity](skills/unity/) | Unity C# standards, ScriptableObject architecture (Tang3cko.ReactiveSO), testing, UI |
-| [documentation](skills/documentation/) | Technical writing standards |
 | [repository-setup](skills/repository-setup/) | Repository setup and configuration |
 
 ### Other
