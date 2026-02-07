@@ -1,6 +1,11 @@
-# Naming conventions
+# Naming Conventions
 
-## Classes and interfaces
+Detailed naming conventions extending _core-rules.md summary.
+For quick reference, see [_core-rules.md](_core-rules.md).
+
+---
+
+## Classes and Interfaces - P1
 
 - Use PascalCase
 - Interfaces use `I` prefix
@@ -12,7 +17,9 @@ public interface IDamageable { }
 public interface IInteractable { }
 ```
 
-## Fields
+---
+
+## Fields - P1
 
 ```csharp
 public class Example
@@ -31,7 +38,9 @@ public class Example
 }
 ```
 
-## Methods
+---
+
+## Methods - P1
 
 - PascalCase, start with verbs
 
@@ -46,7 +55,9 @@ private void OnEnemyDeath() { }
 private void HandleQuestCompleted(QuestSO quest) { }
 ```
 
-## Properties
+---
+
+## Properties - P1
 
 ```csharp
 public int Health { get; private set; }
@@ -54,7 +65,9 @@ public bool IsAlive => Health > 0;
 public IReadOnlyList<Item> Items => items;
 ```
 
-## Events and EventChannels
+---
+
+## Events and EventChannels - P1
 
 ```csharp
 // EventChannel fields: "on" prefix + past tense
@@ -66,7 +79,9 @@ public event Action OnDeath;
 public event Action<int> OnHealthChanged;
 ```
 
-## Namespace
+---
+
+## Namespace - P1
 
 ```csharp
 namespace ProjectName.Category
@@ -79,7 +94,9 @@ namespace ProjectName.Core
 namespace ProjectName.Data
 ```
 
-## Unity-specific
+---
+
+## Unity-Specific Suffixes - P2
 
 ```csharp
 // ScriptableObject: "SO" suffix
@@ -94,7 +111,9 @@ public class IntEventChannelSO : EventChannelSO<int> { }
 public class EnemyRuntimeSetSO : ScriptableObject { }
 ```
 
-## Boolean variables
+---
+
+## Boolean Variables - P1
 
 ```csharp
 // Use "is", "has", "can", "should" prefixes
@@ -103,3 +122,11 @@ private bool hasKey;
 private bool canJump;
 private bool shouldSpawn;
 ```
+
+---
+
+## References
+
+- [_core-rules.md](_core-rules.md) - Quick reference for all core rules
+- [code-organization.md](code-organization.md) - File and namespace organization
+- [comments.md](comments.md) - Documentation and comment conventions

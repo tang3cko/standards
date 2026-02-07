@@ -1,6 +1,10 @@
-# Design principles
+# Design Principles
 
-## The three pillars
+Three design pillars: Observability, Asset-based DI, and Data-Oriented Design.
+
+---
+
+## The Three Pillars - P1
 
 | Principle | Goal | Enables |
 |-----------|------|---------|
@@ -10,12 +14,12 @@
 
 ---
 
-## True Observability
+## True Observability - P1
 
 ### The model
 
 ```
-S_n(T_i) ⊆ T
+S_n(T_i) <= T
 
 T   = Total Set (all data in the system)
 S_n = Observer (a filter or view)
@@ -38,7 +42,9 @@ Behavior (S_n)
 └── Can be tested independently
 ```
 
-### Practical applications
+---
+
+## Practical Applications - P2
 
 | Pattern | Description |
 |---------|-------------|
@@ -49,7 +55,7 @@ Behavior (S_n)
 
 ---
 
-## Asset-based Dependency Injection
+## Asset-based Dependency Injection - P1
 
 ### Pure DI via Inspector
 
@@ -88,7 +94,7 @@ void Spawn()
 
 ---
 
-## Data-Oriented Design
+## Data-Oriented Design - P1
 
 ### The pattern
 
@@ -141,7 +147,7 @@ entitySet.UpdateData(enemyId, state =>
 
 ---
 
-## Entity vs Object vs View
+## Entity vs Object vs View - P1
 
 | Concept | Description | Lifecycle |
 |---------|-------------|-----------|
@@ -153,7 +159,7 @@ entitySet.UpdateData(enemyId, state =>
 
 ---
 
-## Design checklist
+## Design Checklist - P1
 
 ### 1. Observability
 
@@ -178,3 +184,11 @@ entitySet.UpdateData(enemyId, state =>
 - Does entity exist in ReactiveEntitySet?
 - Is state managed by RES, not GameObject?
 - Can entity exist without visual representation?
+
+---
+
+## References
+
+- [architecture.md](architecture.md) - Architecture decision tree
+- [dependency-management.md](dependency-management.md) - DI priority order
+- [reactive-entity-sets.md](reactive-entity-sets.md) - RES implementation details

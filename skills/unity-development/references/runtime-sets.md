@@ -1,27 +1,54 @@
-# RuntimeSet details
+# RuntimeSet Details
 
-## Design philosophy
+RuntimeSet pattern for object tracking without scene scanning.
+
+---
+
+## Design Philosophy - P1
 
 **Traditional Unity:**
 ```
 GameManager wants all enemies
-         ↓
-FindObjectsOfType<Enemy>()  ← O(n) scene scan every call
-         ↓
+         |
+FindObjectsOfType<Enemy>()  <- O(n) scene scan every call
+         |
 Performance problem
 ```
 
 **RuntimeSet pattern:**
 ```
-Enemy OnEnable() → enemySet.Add(this)
-Enemy OnDisable() → enemySet.Remove(this)
-         ↓
-GameManager → enemySet.Items  ← O(1) direct access
+Enemy OnEnable() -> enemySet.Add(this)
+Enemy OnDisable() -> enemySet.Remove(this)
+         |
+GameManager -> enemySet.Items  <- O(1) direct access
 ```
 
 **Key insight:** Objects register themselves. The collection doesn't search for them.
 
-## Custom RuntimeSet
+---
+
+## Basic Usage - P1
+
+### Registration
+
+```csharp
+[SerializeField] private EnemyRuntimeSetSO enemySet;
+private void OnEnable() => enemySet?.Add(this);
+private void OnDisable() => enemySet?.Remove(this);
+```
+
+### Scene cleanup
+
+```csharp
+private void OnDestroy()
+{
+    enemySet?.Clear();
+}
+```
+
+---
+
+## Custom RuntimeSets - P2
 
 ```csharp
 using UnityEngine;
@@ -74,7 +101,9 @@ namespace ProjectName.Enemy
 }
 ```
 
-## Event notifications
+---
+
+## Event Notifications - P2
 
 RuntimeSets use EventChannels for notifications. Assign in Inspector:
 - **onItemsChanged** (VoidEventChannelSO) - Items added or removed
@@ -105,16 +134,9 @@ public class EnemyCountDisplay : MonoBehaviour
 }
 ```
 
-## Scene cleanup
+---
 
-```csharp
-private void OnDestroy()
-{
-    enemySet?.Clear();
-}
-```
-
-## RuntimeSet vs ReactiveEntitySet
+## RuntimeSet vs ReactiveEntitySet - P2
 
 | Use RuntimeSet when | Use ReactiveEntitySet when |
 |---------------------|---------------------------|
@@ -122,3 +144,11 @@ private void OnDestroy()
 | Simple add/remove lifecycle | ID-based entity lookup |
 | Need to iterate over all items | Scene-persistent state |
 | No per-entity state required | Complex state updates with events |
+
+---
+
+## References
+
+- [_core-rules.md](_core-rules.md) - Core anti-patterns (RuntimeSet vs FindObjectsOfType)
+- [reactive-entity-sets.md](reactive-entity-sets.md) - Per-entity state management
+- [event-channels.md](event-channels.md) - EventChannel notification integration

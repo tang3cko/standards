@@ -1,6 +1,10 @@
-# Variable details
+# Variable Details
 
-## Built-in Variable types
+VariableSO pattern for shared state with change detection.
+
+---
+
+## Built-in Variable Types - P1
 
 | Type | Use Case | Example |
 |------|----------|---------|
@@ -14,7 +18,9 @@
 
 ---
 
-## Variables vs EventChannels
+## Usage - P1
+
+### Variables vs EventChannels
 
 | Use Variables when | Use EventChannels when |
 |-------------------|------------------------|
@@ -22,7 +28,24 @@
 | Current value needs to be read | One-time notification is sufficient |
 | Value changes require auto-notification | Value does not need to be stored |
 
-## GPU Sync feature
+### Value change detection
+
+Variables use `EqualityComparer<T>` to detect changes:
+
+```csharp
+playerScore.Value = 100;  // Raises event
+playerScore.Value = 100;  // Does NOT raise event (same value)
+playerScore.Value = 150;  // Raises event
+```
+
+### Naming conventions
+
+- **Variable assets:** Noun form (playerScore, playerHealth, isGamePaused)
+- **EventChannel assets:** `on + PastTense` form (onScoreChanged, onHealthChanged)
+
+---
+
+## GPU Sync Feature - P2
 
 Variables can automatically sync to shader global properties.
 
@@ -33,11 +56,11 @@ Variables can automatically sync to shader global properties.
 3. Enter shader property name (MUST start with underscore `_`)
 
 ```csharp
-// OK: Property name starts with underscore
+// Good: Property name starts with underscore
 _PlayerHealth
 _TimeScale
 
-// NG: Property name without underscore (will not work)
+// Bad: Property name without underscore (will not work)
 PlayerHealth
 ```
 
@@ -59,25 +82,20 @@ fixed4 frag(v2f i) : SV_Target
 }
 ```
 
-## Value change detection
+---
 
-Variables use `EqualityComparer<T>` to detect changes:
-
-```csharp
-playerScore.Value = 100;  // Raises event
-playerScore.Value = 100;  // Does NOT raise event (same value)
-playerScore.Value = 150;  // Raises event
-```
-
-## Anti-patterns
+## Anti-Patterns - P1
 
 ### Direct Variable subscription
 
 ```csharp
-// NG
+// Bad: Subscribing directly to Variable's internal event creates tight coupling
+// between the subscriber and the Variable's implementation. If the Variable is
+// swapped or refactored, all direct subscribers break. Using a separate
+// EventChannel allows the Variable and its consumers to evolve independently.
 playerScore.OnValueChanged.OnEventRaised += UpdateUI;
 
-// OK
+// Good: Subscribe to the dedicated EventChannel instead
 [SerializeField] private IntEventChannelSO onScoreChanged;
 onScoreChanged.OnEventRaised += UpdateUI;
 ```
@@ -85,20 +103,23 @@ onScoreChanged.OnEventRaised += UpdateUI;
 ### Ignoring initial value reset
 
 ```csharp
-// NG: Previous value may persist
+// Bad: Previous value may persist from last play session
 private void Start()
 {
     playerScore.Value += 10;
 }
 
-// OK
+// Good: Reset to initial value first
 private void Start()
 {
     playerScore.ResetToInitial();
 }
 ```
 
-## Naming conventions
+---
 
-- **Variable assets:** Noun form (playerScore, playerHealth, isGamePaused)
-- **EventChannel assets:** `on + PastTense` form (onScoreChanged, onHealthChanged)
+## References
+
+- [event-channels.md](event-channels.md) - EventChannel patterns and types
+- [architecture.md](architecture.md) - ScriptableObject patterns overview
+- [dependency-management.md](dependency-management.md) - Dependency priority

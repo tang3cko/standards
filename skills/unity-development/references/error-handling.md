@@ -1,6 +1,11 @@
-# Error handling
+# Error Handling
 
-## Null safety
+Error handling patterns including null safety, validation, logging, and assertions.
+For quick reference, see [_core-rules.md](_core-rules.md).
+
+---
+
+## Null Safety - P1
 
 ### Null conditional operator
 
@@ -43,7 +48,63 @@ private void Start()
 }
 ```
 
-## Try-catch patterns
+---
+
+## OnValidate Validation - P1
+
+```csharp
+#if UNITY_EDITOR
+private void OnValidate()
+{
+    if (onQuestSelected == null)
+        Debug.LogWarning($"[{GetType().Name}] onQuestSelected not assigned on {gameObject.name}.", this);
+
+    if (questProgress == null)
+        Debug.LogWarning($"[{GetType().Name}] questProgress not assigned on {gameObject.name}.", this);
+}
+#endif
+```
+
+---
+
+## Early Return Pattern - P1
+
+```csharp
+// Good: Early return
+public void ProcessQuest(QuestSO quest)
+{
+    if (quest == null)
+    {
+        Debug.LogError("Quest is null");
+        return;
+    }
+
+    if (!quest.IsActive)
+    {
+        Debug.LogWarning("Quest is not active");
+        return;
+    }
+
+    // Normal processing (no deep nesting)
+    StartQuest(quest);
+}
+
+// Bad: Deep nesting
+public void ProcessQuest(QuestSO quest)
+{
+    if (quest != null)
+    {
+        if (quest.IsActive)
+        {
+            StartQuest(quest);
+        }
+    }
+}
+```
+
+---
+
+## Try-Catch Patterns - P2
 
 ### File I/O
 
@@ -88,7 +149,9 @@ public bool LoadData(string path)
 }
 ```
 
-## Logging guidelines
+---
+
+## Logging Guidelines - P2
 
 ### Log levels
 
@@ -116,57 +179,9 @@ Debug.LogError("Component is null");
 Debug.LogError($"[{GetType().Name}] targetComponent is null on {gameObject.name}", this);
 ```
 
-## OnValidate validation
+---
 
-```csharp
-#if UNITY_EDITOR
-private void OnValidate()
-{
-    if (onQuestSelected == null)
-        Debug.LogWarning($"[{GetType().Name}] onQuestSelected not assigned on {gameObject.name}.", this);
-
-    if (questProgress == null)
-        Debug.LogWarning($"[{GetType().Name}] questProgress not assigned on {gameObject.name}.", this);
-}
-#endif
-```
-
-## Early return pattern
-
-```csharp
-// Good: Early return
-public void ProcessQuest(QuestSO quest)
-{
-    if (quest == null)
-    {
-        Debug.LogError("Quest is null");
-        return;
-    }
-
-    if (!quest.IsActive)
-    {
-        Debug.LogWarning("Quest is not active");
-        return;
-    }
-
-    // Normal processing (no deep nesting)
-    StartQuest(quest);
-}
-
-// Bad: Deep nesting
-public void ProcessQuest(QuestSO quest)
-{
-    if (quest != null)
-    {
-        if (quest.IsActive)
-        {
-            StartQuest(quest);
-        }
-    }
-}
-```
-
-## Assert usage
+## Assert Usage - P3
 
 ```csharp
 using UnityEngine.Assertions;
@@ -180,3 +195,11 @@ public void DealDamage(int damage)
     targetEnemy.TakeDamage(damage);
 }
 ```
+
+---
+
+## References
+
+- [_core-rules.md](_core-rules.md) - Error handling quick reference
+- [performance.md](performance.md) - Performance-related patterns
+- [dependency-management.md](dependency-management.md) - Dependency validation

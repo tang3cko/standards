@@ -1,34 +1,10 @@
-# Input System integration
+# Input System Integration
 
-## Action Maps organization
+Unity Input System patterns with InputReader ScriptableObject and EventChannel integration.
 
-```
-PlayerInputActions.inputactions
-├── Player (Action Map)      <- Gameplay
-│   ├── Move (Vector2)
-│   ├── Look (Vector2)
-│   ├── Jump (Button)
-│   └── Fire (Button)
-├── UI (Action Map)          <- Menu
-│   ├── Navigate (Vector2)
-│   ├── Submit (Button)
-│   └── Cancel (Button)
-└── Vehicle (Action Map)     <- Driving
-    ├── Steer (Vector2)
-    └── Accelerate (Button)
-```
+---
 
-### Switching Action Maps
-
-```csharp
-playerInput.SwitchCurrentActionMap("UI");
-
-// Or manual
-inputActions.Player.Disable();
-inputActions.UI.Enable();
-```
-
-## InputReader pattern
+## InputReader Pattern - P1
 
 ### InputReader ScriptableObject
 
@@ -87,7 +63,9 @@ namespace ProjectName.Input
 }
 ```
 
-### Usage in MonoBehaviour
+---
+
+## MonoBehaviour Usage - P1
 
 ```csharp
 public class PlayerController : MonoBehaviour
@@ -120,7 +98,39 @@ public class PlayerController : MonoBehaviour
 }
 ```
 
-## EventChannel bridge
+---
+
+## Action Maps Organization - P2
+
+```
+PlayerInputActions.inputactions
+├── Player (Action Map)      <- Gameplay
+│   ├── Move (Vector2)
+│   ├── Look (Vector2)
+│   ├── Jump (Button)
+│   └── Fire (Button)
+├── UI (Action Map)          <- Menu
+│   ├── Navigate (Vector2)
+│   ├── Submit (Button)
+│   └── Cancel (Button)
+└── Vehicle (Action Map)     <- Driving
+    ├── Steer (Vector2)
+    └── Accelerate (Button)
+```
+
+### Switching Action Maps
+
+```csharp
+playerInput.SwitchCurrentActionMap("UI");
+
+// Or manual
+inputActions.Player.Disable();
+inputActions.UI.Enable();
+```
+
+---
+
+## EventChannel Bridge - P2
 
 ```csharp
 public class InputEventBridge : MonoBehaviour
@@ -149,7 +159,9 @@ public class InputEventBridge : MonoBehaviour
 }
 ```
 
-## Testing with mock input
+---
+
+## Testing with Mock Input - P2
 
 ```csharp
 [CreateAssetMenu(fileName = "MockInputReader", menuName = "Input/Mock Input Reader")]
@@ -160,7 +172,9 @@ public class MockInputReaderSO : InputReaderSO
 }
 ```
 
-## Project setup
+---
+
+## Project Setup - P3
 
 1. Install Input System Package
 2. Enable in Project Settings > Player > Active Input Handling
@@ -181,3 +195,11 @@ Assets/
         ├── InputReaderSO.cs
         └── InputEventBridge.cs
 ```
+
+---
+
+## References
+
+- [event-channels.md](event-channels.md) - EventChannel patterns for input bridging
+- [dependency-management.md](dependency-management.md) - ScriptableObject as dependency
+- [async.md](async.md) - Async input processing

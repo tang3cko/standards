@@ -1,29 +1,10 @@
 # UI Toolkit
 
-## Directory structure
-
-```
-Assets/_Project/
-├── UI/
-│   ├── UXML/                    # UI structure definitions
-│   │   ├── Quest/
-│   │   │   └── QuestProgressHUD.uxml
-│   │   └── Menu/
-│   │       └── TitleScreen.uxml
-│   │
-│   └── USS/                     # Style definitions
-│       ├── Common.uss           # Design tokens, common components
-│       └── QuestUI.uss          # Quest-specific styles
-│
-└── Scripts/
-    └── UI/                      # UI logic
-        └── Quest/
-            └── QuestProgressUI.cs
-```
+UI Toolkit patterns: BEM naming, design tokens, USS responsive design, and C# controllers.
 
 ---
 
-## BEM naming convention
+## BEM Naming Convention - P1
 
 ### Structure
 
@@ -40,16 +21,6 @@ Assets/_Project/
 .quest-result--active { }
 .quest-result__status--success { }
 .quest-result__status--failed { }
-```
-
-### UXML example
-
-```xml
-<!-- Always include both base class and modifier -->
-<ui:VisualElement class="quest-result__panel">
-    <ui:Label class="quest-result__title" />
-    <ui:Label class="quest-result__status quest-result__status--success" />
-</ui:VisualElement>
 ```
 
 ### Anti-patterns
@@ -85,7 +56,48 @@ public void ShowSuccess()
 
 ---
 
-## Design tokens
+## UXML Structure - P1
+
+### File template
+
+```xml
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <!-- Reference USS files -->
+    <Style src="../../USS/Common.uss" />
+    <Style src="../../USS/QuestUI.uss" />
+
+    <!-- Root container -->
+    <ui:VisualElement name="QuestProgressPanel" class="quest-progress__panel">
+        <ui:Label name="QuestNameText" class="quest-progress__title" text="Quest Name" />
+        <ui:Label name="ProgressText" class="quest-progress__progress" text="0/5" />
+    </ui:VisualElement>
+</ui:UXML>
+```
+
+### Naming conventions
+
+- **name attribute**: PascalCase (for C# queries)
+- **class attribute**: kebab-case with BEM
+
+```xml
+<ui:VisualElement name="QuestResultPanel" class="quest-result__panel">
+    <ui:Label name="StatusText" class="quest-result__status" />
+</ui:VisualElement>
+```
+
+### UXML example
+
+```xml
+<!-- Always include both base class and modifier -->
+<ui:VisualElement class="quest-result__panel">
+    <ui:Label class="quest-result__title" />
+    <ui:Label class="quest-result__status quest-result__status--success" />
+</ui:VisualElement>
+```
+
+---
+
+## Design Tokens - P2
 
 ### Common.uss structure
 
@@ -153,7 +165,7 @@ Examples:
 
 ---
 
-## USS responsive design
+## USS Responsive Design - P2
 
 ### Panel Settings
 
@@ -220,38 +232,7 @@ m_Match: 0                        # Match width (PC landscape)
 
 ---
 
-## UXML structure
-
-### File template
-
-```xml
-<ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <!-- Reference USS files -->
-    <Style src="../../USS/Common.uss" />
-    <Style src="../../USS/QuestUI.uss" />
-
-    <!-- Root container -->
-    <ui:VisualElement name="QuestProgressPanel" class="quest-progress__panel">
-        <ui:Label name="QuestNameText" class="quest-progress__title" text="Quest Name" />
-        <ui:Label name="ProgressText" class="quest-progress__progress" text="0/5" />
-    </ui:VisualElement>
-</ui:UXML>
-```
-
-### Naming conventions
-
-- **name attribute**: PascalCase (for C# queries)
-- **class attribute**: kebab-case with BEM
-
-```xml
-<ui:VisualElement name="QuestResultPanel" class="quest-result__panel">
-    <ui:Label name="StatusText" class="quest-result__status" />
-</ui:VisualElement>
-```
-
----
-
-## C# controller pattern
+## C# Controller Pattern - P2
 
 ```csharp
 using UnityEngine;
@@ -316,7 +297,11 @@ if (progressText == null)
 }
 ```
 
-### Performance: Cache element references
+---
+
+## Performance Tips - P3
+
+### Cache element references
 
 ```csharp
 // Good: Cache in OnEnable
@@ -339,3 +324,34 @@ private void UpdateStatus(string status)
     statusText.text = status;
 }
 ```
+
+---
+
+## Directory Structure - P2
+
+```
+Assets/_Project/
+├── UI/
+│   ├── UXML/                    # UI structure definitions
+│   │   ├── Quest/
+│   │   │   └── QuestProgressHUD.uxml
+│   │   └── Menu/
+│   │       └── TitleScreen.uxml
+│   │
+│   └── USS/                     # Style definitions
+│       ├── Common.uss           # Design tokens, common components
+│       └── QuestUI.uss          # Quest-specific styles
+│
+└── Scripts/
+    └── UI/                      # UI logic
+        └── Quest/
+            └── QuestProgressUI.cs
+```
+
+---
+
+## References
+
+- [accessibility.md](accessibility.md) - Font size and contrast requirements
+- [naming.md](naming.md) - General naming conventions
+- [event-channels.md](event-channels.md) - EventChannel integration with UI

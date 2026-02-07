@@ -1,6 +1,10 @@
 # NUnit Quick Reference
 
-## Core attributes
+NUnit attributes, assertions, and parameterized tests for Unity.
+
+---
+
+## Core Attributes - P1
 
 ### `[Test]` - Standard test
 
@@ -35,65 +39,9 @@ public IEnumerator MethodName_Scenario_ExpectedBehavior()
 - Mode: Play Mode only
 - Asynchronous
 
-## Setup and teardown
+---
 
-```csharp
-private GameLogic gameLogic;
-
-[SetUp]
-public void Setup()
-{
-    gameLogic = new GameLogic();  // Before EACH test
-}
-
-[TearDown]
-public void Teardown()
-{
-    gameLogic = null;  // After EACH test
-}
-
-[OneTimeSetUp]
-public void OneTimeSetup()
-{
-    // ONCE before all tests
-}
-
-[OneTimeTearDown]
-public void OneTimeTeardown()
-{
-    // ONCE after all tests
-}
-```
-
-## Parameterized tests
-
-### `[TestCase]` - Edit Mode only
-
-```csharp
-[TestCase(1, 1, ExpectedResult = true)]
-[TestCase(1, 2, ExpectedResult = false)]
-[TestCase(8, 1, ExpectedResult = true)]  // 8-cut
-public bool CanPlayCard(int cardRank, int fieldRank)
-{
-    return CardValidator.CanPlayCard(cardRank, fieldRank);
-}
-```
-
-### `[ValueSource]` - Both modes
-
-```csharp
-[Test]
-public void IsValidRank_WithVariousRanks(
-    [ValueSource(nameof(ValidRanks))] int rank)
-{
-    bool result = CardValidator.IsValidRank(rank);
-    Assert.That(result, Is.True);
-}
-
-private static int[] ValidRanks = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
-```
-
-## Assertions (Constraint Model)
+## Assertions (Constraint Model) - P1
 
 ### Equality
 
@@ -152,7 +100,7 @@ Assert.That(
 Assert.That(() => SafeMethod(), Throws.Nothing);
 ```
 
-## Combining constraints
+### Combining constraints
 
 ```csharp
 // AND
@@ -162,9 +110,71 @@ Assert.That(value, Is.GreaterThan(3).And.LessThan(10));
 Assert.That(value, Is.EqualTo(5).Or.EqualTo(10));
 ```
 
-## Unity-specific
+---
 
-### LogAssert
+## Setup and Teardown - P1
+
+```csharp
+private GameLogic gameLogic;
+
+[SetUp]
+public void Setup()
+{
+    gameLogic = new GameLogic();  // Before EACH test
+}
+
+[TearDown]
+public void Teardown()
+{
+    gameLogic = null;  // After EACH test
+}
+
+[OneTimeSetUp]
+public void OneTimeSetup()
+{
+    // ONCE before all tests
+}
+
+[OneTimeTearDown]
+public void OneTimeTeardown()
+{
+    // ONCE after all tests
+}
+```
+
+---
+
+## Parameterized Tests - P2
+
+### `[TestCase]` - Edit Mode only
+
+```csharp
+[TestCase(1, 1, ExpectedResult = true)]
+[TestCase(1, 2, ExpectedResult = false)]
+[TestCase(8, 1, ExpectedResult = true)]  // 8-cut
+public bool CanPlayCard(int cardRank, int fieldRank)
+{
+    return CardValidator.CanPlayCard(cardRank, fieldRank);
+}
+```
+
+### `[ValueSource]` - Both modes
+
+```csharp
+[Test]
+public void IsValidRank_WithVariousRanks(
+    [ValueSource(nameof(ValidRanks))] int rank)
+{
+    bool result = CardValidator.IsValidRank(rank);
+    Assert.That(result, Is.True);
+}
+
+private static int[] ValidRanks = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+```
+
+---
+
+## Unity-Specific (LogAssert) - P3
 
 ```csharp
 using UnityEngine.TestTools;
@@ -177,7 +187,9 @@ public void Method_LogsError_WhenInvalid()
 }
 ```
 
-## Quick reference card
+---
+
+## Quick Reference Card - P1
 
 ```csharp
 // ATTRIBUTES
@@ -199,3 +211,12 @@ Assert.That(list, Has.Count.EqualTo(3)); // Collection
 Assert.That(str, Does.Contain("sub"));   // String
 Assert.That(() => f(), Throws.Nothing);  // Exception
 ```
+
+---
+
+## References
+
+- [testing.md](testing.md) - Testing overview
+- [principles.md](principles.md) - AAA pattern for structuring tests
+- [test-doubles.md](test-doubles.md) - Test doubles with NSubstitute
+- [assemblies.md](assemblies.md) - Assembly definitions for NUnit

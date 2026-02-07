@@ -1,6 +1,10 @@
-# ReactiveEntitySet details
+# ReactiveEntitySet Details
 
-## Design philosophy
+ReactiveEntitySet pattern for per-entity state management with Job System integration.
+
+---
+
+## Design Philosophy - P1
 
 **Traditional Unity:**
 ```
@@ -18,7 +22,39 @@ ScriptableObject owns the data (persistent)
 
 **Key insight:** Entity existence is determined by RES registration, not GameObject existence.
 
-## Data struct rules
+---
+
+## Basic API - P1
+
+```csharp
+// Create asset
+[CreateAssetMenu(fileName = "EnemyStateSet", menuName = "Reactive SO/Reactive Entity Sets/Enemy State")]
+public class EnemyStateSetSO : ReactiveEntitySetSO<EnemyState> { }
+
+// Registration
+entitySet.Register(entityId, initialState);
+entitySet.Unregister(entityId);
+
+// Data access
+var state = entitySet.GetData(entityId);
+entitySet.TryGetData(entityId, out var state);
+entitySet.SetData(entityId, newState);
+
+// Update (functional pattern, recommended)
+entitySet.UpdateData(entityId, state =>
+{
+    state.health -= damage;
+    return state;
+});
+
+// Per-entity subscription
+entitySet.SubscribeToEntity(entityId, OnStateChanged);
+entitySet.UnsubscribeFromEntity(entityId, OnStateChanged);
+```
+
+---
+
+## Data Struct Rules - P1
 
 RES data must be a struct with **fields only** (no properties, no methods).
 
@@ -49,35 +85,9 @@ public static class EnemyStateCalculator
 }
 ```
 
-## Basic API
+---
 
-```csharp
-// Create asset
-[CreateAssetMenu(fileName = "EnemyStateSet", menuName = "Reactive SO/Reactive Entity Sets/Enemy State")]
-public class EnemyStateSetSO : ReactiveEntitySetSO<EnemyState> { }
-
-// Registration
-entitySet.Register(entityId, initialState);
-entitySet.Unregister(entityId);
-
-// Data access
-var state = entitySet.GetData(entityId);
-entitySet.TryGetData(entityId, out var state);
-entitySet.SetData(entityId, newState);
-
-// Update (functional pattern, recommended)
-entitySet.UpdateData(entityId, state =>
-{
-    state.health -= damage;
-    return state;
-});
-
-// Per-entity subscription
-entitySet.SubscribeToEntity(entityId, OnStateChanged);
-entitySet.UnsubscribeFromEntity(entityId, OnStateChanged);
-```
-
-## ReactiveEntity base class
+## ReactiveEntity Base Class - P2
 
 ```csharp
 public class Enemy : ReactiveEntity<EnemyState>
@@ -110,7 +120,7 @@ public class Enemy : ReactiveEntity<EnemyState>
 
 ---
 
-## Job System integration
+## Job System Integration - P2
 
 Use Orchestrator when processing 1,000+ entities every frame.
 
@@ -183,7 +193,7 @@ public struct UnitSimulationJob : IJobParallelFor
 
 ---
 
-## Snapshot and persistence
+## Snapshots and Persistence - P3
 
 ### Creating and restoring snapshots
 
@@ -252,17 +262,17 @@ public class GameManager : MonoBehaviour
 
 ---
 
-## Anti-patterns
+## Anti-Patterns - P1
 
 ### Direct mutation without SetData
 
 ```csharp
-// NG: Changes not saved to RES
+// Bad: Changes not saved to RES
 var state = entitySet.GetData(entityId);
 state.health -= damage;
 // state is a copy, RES not updated!
 
-// OK: Use SetData or UpdateData
+// Good: Use SetData or UpdateData
 entitySet.UpdateData(entityId, state =>
 {
     state.health -= damage;
@@ -273,13 +283,13 @@ entitySet.UpdateData(entityId, state =>
 ### Logic in struct
 
 ```csharp
-// NG
+// Bad
 public struct EnemyState
 {
     public float HealthPercent => (float)health / maxHealth;
 }
 
-// OK: External pure function
+// Good: External pure function
 public static class EnemyStateCalculator
 {
     public static float GetHealthPercent(EnemyState state) => ...;
@@ -289,16 +299,24 @@ public static class EnemyStateCalculator
 ### Forgetting to unsubscribe
 
 ```csharp
-// NG: Memory leak
+// Bad: Memory leak
 private void OnEnable()
 {
     entitySet.SubscribeToEntity(entityId, OnStateChanged);
 }
 // Missing OnDisable!
 
-// OK
+// Good
 private void OnDisable()
 {
     entitySet.UnsubscribeFromEntity(entityId, OnStateChanged);
 }
 ```
+
+---
+
+## References
+
+- [design-principles.md](design-principles.md) - Data-Oriented Design principles
+- [runtime-sets.md](runtime-sets.md) - RuntimeSet vs ReactiveEntitySet comparison
+- [architecture.md](architecture.md) - Architecture decision tree

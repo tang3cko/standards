@@ -1,6 +1,10 @@
-# Code organization
+# Code Organization
 
-## Directory structure
+Directory structure, namespace conventions, and file organization.
+
+---
+
+## Directory Structure - P1
 
 ### Scripts directory
 
@@ -47,7 +51,9 @@ Assets/_Project/Prefabs/
 └── Weapons/
 ```
 
-## Classification criteria
+---
+
+## Classification Criteria - P1
 
 **Feature Domain-Based:**
 - `Player/` - PlayerHealth, PlayerWallet, PlayerController
@@ -61,7 +67,9 @@ Assets/_Project/Prefabs/
 - `Data/` - DataSO definitions
 - `Combat/` - IDamageable, IPoolable
 
-## One file one class
+---
+
+## One File One Class - P1
 
 - One public class per file
 - Filename must match class name
@@ -90,7 +98,21 @@ public class ObjectiveData { }
 public enum QuestType { Gather, Deliver }
 ```
 
-## File structure order
+---
+
+## File Structure Order - P2
+
+See [_core-rules.md](_core-rules.md) for the standard file structure order.
+
+Additional guidance for larger classes:
+
+- Group `[Header]` sections logically: Dependencies first, then Settings, then Event Channels
+- Unity lifecycle methods should follow execution order: `Awake -> OnEnable -> Start -> Update -> FixedUpdate -> LateUpdate -> OnDisable -> OnDestroy`
+- Separate event handlers (e.g., `OnTriggerEnter`) from private helper methods
+
+---
+
+## Namespace Conventions - P1
 
 ```csharp
 using UnityEngine;
@@ -98,43 +120,15 @@ using Tang3cko.ReactiveSO;
 
 namespace ProjectName.Category
 {
-    public class ExampleClass : MonoBehaviour
-    {
-        // 1. Fields
-        [Header("Dependencies")]
-        [SerializeField] private OtherComponent dependency;
-
-        [Header("Settings")]
-        [SerializeField] private float speed = 5f;
-
-        private bool isInitialized;
-
-        // 2. Properties
-        public bool IsInitialized => isInitialized;
-
-        // 3. Unity Lifecycle Methods
-        private void Awake() { }
-        private void OnEnable() { }
-        private void Start() { }
-        private void Update() { }
-        private void FixedUpdate() { }
-        private void LateUpdate() { }
-        private void OnDisable() { }
-        private void OnDestroy() { }
-
-        // 4. Public Methods
-        public void Initialize() { }
-
-        // 5. Private Methods
-        private void UpdatePosition() { }
-
-        // 6. Event Handlers
-        private void OnTriggerEnter(Collider other) { }
-
-        // 7. Editor Only
-#if UNITY_EDITOR
-        private void OnValidate() { }
-#endif
-    }
+    // All code must be in a namespace
+    // Match namespace to directory path
 }
 ```
+
+---
+
+## References
+
+- [_core-rules.md](_core-rules.md) - File structure order quick reference
+- [naming.md](naming.md) - Naming conventions
+- [comments.md](comments.md) - Documentation standards

@@ -4,7 +4,7 @@ Essential P1 rules that apply to all Unity development. Auto-loaded with every s
 
 ---
 
-## Naming Conventions
+## Naming Conventions - P1
 
 | Element | Convention | Example |
 |---------|------------|---------|
@@ -20,7 +20,7 @@ Essential P1 rules that apply to all Unity development. Auto-loaded with every s
 
 ---
 
-## File Structure Order
+## File Structure Order - P1
 
 ```csharp
 using UnityEngine;
@@ -38,7 +38,7 @@ namespace ProjectName.Category
         // 2. Properties
         public bool IsInitialized => isInitialized;
 
-        // 3. Unity Lifecycle (Awake → OnEnable → Start → Update → OnDisable → OnDestroy)
+        // 3. Unity Lifecycle (Awake -> OnEnable -> Start -> Update -> OnDisable -> OnDestroy)
         private void Awake() { }
         private void OnEnable() { }
 
@@ -58,18 +58,18 @@ namespace ProjectName.Category
 
 ---
 
-## Dependency Priority
+## Dependency Priority - P1
 
 ```
-1. Event-based      ← Complete decoupling (recommended)
-2. SerializeField   ← Explicit, visible in Inspector
-3. Find/GetComponent ← Fallback only
-4. Singleton        ← Last resort
+1. Event-based      <- Complete decoupling (recommended)
+2. SerializeField   <- Explicit, visible in Inspector
+3. Find/GetComponent <- Fallback only
+4. Singleton        <- Last resort
 ```
 
 ---
 
-## Error Handling
+## Error Handling - P1
 
 ```csharp
 // Null conditional
@@ -95,16 +95,25 @@ public void Process(QuestSO quest)
 
 ---
 
-## Anti-Patterns
+## Anti-Patterns - P1
 
-❌ **Don't:**
+**Don't:**
 - Use Singleton for everything
 - Poll in Update() when events work
 - Use Find/GetComponent as primary strategy
 - Hide dependencies (use [SerializeField])
 
-✅ **Do:**
+**Do:**
 - Use EventChannel for cross-system communication
 - Cache components in Awake()
 - Use RuntimeSet instead of FindObjectsOfType
 - Validate [SerializeField] in OnValidate()
+
+---
+
+## References
+
+- [naming.md](naming.md) - Detailed naming conventions
+- [code-organization.md](code-organization.md) - Directory structure and file organization
+- [error-handling.md](error-handling.md) - Error handling patterns
+- [dependency-management.md](dependency-management.md) - Dependency injection patterns

@@ -1,17 +1,26 @@
 # Unity Testing
 
-Testing fundamentals for Unity projects using NUnit and Unity Test Framework.
+Testing overview and navigation to specific testing reference files.
 
 ---
 
-## Test Mode Decision
+## Test Philosophy - P1
+
+- **Prefer Edit Mode** tests over Play Mode for speed
+- **Extract logic** from MonoBehaviour to pure C# for testability
+- Follow **FIRST** principles (Fast, Independent, Repeatable, Self-validating, Timely)
+- Structure tests with **AAA** pattern (Arrange-Act-Assert)
+
+---
+
+## Test Mode Decision - P1
 
 ```
 Does your code depend on Unity lifecycle (Awake, Start, Update)?
-├─ YES → Use Play Mode Tests
-└─ NO → Does it require Physics/Animation/Scene?
-    ├─ YES → Use Play Mode Tests
-    └─ NO → Use Edit Mode Tests ← Prefer this
+├─ YES -> Use Play Mode Tests
+└─ NO -> Does it require Physics/Animation/Scene?
+    ├─ YES -> Use Play Mode Tests
+    └─ NO -> Use Edit Mode Tests <- Prefer this
 ```
 
 | Feature | Edit Mode | Play Mode |
@@ -21,87 +30,45 @@ Does your code depend on Unity lifecycle (Awake, Start, Update)?
 | Lifecycle | No | Yes |
 | Physics/Animation | No | Yes |
 
----
-
-## AAA Pattern
-
-Structure every test using Arrange-Act-Assert.
-
-```csharp
-[Test]
-public void PlayCard_ValidCard_ReturnsSuccess()
-{
-    // Arrange
-    var gameLogic = new GameLogic();
-    var card = new Card(rank: 5);
-    var fieldCard = new Card(rank: 3);
-
-    // Act
-    var result = gameLogic.PlayCard(card, fieldCard);
-
-    // Assert
-    Assert.That(result.IsSuccess, Is.True);
-}
-```
+See [test-modes.md](test-modes.md) for detailed comparison and examples.
 
 ---
 
-## FIRST Principles
+## Testing Reference Files - P2
 
-| Principle | Meaning |
-|-----------|---------|
-| **F**ast | Execute quickly (unit tests < 15ms) |
-| **I**ndependent | Tests don't depend on each other |
-| **R**epeatable | Same results every time |
-| **S**elf-validating | Automatic pass/fail via assertions |
-| **T**imely | Written before or with implementation |
-
----
-
-## Humble Object Pattern
-
-Extract logic from MonoBehaviour to make it testable.
-
-```csharp
-// Pure C# class (easily testable in Edit Mode)
-public class GameLogic
-{
-    public CardPlayResult PlayCard(CardSO card, PlayerHandSO hand, IRuleValidator validator)
-    {
-        if (!validator.IsCardInHand(card, hand))
-            return CardPlayResult.Fail("Card not in hand");
-
-        hand.RemoveCard(card);
-        return CardPlayResult.Success(card);
-    }
-}
-
-// MonoBehaviour becomes thin wrapper
-public class GameManager : MonoBehaviour
-{
-    private GameLogic gameLogic;
-
-    private void Awake() => gameLogic = new GameLogic();
-
-    private void HandleCardPlayed(CardSO card)
-    {
-        var result = gameLogic.PlayCard(card, hand, ruleValidator);
-        // Unity integration only
-    }
-}
-```
+| Topic | File | Summary |
+|-------|------|---------|
+| FIRST, AAA, TDD | [principles.md](principles.md) | Core testing principles and workflows |
+| Edit vs Play Mode | [test-modes.md](test-modes.md) | Decision guide and mode comparison |
+| Humble Object, Builder, DI | [patterns.md](patterns.md) | Testing patterns for testable code |
+| Dummy, Stub, Spy, Mock | [test-doubles.md](test-doubles.md) | Test double types and NSubstitute |
+| NUnit attributes, assertions | [nunit.md](nunit.md) | NUnit quick reference |
+| Assembly definitions | [assemblies.md](assemblies.md) | Test assembly setup |
+| Common mistakes | [pitfalls.md](pitfalls.md) | 8 common testing pitfalls |
 
 ---
 
-## Test Doubles Decision
+## Test Doubles Quick Decision - P2
 
 ```
 Need to test with dependency?
-├─ Dependency unused → Dummy
-├─ Need specific return value → Stub
-├─ Need to verify calls → Mock
-├─ Need recording + state → Spy
-└─ Need working implementation → Fake
+├─ Dependency unused -> Dummy
+├─ Need specific return value -> Stub
+├─ Need to verify calls -> Mock
+├─ Need recording + state -> Spy
+└─ Need working implementation -> Fake
 ```
 
-See test-doubles.md for detailed examples.
+See [test-doubles.md](test-doubles.md) for detailed examples.
+
+---
+
+## References
+
+- [principles.md](principles.md) - FIRST principles, AAA, TDD
+- [test-modes.md](test-modes.md) - Edit Mode vs Play Mode
+- [patterns.md](patterns.md) - Testing patterns
+- [test-doubles.md](test-doubles.md) - Test doubles guide
+- [nunit.md](nunit.md) - NUnit reference
+- [assemblies.md](assemblies.md) - Assembly definitions
+- [pitfalls.md](pitfalls.md) - Common pitfalls

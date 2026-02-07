@@ -1,6 +1,10 @@
 # Test Doubles Guide
 
-## The five types
+Test doubles: Dummy, Stub, Spy, Fake, and Mock.
+
+---
+
+## Types Overview - P1
 
 | Type | Purpose | Returns Data | Records Calls | Verifies Behavior |
 |------|---------|--------------|---------------|-------------------|
@@ -10,7 +14,9 @@
 | Fake | Working impl | Yes | No | No |
 | Mock | Verify behavior | Yes | Yes | Yes |
 
-## 1. Dummy
+---
+
+## 1. Dummy - P1
 
 Fill parameters that are never actually used.
 
@@ -32,7 +38,9 @@ public void Calculate_ReturnsResult()
 }
 ```
 
-## 2. Stub
+---
+
+## 2. Stub - P1
 
 Provide specific return values (state verification).
 
@@ -61,7 +69,9 @@ public void ShuffleCards_Randomizes()
 }
 ```
 
-## 3. Spy
+---
+
+## 3. Spy - P1
 
 Record method calls.
 
@@ -91,7 +101,9 @@ public void PlayCard_RaisesEventOnce()
 }
 ```
 
-## 4. Fake
+---
+
+## 4. Fake - P1
 
 Simplified working implementation.
 
@@ -114,7 +126,9 @@ public class FakePlayerDatabase : IPlayerDatabase
 }
 ```
 
-## 5. Mock
+---
+
+## 5. Mock - P1
 
 Verify behavior (how methods were called).
 
@@ -140,14 +154,16 @@ public class MockRuleValidator : IRuleValidator
 }
 ```
 
-## Mock vs Stub
+---
+
+## Mock vs Stub - P1
 
 - **Stub**: State verification (WHAT was returned)
 - **Mock**: Behavior verification (HOW it was called)
 
 ---
 
-## Using NSubstitute
+## Using NSubstitute - P2
 
 ### Basic usage
 
@@ -180,7 +196,7 @@ Assert.That(score, Is.EqualTo(100));
 
 ---
 
-## Best practices
+## Best Practices - P2
 
 **Use interfaces for dependencies:**
 
@@ -215,3 +231,12 @@ public interface IPositionProvider
     Vector3 GetPosition();
 }
 ```
+
+---
+
+## References
+
+- [testing.md](testing.md) - Testing overview
+- [patterns.md](patterns.md) - Testing patterns
+- [nunit.md](nunit.md) - NUnit assertions for verifying test doubles
+- [pitfalls.md](pitfalls.md) - Over-mocking pitfall

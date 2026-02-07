@@ -1,15 +1,10 @@
 # Actions
 
-## When to use
+ActionSO pattern for data-driven, configurable commands.
 
-| Use Actions when | Use EventChannels when |
-|-----------------|------------------------|
-| Data-driven systems (quest rewards, event tables) | Simple notifications |
-| Configurable behaviors (spawn effects, play sounds) | One-way communication |
-| Reusable commands (triggered from multiple places) | No configurable behavior |
-| Designer-configurable logic | Simple parameters |
+---
 
-## Basic usage
+## Basic Usage - P1
 
 ### Creating an Action class
 
@@ -57,7 +52,9 @@ public void GiveReward()
 }
 ```
 
-## Generic Actions
+---
+
+## Generic Actions - P1
 
 Use `ActionSO<T>` when the action needs a parameter at execution time.
 
@@ -83,7 +80,9 @@ public class DamageAction : ActionSO<int>
 }
 ```
 
-## Common patterns
+---
+
+## Common Patterns - P2
 
 ### Sequence Action
 
@@ -123,7 +122,9 @@ public class ConditionalAction : ActionSO
 }
 ```
 
-## Use cases
+---
+
+## Use Cases - P2
 
 ### Quest reward system
 
@@ -173,29 +174,42 @@ public class EventTableSO : ScriptableObject
 }
 ```
 
-## Anti-patterns
+---
+
+## When to Use - P1
+
+| Use Actions when | Use EventChannels when |
+|-----------------|------------------------|
+| Data-driven systems (quest rewards, event tables) | Simple notifications |
+| Configurable behaviors (spawn effects, play sounds) | One-way communication |
+| Reusable commands (triggered from multiple places) | No configurable behavior |
+| Designer-configurable logic | Simple parameters |
+
+---
+
+## Anti-Patterns - P1
 
 ### Missing null-conditional operator
 
 ```csharp
-// NG: Throws NullReferenceException if not assigned
+// Bad: Throws NullReferenceException if not assigned
 rewardAction.Execute();
 
-// OK
+// Good
 rewardAction?.Execute();
 ```
 
 ### Missing #if UNITY_EDITOR for monitoring
 
 ```csharp
-// NG: Monitoring code in release build
+// Bad: Monitoring code in release build
 public override void Execute(...)
 {
     DoSomething();
     NotifyActionExecuted(callerInfo); // Error in build!
 }
 
-// OK
+// Good
 public override void Execute(...)
 {
     DoSomething();
@@ -205,3 +219,11 @@ public override void Execute(...)
 #endif
 }
 ```
+
+---
+
+## References
+
+- [event-channels.md](event-channels.md) - EventChannel vs Actions comparison
+- [architecture.md](architecture.md) - ScriptableObject patterns overview
+- [variables.md](variables.md) - Variable pattern for shared state

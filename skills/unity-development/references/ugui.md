@@ -1,6 +1,10 @@
 # uGUI (World Space UI)
 
-## When to use uGUI
+World Space UI patterns with uGUI: billboards, health bars, and EventChannel integration.
+
+---
+
+## When to Use uGUI - P1
 
 ### Recommended use cases
 
@@ -13,13 +17,13 @@
 
 ### Not recommended
 
-- Screen space menus → Use UI Toolkit
-- HUD elements → Use UI Toolkit
-- Settings panels → Use UI Toolkit
+- Screen space menus -> Use UI Toolkit
+- HUD elements -> Use UI Toolkit
+- Settings panels -> Use UI Toolkit
 
 ---
 
-## Basic template
+## Basic Template - P1
 
 ```csharp
 using UnityEngine;
@@ -46,7 +50,6 @@ namespace ProjectName.UI
         private void Start()
         {
             mainCamera = Camera.main;
-
             if (canvas != null)
             {
                 canvas.renderMode = RenderMode.WorldSpace;
@@ -68,7 +71,6 @@ namespace ProjectName.UI
 
         private void LateUpdate()
         {
-            // Camera billboard (only when visible)
             if (enableBillboard && mainCamera != null && canvas.enabled)
             {
                 transform.LookAt(
@@ -89,7 +91,6 @@ namespace ProjectName.UI
         {
             if (onHealthChanged == null)
                 Debug.LogWarning($"[{GetType().Name}] onHealthChanged not assigned on {gameObject.name}.", this);
-
             if (canvas == null)
                 Debug.LogWarning($"[{GetType().Name}] canvas not assigned on {gameObject.name}.", this);
         }
@@ -100,7 +101,7 @@ namespace ProjectName.UI
 
 ---
 
-## Camera billboard pattern
+## Billboard Pattern - P2
 
 ### Why LateUpdate?
 
@@ -120,21 +121,6 @@ private void Update()
 }
 ```
 
-### Billboard implementation
-
-```csharp
-private void LateUpdate()
-{
-    if (enableBillboard && mainCamera != null && canvas.enabled)
-    {
-        transform.LookAt(
-            transform.position + mainCamera.transform.rotation * Vector3.forward,
-            mainCamera.transform.rotation * Vector3.up
-        );
-    }
-}
-```
-
 ### Common issues
 
 ```csharp
@@ -150,24 +136,17 @@ transform.LookAt(
 
 ---
 
-## Performance optimization
+## Performance Optimization - P2
 
 ### Cache camera reference
 
 ```csharp
 // Good: Cache in Start
 private Camera mainCamera;
-
-private void Start()
-{
-    mainCamera = Camera.main;
-}
+private void Start() { mainCamera = Camera.main; }
 
 // Bad: Query every frame
-private void LateUpdate()
-{
-    Camera cam = Camera.main; // Expensive!
-}
+private void LateUpdate() { Camera cam = Camera.main; }
 ```
 
 ### Use Canvas.enabled for show/hide
@@ -179,55 +158,21 @@ private void HideUI() => canvas.enabled = false;
 
 // Bad: Destroy and recreate (very expensive)
 private void HideUI() => Destroy(gameObject);
-private void ShowUI() => Instantiate(uiPrefab);
 ```
 
 ### Event-driven updates
 
 ```csharp
 // Good: Update only when EventChannel fires
-private void OnEnable()
-{
-    onHealthChanged.OnEventRaised += UpdateHealth;
-}
-
-private void UpdateHealth(float health)
-{
-    healthText.text = $"HP: {health:F0}";
-}
+private void OnEnable() { onHealthChanged.OnEventRaised += UpdateHealth; }
 
 // Bad: Update every frame
-private void Update()
-{
-    healthText.text = $"HP: {enemy.CurrentHealth:F0}";
-}
-```
-
-### Conditional billboard
-
-```csharp
-// Good: Only billboard when visible
-private void LateUpdate()
-{
-    if (enableBillboard && mainCamera != null && canvas.enabled)
-    {
-        ApplyBillboard();
-    }
-}
-
-// Bad: Always billboard even when hidden
-private void LateUpdate()
-{
-    if (enableBillboard && mainCamera != null)
-    {
-        ApplyBillboard();
-    }
-}
+private void Update() { healthText.text = $"HP: {enemy.CurrentHealth:F0}"; }
 ```
 
 ---
 
-## TextMeshPro
+## TextMeshPro - P2
 
 ### Always use TextMeshPro
 
@@ -241,8 +186,6 @@ using UnityEngine.UI;
 [SerializeField] private Text nameText;
 ```
 
-### Why TextMeshPro?
-
 | Feature | TextMeshPro | Unity Text |
 |---------|-------------|------------|
 | Quality | High (SDF) | Low (bitmap) |
@@ -252,118 +195,62 @@ using UnityEngine.UI;
 
 ---
 
-## Health bar example
+## Health Bar Example - P2
 
 ```csharp
-using UnityEngine;
-using UnityEngine.UI;
-using Tang3cko.ReactiveSO;
-
-namespace ProjectName.UI
+public class HealthBarUI : MonoBehaviour
 {
-    public class HealthBarUI : MonoBehaviour
+    [Header("Event Channels")]
+    [SerializeField] private FloatEventChannelSO onHealthChanged;
+
+    [Header("UI References")]
+    [SerializeField] private Canvas canvas;
+    [SerializeField] private Image fillImage;
+
+    [Header("Settings")]
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private Color fullHealthColor = Color.green;
+    [SerializeField] private Color lowHealthColor = Color.red;
+
+    private Camera mainCamera;
+
+    private void Start()
     {
-        [Header("Event Channels")]
-        [SerializeField] private FloatEventChannelSO onHealthChanged;
-
-        [Header("UI References")]
-        [SerializeField] private Canvas canvas;
-        [SerializeField] private Image fillImage;
-
-        [Header("Settings")]
-        [SerializeField] private float maxHealth = 100f;
-        [SerializeField] private bool enableBillboard = true;
-        [SerializeField] private Color fullHealthColor = Color.green;
-        [SerializeField] private Color lowHealthColor = Color.red;
-
-        private Camera mainCamera;
-
-        private void Start()
+        mainCamera = Camera.main;
+        if (canvas != null)
         {
-            mainCamera = Camera.main;
-
-            if (canvas != null)
-            {
-                canvas.renderMode = RenderMode.WorldSpace;
-                canvas.worldCamera = mainCamera;
-            }
-
-            UpdateHealthBar(maxHealth);
+            canvas.renderMode = RenderMode.WorldSpace;
+            canvas.worldCamera = mainCamera;
         }
+        UpdateHealthBar(maxHealth);
+    }
 
-        private void OnEnable()
-        {
-            if (onHealthChanged != null)
-                onHealthChanged.OnEventRaised += UpdateHealthBar;
-        }
+    private void OnEnable()
+    {
+        if (onHealthChanged != null)
+            onHealthChanged.OnEventRaised += UpdateHealthBar;
+    }
 
-        private void OnDisable()
-        {
-            if (onHealthChanged != null)
-                onHealthChanged.OnEventRaised -= UpdateHealthBar;
-        }
+    private void OnDisable()
+    {
+        if (onHealthChanged != null)
+            onHealthChanged.OnEventRaised -= UpdateHealthBar;
+    }
 
-        private void LateUpdate()
-        {
-            if (enableBillboard && mainCamera != null && canvas.enabled)
-            {
-                transform.LookAt(
-                    transform.position + mainCamera.transform.rotation * Vector3.forward,
-                    mainCamera.transform.rotation * Vector3.up
-                );
-            }
-        }
-
-        private void UpdateHealthBar(float currentHealth)
-        {
-            if (fillImage == null) return;
-
-            float fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
-            fillImage.fillAmount = fillAmount;
-            fillImage.color = Color.Lerp(lowHealthColor, fullHealthColor, fillAmount);
-
-            // Hide at full health
-            canvas.enabled = fillAmount < 1f;
-        }
+    private void UpdateHealthBar(float currentHealth)
+    {
+        if (fillImage == null) return;
+        float fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
+        fillImage.fillAmount = fillAmount;
+        fillImage.color = Color.Lerp(lowHealthColor, fullHealthColor, fillAmount);
+        canvas.enabled = fillAmount < 1f;
     }
 }
 ```
 
 ---
 
-## Button to EventChannel pattern
-
-Convert uGUI button clicks to EventChannel events:
-
-```csharp
-using UnityEngine;
-using UnityEngine.UI;
-using Tang3cko.ReactiveSO;
-
-namespace ProjectName.UI
-{
-    public class ButtonEventChannel : MonoBehaviour
-    {
-        [SerializeField] private VoidEventChannelSO onButtonPressed;
-        [SerializeField] private Button button;
-
-        private void Start()
-        {
-            if (button != null)
-                button.onClick.AddListener(HandleButtonClick);
-        }
-
-        private void HandleButtonClick()
-        {
-            onButtonPressed?.RaiseEvent();
-        }
-    }
-}
-```
-
----
-
-## Common pitfalls
+## Common Pitfalls - P1
 
 ### Forgetting to unsubscribe
 
@@ -394,3 +281,12 @@ Scene with EventSystem:
 │   └── Button (works!)
 └── EventSystem
 ```
+
+---
+
+## References
+
+- [ui-toolkit.md](ui-toolkit.md) - UI Toolkit for screen-space UI
+- [event-channels.md](event-channels.md) - EventChannel integration
+- [performance.md](performance.md) - Caching and event-driven patterns
+- [accessibility.md](accessibility.md) - Font size requirements
