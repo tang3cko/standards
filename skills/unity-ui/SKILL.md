@@ -37,7 +37,7 @@ Help users build, review, and improve Unity UI following Tang3cko standards.
 1. Load the relevant UI system reference
 2. Load `accessibility.md` for compliance check
 3. Check naming conventions, layout patterns, styling approach
-4. Categorize issues by priority (P1/P2/P3)
+4. Categorize issues by priority (must fix, should fix, nice to have)
 
 ### Step 2c: UI Technology Question
 

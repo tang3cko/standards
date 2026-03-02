@@ -5,7 +5,7 @@ For quick reference, see [_core-rules.md](_core-rules.md).
 
 ---
 
-## Null Safety - P1
+## Null Safety
 
 ### Null conditional operator
 
@@ -50,7 +50,7 @@ private void Start()
 
 ---
 
-## OnValidate Validation - P1
+## OnValidate Validation
 
 ```csharp
 #if UNITY_EDITOR
@@ -67,7 +67,7 @@ private void OnValidate()
 
 ---
 
-## Early Return Pattern - P1
+## Early Return Pattern
 
 ```csharp
 // Good: Early return
@@ -104,7 +104,7 @@ public void ProcessQuest(QuestSO quest)
 
 ---
 
-## Try-Catch Patterns - P2
+## Try-Catch Patterns
 
 ### File I/O
 
@@ -151,7 +151,7 @@ public bool LoadData(string path)
 
 ---
 
-## Logging Guidelines - P2
+## Logging Guidelines
 
 ### Log levels
 
@@ -181,7 +181,7 @@ Debug.LogError($"[{GetType().Name}] targetComponent is null on {gameObject.name}
 
 ---
 
-## Assert Usage - P3
+## Assert Usage
 
 ```csharp
 using UnityEngine.Assertions;

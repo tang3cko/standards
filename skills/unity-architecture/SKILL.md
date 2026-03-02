@@ -40,7 +40,7 @@ Help users design, implement, and review Unity system architecture using Scripta
 1. Load `design-principles.md` for the three pillars (Observability, Asset-based DI, DOD)
 2. Check dependency direction and coupling
 3. Verify SO pattern usage follows conventions
-4. Note issues with priority (P1/P2/P3)
+4. Note issues with priority (must fix, should fix, nice to have)
 
 ### Step 2c: Choosing a Pattern
 

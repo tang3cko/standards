@@ -4,7 +4,7 @@ Test assembly definition setup for Edit Mode and Play Mode tests.
 
 ---
 
-## Folder Structure - P1
+## Folder Structure
 
 ```
 Assets/_Project/
@@ -27,7 +27,7 @@ Assets/_Project/
 
 ---
 
-## Edit Mode Test Assembly - P1
+## Edit Mode Test Assembly
 
 File: `Tests/Editor/Core/Daifugo.Core.Tests.Editor.asmdef`
 
@@ -65,7 +65,7 @@ File: `Tests/Editor/Core/Daifugo.Core.Tests.Editor.asmdef`
 
 ---
 
-## Play Mode Test Assembly - P1
+## Play Mode Test Assembly
 
 File: `Tests/Runtime/Daifugo.Tests.Runtime.asmdef`
 
@@ -104,7 +104,7 @@ File: `Tests/Runtime/Daifugo.Tests.Runtime.asmdef`
 
 ---
 
-## Creating Test Assembly (Easy Way) - P2
+## Creating Test Assembly (Easy Way)
 
 1. Open Test Runner (`Window > General > Test Runner`)
 2. Select `EditMode` tab
@@ -113,7 +113,7 @@ File: `Tests/Runtime/Daifugo.Tests.Runtime.asmdef`
 
 ---
 
-## Common Issues - P2
+## Common Issues
 
 ### Tests not appearing
 
@@ -146,7 +146,7 @@ File: `Tests/Runtime/Daifugo.Tests.Runtime.asmdef`
 
 ---
 
-## Quick Checklist - P1
+## Quick Checklist
 
 For each test assembly:
 

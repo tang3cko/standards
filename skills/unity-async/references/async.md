@@ -4,7 +4,7 @@ Async patterns for Unity: Coroutines, Awaitable (Unity 6+), and UniTask.
 
 ---
 
-## Comparison - P1
+## Comparison
 
 | Approach | Unity Version | Pros | Cons |
 |----------|---------------|------|------|
@@ -19,7 +19,7 @@ Async patterns for Unity: Coroutines, Awaitable (Unity 6+), and UniTask.
 
 ---
 
-## Coroutines - P1
+## Coroutines
 
 ```csharp
 public class CoroutineExample : MonoBehaviour
@@ -72,7 +72,7 @@ public void StopSpawning()
 
 ---
 
-## Cancellation - P1
+## Cancellation
 
 ```csharp
 private CancellationTokenSource cts;
@@ -101,7 +101,7 @@ private void OnDestroy()
 
 ---
 
-## Time.deltaTime Usage - P1
+## Time.deltaTime Usage
 
 ```csharp
 // Good: Framerate-independent movement
@@ -119,7 +119,7 @@ private void HandleJump()
 
 ---
 
-## Awaitable (Unity 6+) - P2
+## Awaitable (Unity 6+)
 
 ```csharp
 private async void Start()
@@ -164,7 +164,7 @@ private async Awaitable LoadDataAsync()
 
 ---
 
-## UniTask - P2
+## UniTask
 
 Installation:
 ```

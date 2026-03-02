@@ -17,4 +17,4 @@ Shared standards, Claude Code skills, and Gemini CLI context for Tang3cko projec
 ## Before editing
 
 - Follow existing patterns and structure
-- Use P1/P2/P3 priority labels
+- Use priority labels: must fix, should fix, nice to have

@@ -5,7 +5,7 @@ For quick reference, see `unity-core` skill's `_core-rules.md`.
 
 ---
 
-## Priority Order - P1
+## Priority Order
 
 ```
 1. EventChannel (Highest) <- Complete decoupling
@@ -24,7 +24,7 @@ For quick reference, see `unity-core` skill's `_core-rules.md`.
 
 ---
 
-## EventChannel Pattern - P1
+## EventChannel Pattern
 
 ```csharp
 // Publisher doesn't know who receives
@@ -57,7 +57,7 @@ public class GameStatsManager : MonoBehaviour
 
 ---
 
-## SerializeField Pattern - P2
+## SerializeField Pattern
 
 ```csharp
 public class UIManager : MonoBehaviour
@@ -84,7 +84,7 @@ public class UIManager : MonoBehaviour
 
 ---
 
-## Singleton Pattern - P2
+## Singleton Pattern
 
 ### When to use Singleton
 
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
 
 ---
 
-## Refactoring Example - P2
+## Refactoring Example
 
 ### Before (Singleton)
 

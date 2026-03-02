@@ -4,7 +4,7 @@ FIRST principles, AAA pattern, and TDD workflow for Unity testing.
 
 ---
 
-## FIRST Principles - P1
+## FIRST Principles
 
 ### Fast
 
@@ -72,7 +72,7 @@ Write tests before or immediately after implementation.
 
 ---
 
-## AAA Pattern - P1
+## AAA Pattern
 
 Structure every test using Arrange-Act-Assert.
 
@@ -96,7 +96,7 @@ public void PlayCard_ValidCard_ReturnsSuccess()
 
 ---
 
-## TDD Workflow - P2
+## TDD Workflow
 
 Test-Driven Development follows Red-Green-Refactor.
 
@@ -144,7 +144,7 @@ public class Calculator
 
 ---
 
-## Core Rules - P1
+## Core Rules
 
 ### Rule 1: Test only YOUR code
 

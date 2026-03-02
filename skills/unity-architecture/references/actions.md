@@ -4,7 +4,7 @@ ActionSO pattern for data-driven, configurable commands.
 
 ---
 
-## Basic Usage - P1
+## Basic Usage
 
 ### Creating an Action class
 
@@ -54,7 +54,7 @@ public void GiveReward()
 
 ---
 
-## Generic Actions - P1
+## Generic Actions
 
 Use `ActionSO<T>` when the action needs a parameter at execution time.
 
@@ -82,7 +82,7 @@ public class DamageAction : ActionSO<int>
 
 ---
 
-## Common Patterns - P2
+## Common Patterns
 
 ### Sequence Action
 
@@ -124,7 +124,7 @@ public class ConditionalAction : ActionSO
 
 ---
 
-## Use Cases - P2
+## Use Cases
 
 ### Quest reward system
 
@@ -176,7 +176,7 @@ public class EventTableSO : ScriptableObject
 
 ---
 
-## When to Use - P1
+## When to Use
 
 | Use Actions when | Use EventChannels when |
 |-----------------|------------------------|
@@ -187,7 +187,7 @@ public class EventTableSO : ScriptableObject
 
 ---
 
-## Anti-Patterns - P1
+## Anti-Patterns
 
 ### Missing null-conditional operator
 

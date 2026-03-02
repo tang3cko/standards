@@ -17,7 +17,7 @@ Define a unified base class pattern for interactable objects in Mirror Networkin
 
 ---
 
-## Base class design - P1
+## Base class design
 
 ### Design philosophy
 
@@ -103,7 +103,7 @@ namespace ProjectName.Interaction
 
 ---
 
-## Server authority example - P1
+## Server authority example
 
 ### Collectible item (mushroom)
 
@@ -162,7 +162,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Local-only example - P1
+## Local-only example
 
 ### Receptionist NPC (UI trigger)
 
@@ -202,7 +202,7 @@ namespace ProjectName.Lobby
 
 ---
 
-## Networked door example - P1
+## Networked door example
 
 ```csharp
 using Mirror;
@@ -270,7 +270,7 @@ namespace ProjectName.Environment
 
 ---
 
-## Networked chest example - P1
+## Networked chest example
 
 ```csharp
 using Mirror;
@@ -360,7 +360,7 @@ namespace ProjectName.Loot
 
 ---
 
-## When to use each mode - P1
+## When to use each mode
 
 ### Use Server Authority (useServerAuthority = true)
 
@@ -384,7 +384,7 @@ namespace ProjectName.Loot
 
 ---
 
-## Best practices - P1
+## Best practices
 
 ### Validate on server
 

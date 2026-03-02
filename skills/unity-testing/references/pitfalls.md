@@ -4,7 +4,7 @@ Common testing mistakes and how to avoid them.
 
 ---
 
-## Summary - P1
+## Summary
 
 | Pitfall | Solution |
 |---------|----------|
@@ -19,7 +19,7 @@ Common testing mistakes and how to avoid them.
 
 ---
 
-## Pitfall 1: Testing Implementation Details - P1
+## Pitfall 1: Testing Implementation Details
 
 ### Problem
 
@@ -52,7 +52,7 @@ public void ProcessCard_ValidCard_UpdatesState()
 
 ---
 
-## Pitfall 2: Over-Mocking - P1
+## Pitfall 2: Over-Mocking
 
 ### Problem
 
@@ -74,7 +74,7 @@ var validator = Substitute.For<IRuleValidator>();  // Mock only complex dependen
 
 ---
 
-## Pitfall 3: Shared Mutable State - P1
+## Pitfall 3: Shared Mutable State
 
 ### Problem
 
@@ -110,7 +110,7 @@ public void Setup()
 
 ---
 
-## Pitfall 4: Not Cleaning Up - P1
+## Pitfall 4: Not Cleaning Up
 
 ### Problem
 
@@ -160,7 +160,7 @@ public void Teardown()
 
 ---
 
-## Pitfall 5: Testing Unity Framework - P1
+## Pitfall 5: Testing Unity Framework
 
 ### Problem
 
@@ -188,7 +188,7 @@ public void CalculateDistance_ReturnsCorrectValue()
 
 ---
 
-## Pitfall 6: Logic in MonoBehaviour - P1
+## Pitfall 6: Logic in MonoBehaviour
 
 ### Problem
 
@@ -227,7 +227,7 @@ public class GameManager : MonoBehaviour
 
 ---
 
-## Pitfall 7: Unnecessary Play Mode - P1
+## Pitfall 7: Unnecessary Play Mode
 
 ### Problem
 
@@ -256,7 +256,7 @@ public void SimpleCalculation()
 
 ---
 
-## Pitfall 8: Multiple Unrelated Assertions - P1
+## Pitfall 8: Multiple Unrelated Assertions
 
 ### Problem
 

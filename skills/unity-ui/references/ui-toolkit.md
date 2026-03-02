@@ -4,7 +4,7 @@ UI Toolkit patterns: BEM naming, design tokens, USS responsive design, and C# co
 
 ---
 
-## BEM Naming Convention - P1
+## BEM Naming Convention
 
 ### Structure
 
@@ -56,7 +56,7 @@ public void ShowSuccess()
 
 ---
 
-## UXML Structure - P1
+## UXML Structure
 
 ### File template
 
@@ -97,7 +97,7 @@ public void ShowSuccess()
 
 ---
 
-## Design Tokens - P2
+## Design Tokens
 
 ### Common.uss structure
 
@@ -165,7 +165,7 @@ Examples:
 
 ---
 
-## USS Responsive Design - P2
+## USS Responsive Design
 
 ### Panel Settings
 
@@ -232,7 +232,7 @@ m_Match: 0                        # Match width (PC landscape)
 
 ---
 
-## C# Controller Pattern - P2
+## C# Controller Pattern
 
 ```csharp
 using UnityEngine;
@@ -299,7 +299,7 @@ if (progressText == null)
 
 ---
 
-## Performance Tips - P3
+## Performance Tips
 
 ### Cache element references
 
@@ -327,7 +327,7 @@ private void UpdateStatus(string status)
 
 ---
 
-## Directory Structure - P2
+## Directory Structure
 
 ```
 Assets/_Project/

@@ -4,7 +4,7 @@ Unity Input System patterns with InputReader ScriptableObject and EventChannel i
 
 ---
 
-## InputReader Pattern - P1
+## InputReader Pattern
 
 ### InputReader ScriptableObject
 
@@ -65,7 +65,7 @@ namespace ProjectName.Input
 
 ---
 
-## MonoBehaviour Usage - P1
+## MonoBehaviour Usage
 
 ```csharp
 public class PlayerController : MonoBehaviour
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
 ---
 
-## Action Maps Organization - P2
+## Action Maps Organization
 
 ```
 PlayerInputActions.inputactions
@@ -130,7 +130,7 @@ inputActions.UI.Enable();
 
 ---
 
-## EventChannel Bridge - P2
+## EventChannel Bridge
 
 ```csharp
 public class InputEventBridge : MonoBehaviour
@@ -161,7 +161,7 @@ public class InputEventBridge : MonoBehaviour
 
 ---
 
-## Testing with Mock Input - P2
+## Testing with Mock Input
 
 ```csharp
 [CreateAssetMenu(fileName = "MockInputReader", menuName = "Input/Mock Input Reader")]
@@ -174,7 +174,7 @@ public class MockInputReaderSO : InputReaderSO
 
 ---
 
-## Project Setup - P3
+## Project Setup
 
 1. Install Input System Package
 2. Enable in Project Settings > Player > Active Input Handling

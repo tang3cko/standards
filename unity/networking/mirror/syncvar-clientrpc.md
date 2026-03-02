@@ -16,7 +16,7 @@ Define proper usage of SyncVar for automatic state synchronization and ClientRpc
 
 ---
 
-## SyncVar overview - P1
+## SyncVar overview
 
 SyncVar automatically synchronizes values from server to clients, including late-joining clients.
 
@@ -73,7 +73,7 @@ namespace ProjectName.Player
 
 ---
 
-## SyncVar vs ClientRpc - P1
+## SyncVar vs ClientRpc
 
 | Feature | SyncVar | ClientRpc |
 |---------|---------|-----------|
@@ -122,7 +122,7 @@ private void RpcShowNotification(string message)
 
 ---
 
-## ScriptableObject synchronization - P1
+## ScriptableObject synchronization
 
 ### Problem: cannot sync ScriptableObjects
 
@@ -207,7 +207,7 @@ namespace ProjectName.Quest
 
 ---
 
-## SyncVar hook behavior - P1
+## SyncVar hook behavior
 
 ### Important: hooks don't fire on server
 
@@ -274,7 +274,7 @@ namespace ProjectName.Game
 
 ---
 
-## ClientRpc patterns - P1
+## ClientRpc patterns
 
 ### Basic ClientRpc
 
@@ -330,7 +330,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Late join support - P1
+## Late join support
 
 ### SyncVar automatically handles late join
 
@@ -364,7 +364,7 @@ private void RpcPlayExplosion(Vector3 position)
 
 ---
 
-## Performance considerations - P1
+## Performance considerations
 
 ### Minimize SyncVar changes
 

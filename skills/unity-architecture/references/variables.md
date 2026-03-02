@@ -4,7 +4,7 @@ VariableSO pattern for shared state with change detection.
 
 ---
 
-## Built-in Variable Types - P1
+## Built-in Variable Types
 
 | Type | Use Case | Example |
 |------|----------|---------|
@@ -18,7 +18,7 @@ VariableSO pattern for shared state with change detection.
 
 ---
 
-## Usage - P1
+## Usage
 
 ### Variables vs EventChannels
 
@@ -45,7 +45,7 @@ playerScore.Value = 150;  // Raises event
 
 ---
 
-## GPU Sync Feature - P2
+## GPU Sync Feature
 
 Variables can automatically sync to shader global properties.
 
@@ -84,7 +84,7 @@ fixed4 frag(v2f i) : SV_Target
 
 ---
 
-## Anti-Patterns - P1
+## Anti-Patterns
 
 ### Direct Variable subscription
 

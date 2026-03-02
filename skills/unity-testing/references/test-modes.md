@@ -4,7 +4,7 @@ Edit Mode vs Play Mode test decision guide.
 
 ---
 
-## Decision Tree - P1
+## Decision Tree
 
 ```
 Does your code depend on Unity lifecycle (Awake, Start, Update)?
@@ -16,7 +16,7 @@ Does your code depend on Unity lifecycle (Awake, Start, Update)?
 
 ---
 
-## Comparison Table - P1
+## Comparison Table
 
 | Feature | Edit Mode | Play Mode |
 |---------|-----------|-----------|
@@ -46,7 +46,7 @@ Test execution: ~100ms-1000ms per test
 
 ---
 
-## Edit Mode Tests - P1
+## Edit Mode Tests
 
 ### Characteristics
 
@@ -80,7 +80,7 @@ public class CardValidatorTests
 
 ---
 
-## Play Mode Tests - P1
+## Play Mode Tests
 
 ### Characteristics
 
@@ -120,7 +120,7 @@ public class GameManagerTests
 
 ---
 
-## Best Practices - P2
+## Best Practices
 
 **Extract logic to pure C# for Edit Mode testing:**
 

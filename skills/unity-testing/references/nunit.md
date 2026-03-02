@@ -4,7 +4,7 @@ NUnit attributes, assertions, and parameterized tests for Unity.
 
 ---
 
-## Core Attributes - P1
+## Core Attributes
 
 ### `[Test]` - Standard test
 
@@ -41,7 +41,7 @@ public IEnumerator MethodName_Scenario_ExpectedBehavior()
 
 ---
 
-## Assertions (Constraint Model) - P1
+## Assertions (Constraint Model)
 
 ### Equality
 
@@ -112,7 +112,7 @@ Assert.That(value, Is.EqualTo(5).Or.EqualTo(10));
 
 ---
 
-## Setup and Teardown - P1
+## Setup and Teardown
 
 ```csharp
 private GameLogic gameLogic;
@@ -144,7 +144,7 @@ public void OneTimeTeardown()
 
 ---
 
-## Parameterized Tests - P2
+## Parameterized Tests
 
 ### `[TestCase]` - Edit Mode only
 
@@ -174,7 +174,7 @@ private static int[] ValidRanks = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
 
 ---
 
-## Unity-Specific (LogAssert) - P3
+## Unity-Specific (LogAssert)
 
 ```csharp
 using UnityEngine.TestTools;
@@ -189,7 +189,7 @@ public void Method_LogsError_WhenInvalid()
 
 ---
 
-## Quick Reference Card - P1
+## Quick Reference Card
 
 ```csharp
 // ATTRIBUTES

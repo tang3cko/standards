@@ -1,10 +1,10 @@
 # Core Unity Rules
 
-Essential P1 rules that apply to all Unity development. Auto-loaded with every skill invocation.
+Essential rules that apply to all Unity development. Auto-loaded with every skill invocation.
 
 ---
 
-## Naming Conventions - P1
+## Naming Conventions
 
 | Element | Convention | Example |
 |---------|------------|---------|
@@ -20,7 +20,7 @@ Essential P1 rules that apply to all Unity development. Auto-loaded with every s
 
 ---
 
-## File Structure Order - P1
+## File Structure Order
 
 ```csharp
 using UnityEngine;
@@ -58,7 +58,7 @@ namespace ProjectName.Category
 
 ---
 
-## Dependency Priority - P1
+## Dependency Priority
 
 ```
 1. Event-based      <- Complete decoupling (recommended)
@@ -69,7 +69,7 @@ namespace ProjectName.Category
 
 ---
 
-## Error Handling - P1
+## Error Handling
 
 ```csharp
 // Null conditional
@@ -95,7 +95,7 @@ public void Process(QuestSO quest)
 
 ---
 
-## Anti-Patterns - P1
+## Anti-Patterns
 
 **Don't:**
 - Use Singleton for everything

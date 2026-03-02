@@ -4,7 +4,7 @@ Directory structure, namespace conventions, and file organization.
 
 ---
 
-## Directory Structure - P1
+## Directory Structure
 
 ### Scripts directory
 
@@ -53,7 +53,7 @@ Assets/_Project/Prefabs/
 
 ---
 
-## Classification Criteria - P1
+## Classification Criteria
 
 **Feature Domain-Based:**
 - `Player/` - PlayerHealth, PlayerWallet, PlayerController
@@ -69,7 +69,7 @@ Assets/_Project/Prefabs/
 
 ---
 
-## One File One Class - P1
+## One File One Class
 
 - One public class per file
 - Filename must match class name
@@ -100,7 +100,7 @@ public enum QuestType { Gather, Deliver }
 
 ---
 
-## File Structure Order - P2
+## File Structure Order
 
 See [_core-rules.md](_core-rules.md) for the standard file structure order.
 
@@ -112,7 +112,7 @@ Additional guidance for larger classes:
 
 ---
 
-## Namespace Conventions - P1
+## Namespace Conventions
 
 ```csharp
 using UnityEngine;

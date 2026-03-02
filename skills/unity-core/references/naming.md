@@ -5,7 +5,7 @@ For quick reference, see [_core-rules.md](_core-rules.md).
 
 ---
 
-## Classes and Interfaces - P1
+## Classes and Interfaces
 
 - Use PascalCase
 - Interfaces use `I` prefix
@@ -19,7 +19,7 @@ public interface IInteractable { }
 
 ---
 
-## Fields - P1
+## Fields
 
 ```csharp
 public class Example
@@ -40,7 +40,7 @@ public class Example
 
 ---
 
-## Methods - P1
+## Methods
 
 - PascalCase, start with verbs
 
@@ -57,7 +57,7 @@ private void HandleQuestCompleted(QuestSO quest) { }
 
 ---
 
-## Properties - P1
+## Properties
 
 ```csharp
 public int Health { get; private set; }
@@ -67,7 +67,7 @@ public IReadOnlyList<Item> Items => items;
 
 ---
 
-## Events and EventChannels - P1
+## Events and EventChannels
 
 ```csharp
 // EventChannel fields: "on" prefix + past tense
@@ -81,7 +81,7 @@ public event Action<int> OnHealthChanged;
 
 ---
 
-## Namespace - P1
+## Namespace
 
 ```csharp
 namespace ProjectName.Category
@@ -96,7 +96,7 @@ namespace ProjectName.Data
 
 ---
 
-## Unity-Specific Suffixes - P2
+## Unity-Specific Suffixes
 
 ```csharp
 // ScriptableObject: "SO" suffix
@@ -113,7 +113,7 @@ public class EnemyRuntimeSetSO : ScriptableObject { }
 
 ---
 
-## Boolean Variables - P1
+## Boolean Variables
 
 ```csharp
 // Use "is", "has", "can", "should" prefixes

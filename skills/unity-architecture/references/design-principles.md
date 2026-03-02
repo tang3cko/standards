@@ -4,7 +4,7 @@ Three design pillars: Observability, Asset-based DI, and Data-Oriented Design.
 
 ---
 
-## The Three Pillars - P1
+## The Three Pillars
 
 | Principle | Goal | Enables |
 |-----------|------|---------|
@@ -14,7 +14,7 @@ Three design pillars: Observability, Asset-based DI, and Data-Oriented Design.
 
 ---
 
-## True Observability - P1
+## True Observability
 
 ### The model
 
@@ -44,7 +44,7 @@ Behavior (S_n)
 
 ---
 
-## Practical Applications - P2
+## Practical Applications
 
 | Pattern | Description |
 |---------|-------------|
@@ -55,7 +55,7 @@ Behavior (S_n)
 
 ---
 
-## Asset-based Dependency Injection - P1
+## Asset-based Dependency Injection
 
 ### Pure DI via Inspector
 
@@ -94,7 +94,7 @@ void Spawn()
 
 ---
 
-## Data-Oriented Design - P1
+## Data-Oriented Design
 
 ### The pattern
 
@@ -147,7 +147,7 @@ entitySet.UpdateData(enemyId, state =>
 
 ---
 
-## Entity vs Object vs View - P1
+## Entity vs Object vs View
 
 | Concept | Description | Lifecycle |
 |---------|-------------|-----------|
@@ -159,7 +159,7 @@ entitySet.UpdateData(enemyId, state =>
 
 ---
 
-## Design Checklist - P1
+## Design Checklist
 
 ### 1. Observability
 

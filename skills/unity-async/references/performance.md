@@ -4,7 +4,7 @@ Performance optimization including caching, pooling, event-driven updates, and G
 
 ---
 
-## Component Caching - P1
+## Component Caching
 
 ```csharp
 // Bad: GetComponent every frame
@@ -29,7 +29,7 @@ private void Update()
 
 ---
 
-## Event-Driven Updates - P1
+## Event-Driven Updates
 
 ```csharp
 // Bad: Update every frame
@@ -59,7 +59,7 @@ private void UpdateHealthUI(int health)
 
 ---
 
-## Garbage Collection Avoidance - P1
+## Garbage Collection Avoidance
 
 ### Avoid boxing in hot paths
 
@@ -120,7 +120,7 @@ void ProcessEnemies()
 
 ---
 
-## Avoid Find in Update - P1
+## Avoid Find in Update
 
 ```csharp
 // Bad: Find every frame
@@ -143,7 +143,7 @@ private void ProcessEnemies()
 
 ---
 
-## Object Pooling - P2
+## Object Pooling
 
 ```csharp
 public class ObjectPool<T> where T : Component
@@ -186,7 +186,7 @@ public class ObjectPool<T> where T : Component
 
 ---
 
-## String Operations - P2
+## String Operations
 
 ```csharp
 // Bad: Concatenation every frame
@@ -213,7 +213,7 @@ string BuildReport()
 
 ---
 
-## Collection Pre-Allocation - P2
+## Collection Pre-Allocation
 
 ```csharp
 // Bad: Default capacity
@@ -235,7 +235,7 @@ public List<Enemy> GetNearbyEnemies()
 
 ---
 
-## Physics Optimization - P2
+## Physics Optimization
 
 ```csharp
 // Bad: Raycast hits everything
@@ -249,7 +249,7 @@ Physics.Raycast(transform.position, transform.forward, out hit, 100f, enemyLayer
 
 ---
 
-## Coroutine Caching - P3
+## Coroutine Caching
 
 ```csharp
 // Bad: Create new every time
