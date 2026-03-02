@@ -4,7 +4,7 @@ EventChannel pub/sub pattern for decoupled communication.
 
 ---
 
-## Built-in EventChannel Types - P1
+## Built-in EventChannel Types
 
 | Type | Use Case | Example |
 |------|----------|---------|
@@ -19,7 +19,7 @@ EventChannel pub/sub pattern for decoupled communication.
 
 ---
 
-## Usage Pattern - P1
+## Usage Pattern
 
 ```csharp
 using UnityEngine;
@@ -64,7 +64,7 @@ namespace ProjectName.Enemy
 
 ---
 
-## Custom EventChannel Types - P2
+## Custom EventChannel Types
 
 Create custom EventChannels when passing complex data structures.
 
@@ -118,7 +118,7 @@ private void OnDisable() => onItemAcquired.OnEventRaised -= HandleItemAcquired;
 
 ---
 
-## Debugging - P2
+## Debugging
 
 Access Event Monitor via `Window -> Reactive SO -> Event Monitor`:
 - Real-time event logging

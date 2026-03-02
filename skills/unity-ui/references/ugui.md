@@ -4,7 +4,7 @@ World Space UI patterns with uGUI: billboards, health bars, and EventChannel int
 
 ---
 
-## When to Use uGUI - P1
+## When to Use uGUI
 
 ### Recommended use cases
 
@@ -23,7 +23,7 @@ World Space UI patterns with uGUI: billboards, health bars, and EventChannel int
 
 ---
 
-## Basic Template - P1
+## Basic Template
 
 ```csharp
 using UnityEngine;
@@ -101,7 +101,7 @@ namespace ProjectName.UI
 
 ---
 
-## Billboard Pattern - P2
+## Billboard Pattern
 
 ### Why LateUpdate?
 
@@ -136,7 +136,7 @@ transform.LookAt(
 
 ---
 
-## Performance Optimization - P2
+## Performance Optimization
 
 ### Cache camera reference
 
@@ -172,7 +172,7 @@ private void Update() { healthText.text = $"HP: {enemy.CurrentHealth:F0}"; }
 
 ---
 
-## TextMeshPro - P2
+## TextMeshPro
 
 ### Always use TextMeshPro
 
@@ -195,7 +195,7 @@ using UnityEngine.UI;
 
 ---
 
-## Health Bar Example - P2
+## Health Bar Example
 
 ```csharp
 public class HealthBarUI : MonoBehaviour
@@ -250,7 +250,7 @@ public class HealthBarUI : MonoBehaviour
 
 ---
 
-## Common Pitfalls - P1
+## Common Pitfalls
 
 ### Forgetting to unsubscribe
 

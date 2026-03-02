@@ -25,17 +25,17 @@ Help users write, review, and refactor Unity C# code following Tang3cko core cod
 
 ### Step 2a: Writing New Code
 
-1. `_core-rules.md` is auto-loaded with essential P1 rules
+1. `_core-rules.md` is auto-loaded with essential rules
 2. Load specific references matching the code domain (naming, comments, error-handling, input)
 3. Generate code following loaded standards
 4. Verify naming, file structure order, and null safety
 
 ### Step 2b: Reviewing Code
 
-1. `_core-rules.md` is auto-loaded with P1 rules
+1. `_core-rules.md` is auto-loaded with core rules
 2. Check against naming conventions, code organization, error handling
 3. Note specific issues with line numbers
-4. Categorize issues by priority (P1 must fix, P2 should fix, P3 nice to have)
+4. Categorize issues by priority (must fix, should fix, nice to have)
 
 ### Step 2c: Convention Question
 

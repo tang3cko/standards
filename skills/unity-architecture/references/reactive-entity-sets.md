@@ -4,7 +4,7 @@ ReactiveEntitySet pattern for per-entity state management with Job System integr
 
 ---
 
-## Design Philosophy - P1
+## Design Philosophy
 
 **Traditional Unity:**
 ```
@@ -24,7 +24,7 @@ ScriptableObject owns the data (persistent)
 
 ---
 
-## Basic API - P1
+## Basic API
 
 ```csharp
 // Create asset
@@ -54,7 +54,7 @@ entitySet.UnsubscribeFromEntity(entityId, OnStateChanged);
 
 ---
 
-## Data Struct Rules - P1
+## Data Struct Rules
 
 RES data must be a struct with **fields only** (no properties, no methods).
 
@@ -87,7 +87,7 @@ public static class EnemyStateCalculator
 
 ---
 
-## ReactiveEntity Base Class - P2
+## ReactiveEntity Base Class
 
 ```csharp
 public class Enemy : ReactiveEntity<EnemyState>
@@ -120,7 +120,7 @@ public class Enemy : ReactiveEntity<EnemyState>
 
 ---
 
-## Job System Integration - P2
+## Job System Integration
 
 Use Orchestrator when processing 1,000+ entities every frame.
 
@@ -193,7 +193,7 @@ public struct UnitSimulationJob : IJobParallelFor
 
 ---
 
-## Snapshots and Persistence - P3
+## Snapshots and Persistence
 
 ### Creating and restoring snapshots
 
@@ -262,7 +262,7 @@ public class GameManager : MonoBehaviour
 
 ---
 
-## Anti-Patterns - P1
+## Anti-Patterns
 
 ### Direct mutation without SetData
 

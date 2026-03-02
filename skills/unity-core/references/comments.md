@@ -4,7 +4,7 @@ XML documentation, Unity attributes, and inline comments.
 
 ---
 
-## Header Attribute - P1
+## Header Attribute
 
 ```csharp
 public class PlayerStats : MonoBehaviour
@@ -25,7 +25,7 @@ public class PlayerStats : MonoBehaviour
 
 ---
 
-## Tooltip Attribute - P1
+## Tooltip Attribute
 
 ```csharp
 [Header("Base Stats")]
@@ -40,7 +40,7 @@ public class PlayerStats : MonoBehaviour
 
 ---
 
-## XML Documentation Comments - P2
+## XML Documentation Comments
 
 ### Class documentation
 
@@ -83,7 +83,7 @@ public bool IsAlive => CurrentHealth > 0;
 
 ---
 
-## When NOT to Document - P2
+## When NOT to Document
 
 **Self-explanatory code:**
 
@@ -113,7 +113,7 @@ private void Awake()
 
 ---
 
-## Inline Comments - P3
+## Inline Comments
 
 **Good: Explaining complex logic**
 
@@ -150,7 +150,7 @@ playerHealth.Heal(10);
 
 ---
 
-## TODO Comments - P3
+## TODO Comments
 
 ```csharp
 // TODO: Add DOTween animation in Phase 2

@@ -4,7 +4,7 @@ Architecture decision tree and ScriptableObject pattern overview.
 
 ---
 
-## Architecture Decision Tree - P1
+## Architecture Decision Tree
 
 ```
 What problem are you solving?
@@ -31,7 +31,7 @@ What problem are you solving?
 
 ---
 
-## Approach Comparison - P1
+## Approach Comparison
 
 | Approach | Coupling | Testability | Use Case |
 |----------|----------|-------------|----------|
@@ -45,7 +45,7 @@ What problem are you solving?
 
 ---
 
-## ScriptableObject Patterns - P1
+## ScriptableObject Patterns
 
 | Need | Pattern | Example |
 |------|---------|---------|
@@ -57,7 +57,7 @@ What problem are you solving?
 
 ---
 
-## Singleton Alternatives - P2
+## Singleton Alternatives
 
 ### Why Avoid Singleton?
 

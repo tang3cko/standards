@@ -4,7 +4,7 @@ RuntimeSet pattern for object tracking without scene scanning.
 
 ---
 
-## Design Philosophy - P1
+## Design Philosophy
 
 **Traditional Unity:**
 ```
@@ -27,7 +27,7 @@ GameManager -> enemySet.Items  <- O(1) direct access
 
 ---
 
-## Basic Usage - P1
+## Basic Usage
 
 ### Registration
 
@@ -48,7 +48,7 @@ private void OnDestroy()
 
 ---
 
-## Custom RuntimeSets - P2
+## Custom RuntimeSets
 
 ```csharp
 using UnityEngine;
@@ -103,7 +103,7 @@ namespace ProjectName.Enemy
 
 ---
 
-## Event Notifications - P2
+## Event Notifications
 
 RuntimeSets use EventChannels for notifications. Assign in Inspector:
 - **onItemsChanged** (VoidEventChannelSO) - Items added or removed
@@ -136,7 +136,7 @@ public class EnemyCountDisplay : MonoBehaviour
 
 ---
 
-## RuntimeSet vs ReactiveEntitySet - P2
+## RuntimeSet vs ReactiveEntitySet
 
 | Use RuntimeSet when | Use ReactiveEntitySet when |
 |---------------------|---------------------------|

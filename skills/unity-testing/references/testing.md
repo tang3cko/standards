@@ -4,7 +4,7 @@ Testing overview and navigation to specific testing reference files.
 
 ---
 
-## Test Philosophy - P1
+## Test Philosophy
 
 - **Prefer Edit Mode** tests over Play Mode for speed
 - **Extract logic** from MonoBehaviour to pure C# for testability
@@ -13,7 +13,7 @@ Testing overview and navigation to specific testing reference files.
 
 ---
 
-## Test Mode Decision - P1
+## Test Mode Decision
 
 ```
 Does your code depend on Unity lifecycle (Awake, Start, Update)?
@@ -34,7 +34,7 @@ See [test-modes.md](test-modes.md) for detailed comparison and examples.
 
 ---
 
-## Testing Reference Files - P2
+## Testing Reference Files
 
 | Topic | File | Summary |
 |-------|------|---------|
@@ -48,7 +48,7 @@ See [test-modes.md](test-modes.md) for detailed comparison and examples.
 
 ---
 
-## Test Doubles Quick Decision - P2
+## Test Doubles Quick Decision
 
 ```
 Need to test with dependency?

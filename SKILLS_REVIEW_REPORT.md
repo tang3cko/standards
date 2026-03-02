@@ -17,7 +17,7 @@ The skills/ directory contains 35 skills following Tang3cko project conventions.
 | Frontmatter | ✅ All use only name/description | N/A |
 | Descriptions | ⚠️ Some lack "when to use" triggers | N/A |
 | Line count | ✅ All under 500 lines | N/A |
-| Document structure | N/A | ✅ Consistent Purpose/Checklist/P1-P3 |
+| Document structure | N/A | ✅ Consistent Purpose/Checklist/Priority levels |
 | Code examples | N/A | ✅ Good/Bad format with emojis |
 
 ---
@@ -58,7 +58,7 @@ description: Unity C# naming conventions. PascalCase for classes, camelCase for 
 
 - Purpose section at document start
 - Checklist section for quick verification
-- P1/P2/P3 priority labels on sections
+- Priority labels on sections (must fix / should fix / nice to have)
 - `---` horizontal rules between major sections
 - ❌/✅ format for code examples
 - `ProjectName` namespace placeholder

@@ -4,7 +4,7 @@ Accessibility requirements: font sizes, contrast ratios, and platform-specific g
 
 ---
 
-## Platform Minimums - P1
+## Platform Minimums
 
 ### Console (Xbox, PlayStation)
 
@@ -45,7 +45,7 @@ DPI-based scaling: `fontSize = 18px * (DPI / 100)`
 
 ---
 
-## Contrast Ratio - P1
+## Contrast Ratio
 
 Minimum contrast ratio: **4.5:1**
 
@@ -69,7 +69,7 @@ Tool: [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
 
 ---
 
-## Design Tokens for Accessibility - P1
+## Design Tokens for Accessibility
 
 ```css
 :root {
@@ -95,7 +95,7 @@ Tool: [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
 
 ---
 
-## Text Resizing (200%) - P2
+## Text Resizing (200%)
 
 Players must be able to resize text up to 200% without breaking layout.
 
@@ -115,7 +115,7 @@ public class FontScaler : MonoBehaviour
 
 ---
 
-## Line Spacing and Width - P2
+## Line Spacing and Width
 
 ```css
 .quest-description {
@@ -131,7 +131,7 @@ public class FontScaler : MonoBehaviour
 
 ---
 
-## Platform Detection - P2
+## Platform Detection
 
 ```csharp
 namespace ProjectName.UI
@@ -176,7 +176,7 @@ namespace ProjectName.UI
 
 ---
 
-## Common Violations - P1
+## Common Violations
 
 ### Small supplementary text
 
@@ -213,7 +213,7 @@ namespace ProjectName.UI
 
 ---
 
-## Testing Checklist - P3
+## Testing Checklist
 
 ### Console testing
 

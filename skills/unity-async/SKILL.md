@@ -41,7 +41,7 @@ Help users write performant async code and optimize Unity projects following Tan
    - Unnecessary allocations in Update loops
    - Polling where events could be used
 3. Recommend specific optimizations with code examples
-4. Categorize issues by priority (P1/P2/P3)
+4. Categorize issues by priority (must fix, should fix, nice to have)
 
 ### Step 2c: Async/Performance Question
 

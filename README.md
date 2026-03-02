@@ -43,9 +43,9 @@ In Claude Code, use the `/plugin` command:
 
 Each standard uses priority levels to indicate importance:
 
-- **P1 (Required)**: Must be followed
-- **P2 (Recommended)**: Should be followed when possible
-- **P3 (Optional)**: Nice-to-have
+- **Must fix**: Must be followed
+- **Should fix**: Should be followed when possible
+- **Nice to have**: Optional improvement
 
 ---
 

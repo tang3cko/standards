@@ -16,7 +16,7 @@ Ensure proper state synchronization for players who join mid-game (late join) an
 
 ---
 
-## Late join scenarios - P1
+## Late join scenarios
 
 ### What is late join?
 
@@ -40,7 +40,7 @@ Time T1: Client2 joins (late)
 
 ---
 
-## State synchronization methods - P1
+## State synchronization methods
 
 | Method | Late Join Support | Use Case | Example |
 |--------|-------------------|----------|---------|
@@ -53,7 +53,7 @@ Time T1: Client2 joins (late)
 
 ---
 
-## Recommended pattern: EventChannel + SyncVar - P1
+## Recommended pattern: EventChannel + SyncVar
 
 Maintain EventChannel decoupling while supporting late join.
 
@@ -163,7 +163,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Flow diagram - P1
+## Flow diagram
 
 ### Existing clients
 
@@ -190,7 +190,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Implementation notes - P1
+## Implementation notes
 
 ### Cannot sync ScriptableObjects directly
 
@@ -236,7 +236,7 @@ All clients must have the same questID → QuestSO mapping.
 
 ---
 
-## Disconnect handling - P1
+## Disconnect handling
 
 ### Player disconnect detection
 
@@ -299,7 +299,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Late join checklist - P1
+## Late join checklist
 
 ### States requiring late join support
 
@@ -323,7 +323,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Test scenarios - P1
+## Test scenarios
 
 | Test Case | Steps | Expected Result |
 |-----------|-------|-----------------|

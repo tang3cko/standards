@@ -4,7 +4,7 @@ Test doubles: Dummy, Stub, Spy, Fake, and Mock.
 
 ---
 
-## Types Overview - P1
+## Types Overview
 
 | Type | Purpose | Returns Data | Records Calls | Verifies Behavior |
 |------|---------|--------------|---------------|-------------------|
@@ -16,7 +16,7 @@ Test doubles: Dummy, Stub, Spy, Fake, and Mock.
 
 ---
 
-## 1. Dummy - P1
+## 1. Dummy
 
 Fill parameters that are never actually used.
 
@@ -40,7 +40,7 @@ public void Calculate_ReturnsResult()
 
 ---
 
-## 2. Stub - P1
+## 2. Stub
 
 Provide specific return values (state verification).
 
@@ -71,7 +71,7 @@ public void ShuffleCards_Randomizes()
 
 ---
 
-## 3. Spy - P1
+## 3. Spy
 
 Record method calls.
 
@@ -103,7 +103,7 @@ public void PlayCard_RaisesEventOnce()
 
 ---
 
-## 4. Fake - P1
+## 4. Fake
 
 Simplified working implementation.
 
@@ -128,7 +128,7 @@ public class FakePlayerDatabase : IPlayerDatabase
 
 ---
 
-## 5. Mock - P1
+## 5. Mock
 
 Verify behavior (how methods were called).
 
@@ -156,14 +156,14 @@ public class MockRuleValidator : IRuleValidator
 
 ---
 
-## Mock vs Stub - P1
+## Mock vs Stub
 
 - **Stub**: State verification (WHAT was returned)
 - **Mock**: Behavior verification (HOW it was called)
 
 ---
 
-## Using NSubstitute - P2
+## Using NSubstitute
 
 ### Basic usage
 
@@ -196,7 +196,7 @@ Assert.That(score, Is.EqualTo(100));
 
 ---
 
-## Best Practices - P2
+## Best Practices
 
 **Use interfaces for dependencies:**
 

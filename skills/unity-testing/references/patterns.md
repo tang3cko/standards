@@ -4,7 +4,7 @@ Testing patterns: Humble Object, Builder, Factory, and DI.
 
 ---
 
-## Humble Object Pattern - P1
+## Humble Object Pattern
 
 The most important pattern for making MonoBehaviour code testable.
 
@@ -91,7 +91,7 @@ public void PlayCard_ValidCard_ReturnsSuccess()
 
 ---
 
-## Test Data Builder Pattern - P2
+## Test Data Builder Pattern
 
 ### The problem
 
@@ -142,7 +142,7 @@ public void CanPlay_8Cut_AlwaysReturnsTrue()
 
 ---
 
-## Factory Pattern - P2
+## Factory Pattern
 
 ### Simple factory
 
@@ -183,7 +183,7 @@ public void Shuffle_FullDeck_Randomizes()
 
 ---
 
-## Dependency Injection Pattern - P2
+## Dependency Injection Pattern
 
 ### Interface-based DI
 
@@ -234,7 +234,7 @@ public void Update_DecreasesRemainingTime()
 
 ---
 
-## Pattern Comparison - P1
+## Pattern Comparison
 
 | Pattern | Purpose | Benefit |
 |---------|---------|---------|

@@ -39,7 +39,7 @@ Help users write, review, and improve Unity tests following Tang3cko testing sta
 1. Load `principles.md` for FIRST principles
 2. Load `pitfalls.md` for common mistakes checklist
 3. Check AAA pattern adherence, test isolation, naming
-4. Categorize issues by priority (P1/P2/P3)
+4. Categorize issues by priority (must fix, should fix, nice to have)
 
 ### Step 2c: Testing Strategy Question
 

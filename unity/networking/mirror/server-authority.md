@@ -17,7 +17,7 @@ Implement secure Server Authority pattern in Mirror Networking to prevent cheati
 
 ---
 
-## Core principle - P1
+## Core principle
 
 **The server is the single source of truth.** Clients request actions, the server validates and executes them, then notifies all clients of the result.
 
@@ -27,7 +27,7 @@ Client Request → Server Validation → Server Execution → Client Notificatio
 
 ---
 
-## Basic pattern - P1
+## Basic pattern
 
 ```csharp
 using Mirror;
@@ -110,7 +110,7 @@ namespace ProjectName.Combat
 
 ---
 
-## Quest system example - P1
+## Quest system example
 
 ```csharp
 using Mirror;
@@ -195,7 +195,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Validation patterns - P1
+## Validation patterns
 
 ### Range validation
 
@@ -276,7 +276,7 @@ private void CmdInteract(uint interactorNetId, uint targetNetId)
 
 ---
 
-## ScriptableObject management - P1
+## ScriptableObject management
 
 ### Server-only updates
 
@@ -327,7 +327,7 @@ namespace ProjectName.Game
 
 ---
 
-## Anti-patterns - P1
+## Anti-patterns
 
 ### Pattern 1: trusting client input
 

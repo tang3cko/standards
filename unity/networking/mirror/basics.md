@@ -16,7 +16,7 @@ Define fundamental patterns and best practices for implementing multiplayer syst
 
 ---
 
-## Prerequisites - P1
+## Prerequisites
 
 - **Mirror Networking**: Open-source networking library for Unity
 - **Server Authority**: Server manages all critical state, clients handle display only
@@ -27,7 +27,7 @@ Define fundamental patterns and best practices for implementing multiplayer syst
 
 ---
 
-## Server authority pattern - P1
+## Server authority pattern
 
 ### Basic principle
 
@@ -115,7 +115,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Mirror attributes - P1
+## Mirror attributes
 
 ### [Server] / [ServerCallback]
 
@@ -193,7 +193,7 @@ private void OnTriggerEnter(Collider other)
 
 ---
 
-## NetworkIdentity and RequireComponent - P1
+## NetworkIdentity and RequireComponent
 
 ### Required pattern
 
@@ -219,7 +219,7 @@ namespace ProjectName.Quest
 
 ---
 
-## EventChannel integration - P1
+## EventChannel integration
 
 ### Server to client notifications
 
@@ -299,7 +299,7 @@ namespace ProjectName.Quest
 
 ---
 
-## Best practices - P1
+## Best practices
 
 ### 1. Always validate on server
 
@@ -381,7 +381,7 @@ public class PlayerController : NetworkBehaviour
 
 ---
 
-## Common patterns - P1
+## Common patterns
 
 ### Player input pattern
 
