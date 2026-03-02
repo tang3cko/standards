@@ -130,7 +130,6 @@ Access Event Monitor via `Window -> Reactive SO -> Event Monitor`:
 
 ## References
 
-- [_core-rules.md](_core-rules.md) - Dependency priority order
 - [dependency-management.md](dependency-management.md) - EventChannel as priority 1 pattern
 - [variables.md](variables.md) - Variables vs EventChannels comparison
 - [architecture.md](architecture.md) - Architecture decision tree

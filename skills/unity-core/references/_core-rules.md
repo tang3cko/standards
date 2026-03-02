@@ -116,4 +116,4 @@ public void Process(QuestSO quest)
 - [naming.md](naming.md) - Detailed naming conventions
 - [code-organization.md](code-organization.md) - Directory structure and file organization
 - [error-handling.md](error-handling.md) - Error handling patterns
-- [dependency-management.md](dependency-management.md) - Dependency injection patterns
+- See `unity-architecture` skill for dependency injection patterns
