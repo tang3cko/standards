@@ -199,5 +199,4 @@ await UniTask.Yield(PlayerLoopTiming.PreUpdate);
 ## References
 
 - [performance.md](performance.md) - Coroutine caching, event-driven updates
-- [error-handling.md](error-handling.md) - Error handling in async code
-- [input-system.md](input-system.md) - Input handling patterns
+- See `unity-core` skill for error handling patterns in async code

@@ -1,7 +1,7 @@
 # Dependency Management
 
 Dependency injection priority order and patterns.
-For quick reference, see [_core-rules.md](_core-rules.md).
+For quick reference, see `unity-core` skill's `_core-rules.md`.
 
 ---
 
@@ -181,7 +181,6 @@ public class UIManager : MonoBehaviour
 
 ## References
 
-- [_core-rules.md](_core-rules.md) - Dependency priority quick reference
 - [architecture.md](architecture.md) - Architecture decision tree
 - [event-channels.md](event-channels.md) - EventChannel details
 - [design-principles.md](design-principles.md) - Asset-based DI principles

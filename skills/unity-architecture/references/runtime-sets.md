@@ -149,6 +149,5 @@ public class EnemyCountDisplay : MonoBehaviour
 
 ## References
 
-- [_core-rules.md](_core-rules.md) - Core anti-patterns (RuntimeSet vs FindObjectsOfType)
 - [reactive-entity-sets.md](reactive-entity-sets.md) - Per-entity state management
 - [event-channels.md](event-channels.md) - EventChannel notification integration

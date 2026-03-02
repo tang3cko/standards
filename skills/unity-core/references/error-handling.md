@@ -201,5 +201,5 @@ public void DealDamage(int damage)
 ## References
 
 - [_core-rules.md](_core-rules.md) - Error handling quick reference
-- [performance.md](performance.md) - Performance-related patterns
-- [dependency-management.md](dependency-management.md) - Dependency validation
+- See `unity-async` skill for performance-related patterns
+- See `unity-architecture` skill for dependency validation

@@ -200,6 +200,5 @@ Assets/
 
 ## References
 
-- [event-channels.md](event-channels.md) - EventChannel patterns for input bridging
-- [dependency-management.md](dependency-management.md) - ScriptableObject as dependency
-- [async.md](async.md) - Async input processing
+- See `unity-architecture` skill for EventChannel patterns and dependency management
+- See `unity-async` skill for async input processing

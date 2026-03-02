@@ -353,5 +353,5 @@ Assets/_Project/
 ## References
 
 - [accessibility.md](accessibility.md) - Font size and contrast requirements
-- [naming.md](naming.md) - General naming conventions
-- [event-channels.md](event-channels.md) - EventChannel integration with UI
+- See `unity-core` skill for general naming conventions
+- See `unity-architecture` skill for EventChannel integration with UI

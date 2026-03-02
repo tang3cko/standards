@@ -282,6 +282,5 @@ IEnumerator GoodCoroutine()
 
 ## References
 
-- [_core-rules.md](_core-rules.md) - Core anti-patterns
-- [error-handling.md](error-handling.md) - Error handling and logging
 - [async.md](async.md) - Coroutine and async patterns
+- See `unity-core` skill for core anti-patterns and error handling

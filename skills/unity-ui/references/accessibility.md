@@ -247,4 +247,4 @@ namespace ProjectName.UI
 
 - [ui-toolkit.md](ui-toolkit.md) - UI Toolkit design tokens
 - [ugui.md](ugui.md) - World space UI patterns
-- [comments.md](comments.md) - Tooltip attribute for Inspector readability
+- See `unity-core` skill for Tooltip attribute and Inspector readability

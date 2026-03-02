@@ -287,6 +287,6 @@ Scene with EventSystem:
 ## References
 
 - [ui-toolkit.md](ui-toolkit.md) - UI Toolkit for screen-space UI
-- [event-channels.md](event-channels.md) - EventChannel integration
-- [performance.md](performance.md) - Caching and event-driven patterns
 - [accessibility.md](accessibility.md) - Font size requirements
+- See `unity-architecture` skill for EventChannel integration
+- See `unity-async` skill for caching and event-driven patterns
