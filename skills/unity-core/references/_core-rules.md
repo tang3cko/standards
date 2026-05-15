@@ -12,8 +12,9 @@ Essential rules that apply to all Unity development. Auto-loaded with every skil
 | Private field | camelCase | `playerHealth`, `moveSpeed` |
 | Public field/Property | PascalCase | `MaxHealth`, `IsAlive` |
 | Method | PascalCase, verb | `TakeDamage()`, `GetInventory()` |
-| Boolean | `is/has/can/should` prefix | `isAlive`, `hasKey`, `canJump` |
-| Constant | UPPER_SNAKE_CASE | `MAX_HEALTH`, `DEFAULT_SPEED` |
+| Boolean | `is/has/can/should` prefix (`was/were/are` allowed in past/state contexts) | `isAlive`, `hasKey`, `canJump`, `wasSuccessful` |
+| Constant (`const` / `static readonly`) | PascalCase | `MaxHealth`, `DefaultSpeed` |
+| Preprocessor symbol | UPPER_SNAKE_CASE | `UNITY_INCLUDE_TESTS`, `UNITY_EDITOR` |
 | ScriptableObject | `SO` suffix | `EnemyDataSO`, `QuestSO` |
 | EventChannel | `EventChannelSO` suffix | `VoidEventChannelSO` |
 | Namespace | `ProjectName.Category` | `ProjectName.Core`, `ProjectName.UI` |

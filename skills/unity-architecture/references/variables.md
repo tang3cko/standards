@@ -118,6 +118,38 @@ private void Start()
 
 ---
 
+## Publisher Contract: Variable + EventChannel Co-existence
+
+Variable and EventChannel have orthogonal responsibilities:
+
+- **Variable** = single source of truth for the **value** (persisted, queryable)
+- **EventChannel** = single notification path for the **change**
+
+These are **not** redundant systems. The writer of a Variable is responsible for both: updating the Variable and raising the matched EventChannel in the same frame.
+
+```csharp
+// Settings UI (publisher)
+public void OnVolumeSliderChanged(float value)
+{
+    masterVolume.Value = value;
+    onMasterVolumeChanged.RaiseEvent(value);
+}
+```
+
+Subscribers read the Variable for initial value (e.g. on `OnEnable`) and listen on the EventChannel for changes:
+
+```csharp
+private void OnEnable()
+{
+    onMasterVolumeChanged.OnEventRaised += ApplyVolume;
+    ApplyVolume(masterVolume.Value);  // initial-value bootstrap
+}
+```
+
+This pattern keeps the Variable consumers loosely coupled to the Variable implementation (rule from Anti-Patterns above) while preserving a single value as the source of truth.
+
+---
+
 ## References
 
 - [event-channels.md](event-channels.md) - EventChannel patterns and types

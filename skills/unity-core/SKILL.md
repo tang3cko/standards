@@ -11,7 +11,7 @@ Help users write, review, and refactor Unity C# code following Tang3cko core cod
 
 ## Core Principles
 
-1. **Naming consistency** - PascalCase for public, _camelCase for private, k_PascalCase for constants
+1. **Naming consistency** - PascalCase for public, camelCase for private, PascalCase for constants (UPPER_SNAKE_CASE only for preprocessor symbols)
 2. **Null safety** - Validate external references in OnValidate, use null-conditional operators
 3. **Event-driven input** - InputReader pattern over direct InputAction references
 
@@ -49,7 +49,8 @@ Help users write, review, and refactor Unity C# code following Tang3cko core cod
 |------|----------|
 | references/_core-rules.md | Auto-loaded: Essential naming and structure rules |
 | references/naming.md | Naming conventions in detail |
-| references/code-organization.md | Directory structure, namespaces |
+| references/code-organization.md | Directory structure, namespaces, Runtime/Editor boundary, SO Serializer |
+| references/editor-tooling.md | Setup Editor pattern (`BuildAssets` / `WireScene`), idempotence, log suppression |
 | references/comments.md | XML docs, Header/Tooltip attributes |
 | references/error-handling.md | Null safety, OnValidate |
 | references/input-system.md | InputReader pattern |

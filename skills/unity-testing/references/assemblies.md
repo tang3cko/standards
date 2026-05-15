@@ -102,6 +102,32 @@ File: `Tests/Runtime/Beta.Tests.Runtime.asmdef`
 | `references` | Production assemblies | + UnityEngine/Editor.TestRunner |
 | `defineConstraints` | `[]` | `["UNITY_INCLUDE_TESTS"]` |
 
+### Runtime test seam: avoid `UnityEditor` in Play Mode tests
+
+Play Mode test assemblies must not reference `UnityEditor`, so `SerializedObject` and other editor APIs are unavailable. To populate private `[SerializeField]` fields on a ScriptableObject from a Runtime test, expose a `public XxxForTesting(...)` method on the SO gated by `#if UNITY_INCLUDE_TESTS`. The method compiles only when test assemblies are included in the build, so production builds strip it.
+
+```csharp
+// In the production SO (runtime asmdef)
+public sealed class AudioCueSO : ScriptableObject
+{
+    [SerializeField] private AudioClip[] clips;
+    public AudioClip[] Clips => clips;
+
+#if UNITY_INCLUDE_TESTS
+    public void SetClipsForTesting(AudioClip[] audioClips) => clips = audioClips;
+#endif
+}
+```
+
+The Play Mode test then needs neither `UnityEditor` nor reflection:
+
+```csharp
+var cue = ScriptableObject.CreateInstance<AudioCueSO>();
+cue.SetClipsForTesting(new[] { clip });
+```
+
+See [patterns.md](patterns.md) for the full `ForTesting` pattern (naming, file-structure placement, public requirement).
+
 ---
 
 ## Creating Test Assembly (Easy Way)

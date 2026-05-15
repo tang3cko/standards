@@ -66,6 +66,28 @@ public void Repeatable_FixedSeed()
 
 Tests must automatically determine pass or fail without manual verification.
 
+The test name is a specification, not a label. The name must match exactly what the test verifies. If the test verifies `onFinished` is not invoked, the name must reflect that — not a broader claim like "ReturnsSlot" that the test never checks.
+
+```csharp
+// Bad: name promises slot return verification, but body only checks the callback
+[UnityTest]
+public IEnumerator Stop_AfterLoopPlay_ReturnsSlotWithoutFinishedCallback()
+{
+    emitter.Play(...);
+    emitter.Stop();
+    yield return null;
+    Assert.That(finishedCalled, Is.False);  // never checks the slot
+}
+
+// Good: name matches what is actually asserted
+[UnityTest]
+public IEnumerator Stop_AfterLoopPlay_DoesNotInvokeFinishedCallback() { ... }
+
+// Good: name + assertion match for the slot-return contract
+[UnityTest]
+public IEnumerator Service_Stop_LoopHandle_FreesSlotForReuse() { ... }
+```
+
 ### Timely
 
 Write tests before or immediately after implementation.

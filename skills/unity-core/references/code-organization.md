@@ -127,6 +127,188 @@ namespace ProjectName.Category
 
 ---
 
+## Runtime / Editor Boundary
+
+How much editor concern (gizmo, `EditorUtility`, editor-only `SerializeField`) may leak into runtime classes.
+
+### Pattern selection
+
+| Pattern | When to use |
+|---------|-------------|
+| **C** — `#if UNITY_EDITOR` direct in runtime | Tag/flush side-effects of runtime processing |
+| **D** — Editor asmdef + official attribute | Editor feature itself (`[CustomEditor]`, `[DrawGizmo]`, `[InitializeOnLoad]`, `[MenuItem]`, `SettingsProvider`) |
+| **B** — `InternalsVisibleTo` + Editor asmdef | Editor continuously reads runtime `internal` state |
+| **A** — Interface DI | Need swappable runtime/editor implementations or test seam |
+
+### Gizmos
+
+Use **Pattern D exclusively**. `OnDrawGizmos*` in runtime classes is forbidden in committed code.
+
+```csharp
+// Editor asmdef only
+[DrawGizmo(GizmoType.NonSelected | GizmoType.Selected)]
+static void Draw(MyComponent target, GizmoType _)
+{
+    Gizmos.DrawWireCube(target.transform.position, Vector3.one);
+}
+```
+
+Rationale: Unity 6 official docs state `[DrawGizmo]` "allows you to keep your gizmo-drawing code out of your component scripts so that it is not included in builds." Zero exceptions keeps lint and review trivial.
+
+### Pattern C — allowed conditions (all five must hold)
+
+A `#if UNITY_EDITOR` direct call in a runtime class is acceptable **only if all five conditions hold**:
+
+1. The editor API call is a **leaf** (return value not used to branch downstream)
+2. **No state held** (no field added or mutated)
+3. **Runtime contract not polluted** (public/internal API shape unchanged)
+4. **No test seam required**
+5. The call is **post-processing of runtime work**, not editor functionality itself
+
+```csharp
+// Allowed (Pattern C)
+public bool SaveToAsset()
+{
+    if (worldDataAsset == null) return false;
+    Serializer.Write(worldDataAsset, model);
+
+#if UNITY_EDITOR
+    UnityEditor.EditorUtility.SetDirty(worldDataAsset);
+#endif
+    return true;
+}
+```
+
+### AssetDatabase usage
+
+`AssetDatabase` use is not blanket-banned. The line is responsibility, not namespace.
+
+| Allowed in Pattern C | Trigger D/B escalation |
+|----------------------|------------------------|
+| `EditorUtility.SetDirty(target)` | `AssetDatabase.Refresh()` |
+| `AssetDatabase.SaveAssetIfDirty(target)` | `AssetDatabase.CreateAsset(...)` |
+| Single-target dirty/flush only | `AssetDatabase.LoadAssetAtPath<T>(...)` |
+| | `AssetDatabase.ImportAsset(...)` |
+| | `AssetDatabase.MoveAsset(...)` |
+| | `AssetDatabase.DeleteAsset(...)` |
+| | Any asset discovery / creation / reload / reorganization |
+
+Single-target flush of a runtime save = Pattern C. Asset-set orchestration = editor functionality, escalate.
+
+### Escalation triggers (1+ → mandatory D/B promotion discussion)
+
+When any of the following appears, escalate from C to D or B in the same PR or open a refactor ticket:
+
+- A second Pattern C call appears in the same class
+- The C call starts using the editor API's return value or callbacks
+- An editor-only helper / utility extraction is introduced
+- The C call reaches into editor workflow APIs (asset DB orchestration, `Selection`, `Undo`, `EditorApplication.delayCall`, `SerializedObject`)
+
+### Editor state must not be held in runtime classes
+
+Editor state means fields kept for editor workflow, visualization, tooling, selection state, foldout state, or caching that does not contribute to player-build runtime semantics.
+
+- `[SerializeField]` of editor state in runtime asmdef is **forbidden**
+- Project-shared settings → `ScriptableObject` + `SettingsProvider` in Editor asmdef
+- Per-user editor state → `ScriptableSingleton<T>` + `[FilePath(..., FilePathAttribute.Location.ProjectFolder)]` or `EditorPrefs`
+
+### `OnValidate`
+
+Runtime asmdef `OnValidate` should be `#if UNITY_EDITOR` guarded, and runtime-required invariants should live in shared helpers reused by `Awake` / `Initialize` and `OnValidate`.
+
+```csharp
+#if UNITY_EDITOR
+private void OnValidate()
+{
+    EnforceInvariants();
+    if (target == null)
+        Debug.LogWarning($"[{GetType().Name}] target not assigned on {gameObject.name}.", this);
+}
+#endif
+
+private void EnforceInvariants()
+{
+    speed = Mathf.Max(0f, speed);
+}
+```
+
+Rationale: Unity does not strip `OnValidate` from builds even with managed stripping high; the guard is a hygiene measure.
+
+### `Debug.DrawLine` / `Debug.DrawRay`
+
+`UnityEngine.Debug.Draw*` lives in the runtime namespace and is not a boundary violation. Out of scope for the lint. Permanent retention in production code requires PR-level justification of ongoing diagnostic value.
+
+### Detection
+
+| Layer | Required | Tool |
+|-------|----------|------|
+| CI | Yes (single source of truth) | `rg`-based tripwire |
+| PR checklist | Yes (design judgment) | Reviewer |
+| Pre-commit hook | Optional | Local DX |
+
+The CI tripwire flags candidates for review; final classification happens in PR. Do not encode the full rule in a shell one-liner.
+
+CI lint targets (under runtime-asmdef paths):
+
+- `using UnityEditor` / `UnityEditor.`
+- `OnDrawGizmos` / `OnDrawGizmosSelected`
+- `[DrawGizmo]` attribute usage
+
+A Roslyn analyzer is not required: the C# compiler already rejects `UnityEditor` references in runtime build configurations, and `Microsoft.Unity.Analyzers` (UNT0001–UNT0042) has no equivalent diagnostic for this concern.
+
+---
+
+## ScriptableObject Serializer Pattern
+
+When a `ScriptableObject` asset persists data with versioning concerns, the SO must not own the format-dispatch logic. Extract the read/write into a pure C# static class.
+
+```csharp
+// SO holds raw fields and accessors only
+public sealed class VoxelWorldData : ScriptableObject
+{
+    [SerializeField] private byte[] densityField;
+    [SerializeField] private byte[] materialIdField;
+    [SerializeField] private int version;
+
+    public const int CurrentVersion = 1;
+
+    public byte[] DensityField => densityField;
+    public byte[] MaterialIdField => materialIdField;
+    public int Version => version;
+    public bool HasDensityField => densityField != null && densityField.Length > 0;
+
+    public void SetDensityField(byte[] field, int version) { /* ... */ }
+}
+
+// Pure C# static class owns version dispatch
+public static class VoxelWorldDataSerializer
+{
+    public static void Read(VoxelWorldData asset, out DensityField density, out byte[] materialIds)
+    {
+        switch (asset.Version)
+        {
+            case 1: /* v1 decode */ break;
+            case 2: /* v2 decode */ break;
+            default: throw new NotSupportedException($"Version {asset.Version}");
+        }
+    }
+
+    public static void Write(VoxelWorldData asset, DensityField density, int chunkSize, byte[] materialIds = null)
+    {
+        // Encode + asset.SetDensityField(...) at CurrentVersion
+    }
+}
+```
+
+Why:
+
+- The SO does not need to know how its own bytes are interpreted, so adding a new format version means editing one class, not two
+- The serializer is pure C# and unit-testable in Edit Mode
+- Migration paths are localized to one switch statement
+- The SO stays a simple data container, matching the "data SO holds data, not behavior" intent
+
+---
+
 ## References
 
 - [_core-rules.md](_core-rules.md) - File structure order quick reference

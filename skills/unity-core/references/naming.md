@@ -33,8 +33,9 @@ public class Example
     // Private fields: camelCase
     private bool isMoving;
 
-    // Constants: UPPER_SNAKE_CASE
-    private const float MAX_HEALTH = 100f;
+    // Constants (const / static readonly): PascalCase
+    private const float MaxHealth = 100f;
+    private static readonly Vector3 DefaultPosition = Vector3.zero;
 }
 ```
 
@@ -121,7 +122,13 @@ private bool isAlive;
 private bool hasKey;
 private bool canJump;
 private bool shouldSpawn;
+
+// "was" / "were" / "are" are acceptable in past or state contexts
+public void ArmAfterDig(bool wasSuccessful) { }
+public bool ItemsAreReady => count > 0;
 ```
+
+The same rule applies to method parameters and properties, not just fields.
 
 ---
 

@@ -234,6 +234,59 @@ public void Update_DecreasesRemainingTime()
 
 ---
 
+## Test-only Setup API (`UNITY_INCLUDE_TESTS`)
+
+### The problem
+
+Runtime tests cannot use `UnityEditor.SerializedObject` to populate private `[SerializeField]` fields on ScriptableObjects, because runtime test assemblies must not reference `UnityEditor`. Reflection works but obscures intent.
+
+### The solution
+
+Expose a `public` configuration method on the SO, gated by `#if UNITY_INCLUDE_TESTS` so it compiles only when test assemblies are included in the build.
+
+```csharp
+public sealed class AudioCueSO : ScriptableObject
+{
+    [SerializeField] private AudioClip[] clips;
+    [SerializeField] private PlaybackMode mode;
+    [SerializeField] private bool isLooping;
+
+    public AudioClip[] Clips => clips;
+    public PlaybackMode Mode => mode;
+    public bool IsLooping => isLooping;
+
+#if UNITY_INCLUDE_TESTS
+    public void SetClipsForTesting(AudioClip[] audioClips,
+        PlaybackMode playbackMode = PlaybackMode.Sequential,
+        int recentWindow = 1,
+        bool isLooping = false)
+    {
+        clips = audioClips;
+        mode = playbackMode;
+        recentWindowSize = recentWindow;
+        this.isLooping = isLooping;
+    }
+#endif
+}
+```
+
+### Rules
+
+- Method must be `public` (test assemblies cannot see `internal` across boundaries)
+- Method name ends with `ForTesting` to make intent explicit at call sites
+- Place **before** any `#if UNITY_EDITOR` block (Public Methods precede Editor Only in file structure order)
+- The runtime test then needs no `UnityEditor` reference and no reflection
+
+```csharp
+// Runtime test
+var cue = ScriptableObject.CreateInstance<AudioCueSO>();
+cue.SetClipsForTesting(new[] { clip }, isLooping: true);
+```
+
+`UNITY_INCLUDE_TESTS` is automatically defined when Test Runner builds the project; production builds do not see it, so the method is stripped.
+
+---
+
 ## Pattern Comparison
 
 | Pattern | Purpose | Benefit |
@@ -242,6 +295,7 @@ public void Update_DecreasesRemainingTime()
 | Test Data Builder | Create test objects | Reduce duplication |
 | Factory | Consistent test data | DRY principle |
 | Dependency Injection | Mock dependencies | Isolation |
+| `ForTesting` setup API | Populate private SO state from runtime tests | No `UnityEditor` dependency, no reflection |
 
 ---
 
