@@ -1,8 +1,9 @@
 ---
 name: unity-ui
-description: Build Unity UI following Tang3cko standards. UI Toolkit (UXML/USS), uGUI, accessibility. Use when creating or reviewing UI code. Triggers on "UI Toolkit", "uGUI", "UXML", "USS", "BEM", "アクセシビリティ", "World Space UI", "UI", "ユーザーインターフェース", "accessibility", "billboard".
+description: Build Unity UI following Tang3cko standards — UI Toolkit (UXML/USS, BEM naming), uGUI for World Space, accessibility. Use when creating or reviewing UI code.
+when_to_use: Triggers on "UI Toolkit", "uGUI", "UXML", "USS", "BEM", "アクセシビリティ", "World Space UI", "UI", "ユーザーインターフェース", "accessibility", "billboard".
 model: sonnet
-allowed-tools: Read, Glob, Grep, Edit, Write
+allowed-tools: Read Glob Grep Edit Write
 ---
 
 # Unity UI
@@ -12,37 +13,29 @@ Help users build, review, and improve Unity UI following Tang3cko standards.
 ## Core Principles
 
 1. **UI Toolkit for new UI** - UXML structure, USS styling, BEM naming convention
-2. **uGUI for World Space** - Billboards, in-game HUD, spatial UI
+2. **uGUI for World Space** - Billboards, floating world labels, spatial UI (screen-space HUD belongs to UI Toolkit)
 3. **Accessibility always** - Minimum font sizes, contrast ratios, scalable layouts
 
-## When Invoked
+## Workflow
 
-### Step 1: Determine Task Type
+Identify the task type and follow the matching path. Load `accessibility.md` in every path.
 
-- **Building new UI?** → Go to Step 2a
-- **Reviewing UI code?** → Go to Step 2b
-- **UI technology question?** → Go to Step 2c
+### Building new UI
 
-### Step 2a: Building New UI
-
-1. Determine which UI system to use:
-   - Screen-space menus, HUD, settings → UI Toolkit (`ui-toolkit.md`)
-   - World Space UI, billboards → uGUI (`ugui.md`)
+1. Pick the UI system from the UI System Decision below and load its reference
 2. Load `accessibility.md` for font size and contrast requirements
-3. Generate UI code following loaded standards
+3. Generate UI code following the loaded standards
 4. Verify BEM naming (UI Toolkit) or component structure (uGUI)
 
-### Step 2b: Reviewing UI Code
+### Reviewing UI code
 
-1. Load the relevant UI system reference
-2. Load `accessibility.md` for compliance check
-3. Check naming conventions, layout patterns, styling approach
-4. Categorize issues by priority (must fix, should fix, nice to have)
+1. Load the relevant UI system reference and `accessibility.md`
+2. Check naming conventions, layout patterns, and styling approach
+3. Categorize issues by priority (must fix, should fix, nice to have)
 
-### Step 2c: UI Technology Question
+### A UI-technology question
 
-1. Load relevant references based on question
-2. Explain with examples, showing recommended patterns
+1. Load the relevant references and explain with recommended-pattern examples
 
 ## UI System Decision
 

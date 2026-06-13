@@ -1,8 +1,10 @@
 ---
 name: unity-architecture
-description: Design Unity systems using ScriptableObject architecture following Tang3cko standards. EventChannel, RuntimeSet, Variable, ActionSO, ReactiveSO patterns. Use when designing system communication or reviewing architecture. Triggers on "アーキテクチャ", "EventChannel", "RuntimeSet", "Variable", "ActionSO", "ReactiveSO", "依存", "設計", "ScriptableObject", "SO", "architecture", "dependency".
-model: sonnet
-allowed-tools: Read, Glob, Grep, Edit, Write
+description: Design Unity systems using ScriptableObject architecture following Tang3cko standards — EventChannel, RuntimeSet, Variable, ActionSO, ReactiveSO patterns. Use when designing system communication, choosing an SO pattern, or reviewing architecture.
+when_to_use: Triggers on "アーキテクチャ", "EventChannel", "RuntimeSet", "Variable", "ActionSO", "ReactiveSO", "依存", "設計", "ScriptableObject", "SO", "architecture", "dependency".
+model: opus
+effort: max
+allowed-tools: Read Glob Grep Edit Write
 ---
 
 # Unity Architecture
@@ -15,40 +17,32 @@ Help users design, implement, and review Unity system architecture using Scripta
 2. **Event-driven decoupling** - Systems communicate through SO channels, never direct references
 3. **Dependency priority** - EventChannel > SerializeField > Find > Singleton (avoid Singleton)
 
-## When Invoked
+## Workflow
 
-### Step 1: Determine Task Type
+Identify the task type and follow the matching path.
 
-- **Designing a new system?** → Go to Step 2a
-- **Reviewing architecture?** → Go to Step 2b
-- **Choosing a pattern?** → Go to Step 2c
+### Designing a new system
 
-### Step 2a: Designing a New System
-
-1. Load `architecture.md` and `design-principles.md` for foundational context
-2. Identify which SO pattern fits the use case:
-   - System-to-system messaging → `event-channels.md`
-   - Tracking live objects → `runtime-sets.md`
-   - Shared state with change events → `variables.md`
-   - Data-driven commands → `actions.md`
-   - Per-entity reactive state → `reactive-entity-sets.md`
-3. Load `dependency-management.md` for DI patterns
+1. Load `architecture.md` + `design-principles.md` for foundational context
+2. Pick the SO pattern from the Pattern Selection Guide below and load its reference
+3. Load `dependency-management.md` for DI wiring
 4. Generate code following the selected pattern
 
-### Step 2b: Reviewing Architecture
+### Reviewing architecture
 
 1. Load `design-principles.md` for the three pillars (Observability, Asset-based DI, DOD)
 2. Check dependency direction and coupling
 3. Verify SO pattern usage follows conventions
 4. Note issues with priority (must fix, should fix, nice to have)
 
-### Step 2c: Choosing a Pattern
+### Choosing a pattern
 
 1. Load `architecture.md` for the system communication overview
-2. Load candidate pattern files based on the question
-3. Explain trade-offs with code examples
+2. Load candidate pattern references and explain trade-offs with code examples
 
 ## Pattern Selection Guide
+
+Load `architecture.md` + `design-principles.md` first for foundational context, then pick a pattern:
 
 | Need | Pattern | Reference |
 |------|---------|-----------|

@@ -1,6 +1,7 @@
 ---
 name: unity-mcp
-description: Verify Unity C# compilation via MCP after code changes. Domain reload and compile error checking through Unity Editor bridge. Use when checking if scripts compile in Unity. Triggers on "compile", "コンパイル", "domain reload", "Unity MCP", "ビルドチェック", "compile check", "コンパイルエラー".
+description: Verify Unity C# compilation via MCP after code changes — domain reload and compile-error checking through the Unity Editor bridge. Use when checking if scripts compile in Unity.
+when_to_use: Triggers on "compile", "コンパイル", "domain reload", "Unity MCP", "ビルドチェック", "compile check", "コンパイルエラー".
 model: sonnet
 allowed-tools: mcp__unity-mcp__*
 ---
@@ -46,6 +47,6 @@ Report errors with file path and line number so the user can locate them.
 
 ## Notes
 
-- **Tool names vary by package version and MCP server configuration.** The names used above (`Unity_RunCommand`, `Unity_GetConsoleLogs`, `Unity_EditorWindow_CaptureScreenshot`) are representative. Check the actual tools exposed by your MCP server if calls fail.
+- **Tool names vary by package version and MCP server configuration.** The names used above (`Unity_RunCommand`, `Unity_GetConsoleLogs`) are representative. Check the actual tools exposed by your MCP server if calls fail.
 - MCP server name may vary by setup. If `unity-mcp` tools are unavailable, check the MCP server name in your configuration.
-- The official package exposes tools with `Unity_` prefix (e.g., `Unity_ManageScene`, `Unity_ManageGameObject`). Tool availability depends on package version.
+- The official package exposes tools with a `Unity_` prefix (e.g., `Unity_RunCommand`, `Unity_GetConsoleLogs`, `Unity_Camera_Capture`). Tool availability depends on package version.

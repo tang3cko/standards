@@ -1,8 +1,9 @@
 ---
 name: unity-testing
-description: Write and review Unity tests following Tang3cko standards. Humble Object, Edit Mode, NUnit, test doubles. Use when writing tests or reviewing test code. Triggers on "テスト", "NUnit", "Humble Object", "mock", "stub", "asmdef", "Edit Mode", "Play Mode", "test", "testing", "TDD", "テスト駆動".
+description: Write and review Unity tests following Tang3cko standards — Humble Object, Edit Mode vs Play Mode, NUnit, test doubles, test assemblies. Use when writing tests or reviewing test code.
+when_to_use: Triggers on "テスト", "NUnit", "Humble Object", "mock", "stub", "asmdef", "Edit Mode", "Play Mode", "test", "testing", "TDD", "テスト駆動".
 model: sonnet
-allowed-tools: Read, Glob, Grep, Edit, Write
+allowed-tools: Read Glob Grep Edit Write
 ---
 
 # Unity Testing
@@ -15,37 +16,31 @@ Help users write, review, and improve Unity tests following Tang3cko testing sta
 2. **Edit Mode preferred** - Faster, more reliable; use Play Mode only when necessary
 3. **FIRST principles** - Fast, Isolated, Repeatable, Self-validating, Timely
 
-## When Invoked
+## Workflow
 
-### Step 1: Determine Task Type
+Identify the task type and follow the matching path.
 
-- **Writing new tests?** → Go to Step 2a
-- **Reviewing test code?** → Go to Step 2b
-- **Testing strategy question?** → Go to Step 2c
+### Writing new tests
 
-### Step 2a: Writing New Tests
-
-1. Load `testing.md` for overview and `principles.md` for FIRST/AAA pattern
-2. Determine test mode: Load `test-modes.md` for Edit Mode vs Play Mode decision
-3. Load pattern files based on need:
+1. Load `testing.md` (overview) and `principles.md` (FIRST / AAA pattern)
+2. Decide the mode with `test-modes.md` (Edit Mode vs Play Mode — see decision below)
+3. Load pattern references as needed:
    - Making code testable → `patterns.md` (Humble Object, Builder, Factory)
    - Mocking dependencies → `test-doubles.md`
    - NUnit attributes/assertions → `nunit.md`
-4. Load `assemblies.md` if setting up test assembly definitions
-5. Generate tests following AAA pattern (Arrange, Act, Assert)
+   - Test assembly setup → `assemblies.md`
+4. Generate tests following AAA (Arrange, Act, Assert)
 
-### Step 2b: Reviewing Test Code
+### Reviewing test code
 
-1. Load `principles.md` for FIRST principles
-2. Load `pitfalls.md` for common mistakes checklist
-3. Check AAA pattern adherence, test isolation, naming
-4. Categorize issues by priority (must fix, should fix, nice to have)
+1. Load `principles.md` (FIRST) and `pitfalls.md` (common mistakes checklist)
+2. Check AAA adherence, test isolation, and naming
+3. Categorize issues by priority (must fix, should fix, nice to have)
 
-### Step 2c: Testing Strategy Question
+### A testing-strategy question
 
-1. Load `testing.md` for fundamentals overview
-2. Load specific reference based on question domain
-3. Explain with code examples
+1. Load `testing.md` for fundamentals, plus the reference for the question domain
+2. Explain with code examples
 
 ## Test Mode Decision
 

@@ -350,6 +350,52 @@ Assets/_Project/
 
 ---
 
+## Input System Pitfall: UIDocument Lifecycle Kills Project-Wide Actions
+
+Unity 6.2+ intentionally disables the **entire project-wide InputActionAsset**
+(`InputSystem.actions`) when the last active UIDocument's runtime panel is
+disposed. Internally: `PanelSettings.DisposePanel -> EventProvider.Shutdown ->
+InputSystemProvider.UnregisterActions -> InputActionAsset.Disable()`. If
+gameplay actions live in the same asset, all gameplay input (Move/Look/Jump)
+silently dies the moment the last UI Toolkit panel disappears — scene
+transitions away from a UI Toolkit title screen, or `SetActive(false)` on a
+fullscreen overlay, are typical triggers. Nothing re-enables the maps.
+
+### Symptom
+
+- Input works until a UI Toolkit screen/overlay closes, then everything stops.
+- `InputActionMap.enabled` is `false` for every map; devices and bindings look healthy.
+- Re-enabling the maps manually restores input immediately.
+
+### Countermeasures (in order of preference)
+
+```text
+1. Separate assets        : Keep gameplay actions in their own InputActionAsset
+                            (referenced via InputActionReference). Leave the
+                            project-wide asset to UI Toolkit only.
+2. Keep a UIDocument alive: Persistent scene with one UIDocument, or hide
+                            overlays with style.display = DisplayStyle.None
+                            instead of SetActive(false).
+3. Unify on UI Toolkit    : Every screen keeps at least one UIDocument active.
+```
+
+```csharp
+// Bad: gameplay reads actions from the project-wide asset (InputSystem.actions).
+// UI Toolkit disables this entire asset when its last panel is disposed.
+[SerializeField] private InputActionReference moveActionRef; // -> InputSystem_Actions (project-wide)
+
+// Good: gameplay references a dedicated asset that UI Toolkit never touches.
+[SerializeField] private InputActionReference moveActionRef; // -> Gameplay_Actions (gameplay-only)
+```
+
+Duplicating the .inputactions file preserves action GUIDs, so existing
+InputActionReference fileIDs stay valid — only the asset GUID in the
+referencing .asset needs to change.
+
+Reference: https://tang3cko.com/posts/unity-inputactionasset-uidocument-scene-transition
+
+---
+
 ## References
 
 - [accessibility.md](accessibility.md) - Font size and contrast requirements

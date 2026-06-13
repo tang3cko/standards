@@ -1,8 +1,9 @@
 ---
 name: unity-core
-description: Write Unity C# code following Tang3cko core standards. Naming, code organization, error handling, Input System. Use when writing or reviewing Unity C# code structure. Triggers on "Unity", "C#", "naming", "null check", "InputReader", "namespace", "コード整理", "命名規則", "code style", "error handling".
+description: Write Unity C# code following Tang3cko core standards — naming, code organization, error handling, Input System, editor tooling. Use when writing or reviewing Unity C# code structure.
+when_to_use: Triggers on "Unity", "C#", "naming", "null check", "InputReader", "namespace", "コード整理", "命名規則", "code style", "error handling".
 model: sonnet
-allowed-tools: Read, Glob, Grep, Edit, Write
+allowed-tools: Read Glob Grep Edit Write
 ---
 
 # Unity Core Standards
@@ -15,33 +16,26 @@ Help users write, review, and refactor Unity C# code following Tang3cko core cod
 2. **Null safety** - Validate external references in OnValidate, use null-conditional operators
 3. **Event-driven input** - InputReader pattern over direct InputAction references
 
-## When Invoked
+## Workflow
 
-### Step 1: Determine Task Type
+`references/_core-rules.md` is auto-loaded with essential naming and structure rules. Identify the task type and follow the matching path.
 
-- **Writing new code?** → Go to Step 2a
-- **Reviewing existing code?** → Go to Step 2b
-- **Question about conventions?** → Go to Step 2c
+### Writing new code
 
-### Step 2a: Writing New Code
+1. Load the references matching the code domain (naming, comments, error-handling, input, editor-tooling)
+2. Generate code following the loaded standards
+3. Verify naming, file structure order, and null safety
 
-1. `_core-rules.md` is auto-loaded with essential rules
-2. Load specific references matching the code domain (naming, comments, error-handling, input)
-3. Generate code following loaded standards
-4. Verify naming, file structure order, and null safety
+### Reviewing code
 
-### Step 2b: Reviewing Code
+1. Check against naming conventions, code organization, and error handling
+2. Note specific issues with line numbers
+3. Categorize issues by priority (must fix, should fix, nice to have)
 
-1. `_core-rules.md` is auto-loaded with core rules
-2. Check against naming conventions, code organization, error handling
-3. Note specific issues with line numbers
-4. Categorize issues by priority (must fix, should fix, nice to have)
+### A convention question
 
-### Step 2c: Convention Question
-
-1. Load the specific reference matching the question domain
-2. Explain with code examples from references
-3. Show Bad/Good patterns where applicable
+1. Load the reference matching the question domain
+2. Explain with Bad/Good code examples where applicable
 
 ## Reference Files
 
