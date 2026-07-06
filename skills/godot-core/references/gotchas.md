@@ -1,0 +1,129 @@
+# Godot 4.x + .NET Gotchas
+
+Pitfalls encountered in Godot 4.6 + .NET and how to avoid them. Most of these **fail silently**, which is why they are codified as conventions.
+
+## NodePath null safety
+
+An `[Export] NodePath` left uninitialized is null and throws NullReferenceException the moment `.IsEmpty` (or anything else) is called on it.
+
+```csharp
+// NG
+[Export] private NodePath _path;
+
+// OK
+[Export] private NodePath _path = new();
+```
+
+## Typed Node exports do not resolve
+
+`[Export]` of a typed node reference (e.g. `Camera3D`) is not automatically resolved from the NodePath Variant stored in `.tscn` (the C# source generator cannot convert it). It stays null at runtime.
+
+```csharp
+// NG (null at runtime)
+[Export] private Camera3D _camera;
+
+// OK
+[Export] private NodePath _cameraPath;
+private Camera3D _camera;
+
+public override void _Ready()
+{
+    _camera = GetNodeOrNull<Camera3D>(_cameraPath);
+}
+```
+
+## Never child an Area3D under a StaticBody3D
+
+Placing an `Area3D` as a child of a `StaticBody3D` binds the inner `CollisionShape3D` to the outer body, and the Area stops being detectable.
+
+Workaround: place them as **siblings** under a common parent (e.g. `Pivot : Node3D`).
+
+```
+Pivot (Node3D)
+├── StaticBody3D
+│   └── CollisionShape3D
+└── Area3D
+    └── CollisionShape3D
+```
+
+## Export property casing must match exactly
+
+`[Export]` property names appear in `.tscn` files with the **identical spelling**. Unlike GDScript exports, there is no automatic snake_case conversion.
+
+```csharp
+[Export] public string PromptText { get; set; }
+```
+
+```ini
+# .tscn
+PromptText = "Open the door"   # OK
+prompt_text = "Open the door"  # silently ignored
+```
+
+## .tres resources are cached by load path
+
+A `.tres` file is cached by its load path; multiple references resolve to the **same instance**.
+
+- For intentionally shared data (EventChannel, Validator, …) this is the benefit
+- When per-instance state is required, set `resource_local_to_scene = true`
+
+## QueueFree timing
+
+`QueueFree()` executes at the end of the frame. Referencing a "deleted" node within the same frame is an error, so order operations carefully when deletion and related work happen in one frame.
+
+```csharp
+// Pickup: acquire item -> add to InventorySystem -> delete node
+InventorySystem.Instance.AddItem(_item);
+QueueFree();  // do not reference self after this within the frame
+```
+
+## InputEventJoypadMotion fires while idle
+
+With a gamepad merely connected, `InputEventJoypadMotion` fires frequently with tiny axis values even at idle. A "last used device" detector that naively treats any joypad motion as Gamepad can never return to keyboard/mouse.
+
+```csharp
+// NG: stuck on Gamepad while a pad is connected
+case InputEventJoypadMotion:
+    return InputDeviceKind.Gamepad;
+
+// OK: only accept when the absolute axis value exceeds a threshold (~0.5)
+case InputEventJoypadMotion m when MathF.Abs(m.AxisValue) > 0.5f:
+    return InputDeviceKind.Gamepad;
+```
+
+Extract the classification logic into a pure class (e.g. `InputDeviceClassifier` with `DefaultJoypadMotionThreshold = 0.5f`) so it stays testable.
+
+## Autoload race conditions
+
+Autoloads initialize before other nodes' `_Ready()`, so referencing an autoload's static `Instance` inside a node's `_Ready()` is safe. However, ordering **between autoloads** follows the autoload order in `project.godot` — make the order explicit when autoloads depend on each other.
+
+## Descendant `_Ready()` fires before the ancestor's
+
+Godot calls `_Ready()` depth-first: children under `Player` (`Label3D`, `Camera3D`, plain `Node`s) run before the `Player` controller's own `_Ready()`.
+
+So if `Player` calls `AddToGroup("player")` in its `_Ready()`, a descendant calling `GetTree().GetFirstNodeInGroup("player")` in its own `_Ready()` gets `null`.
+
+```csharp
+// NG: in a descendant's _Ready() the ancestor is not in the group yet
+public override void _Ready()
+{
+    _player = GetTree().GetFirstNodeInGroup("player") as Node3D;
+}
+```
+
+Workarounds:
+
+- Lazily look up on the first `_Process()`
+- Reference via known tree relations (`Owner`, `GetParent()`)
+- Inject the dependency with an `[Export] NodePath`
+
+## Label3D rotated 180° on Y mirrors its text
+
+A `Label3D` under a `Camera3D` faces `-Z` by default, so it shows its back to the camera. Fixing that with a 180° Y rotation also flips the X axis — the text becomes a mirror image.
+
+Fix it with billboarding instead of rotation:
+
+```ini
+[node name="Watch" type="Label3D" parent="Head/Camera3D"]
+billboard = 1
+```

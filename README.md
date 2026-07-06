@@ -19,6 +19,8 @@ Shared coding standards and Claude Code skills for Tang3cko projects.
 | [unity-ui](skills/unity-ui/) | UI Toolkit (UXML/USS, BEM, world-space on 6.2+), uGUI, accessibility |
 | [unity-networking](skills/unity-networking/) | NGO 2.x: payload sizing, delivery selection, snapshot streaming |
 | [unity-mcp](skills/unity-mcp/) | Compile verification via the official Unity MCP bridge |
+| [godot-core](skills/godot-core/) | Godot 4.x + .NET: naming, structure, export/NodePath gotchas, Resource-based decoupling |
+| [godot-testing](skills/godot-testing/) | Godot 4.x + .NET: xUnit + Humble Object, link-referenced pure C# tests |
 | [game-design](skills/game-design/) | Sakurai / verb theory / Miyazaki design philosophies, concept organization |
 
 ### Skill structure
