@@ -2,6 +2,8 @@
 
 UI Toolkit patterns: BEM naming, design tokens, USS responsive design, and C# controllers.
 
+> **Version notes**: World Space UI Toolkit shipped in Unity 6.2 — UI elements can be positioned, rotated, and scaled alongside 3D objects, replacing the old "world space = uGUI" rule for 6.2+ projects. Unity 6.5 adds **Panel Renderer** (supersedes `UIDocument` — same functionality plus better world-space compatibility; a migration guide exists) and makes the **Advanced Text Generator** the default text system. Unity 6.3 adds the UI Test Framework package and USS CSS-style filters (blur/grayscale). All BEM/UXML/USS conventions in this file apply to both screen-space and world-space panels.
+
 ---
 
 ## BEM Naming Convention

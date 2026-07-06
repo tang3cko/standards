@@ -6,25 +6,30 @@ Hard rules for RPC payload sizing. The cost of getting this wrong is `OverflowEx
 
 ## MTU Reality
 
-Unity Transport's underlying UDP MTU is **~1400 B** wire-level. After NGO framing (RPC method hash, NetworkObjectId, NetworkBehaviourIndex, length prefixes) the **safe payload budget is ~1200 B per Unreliable message**.
+Unity Transport's UDP MTU is **1400 B** (`NetworkParameterConstants.MTU`). After NGO framing (RPC method hash, NetworkObjectId, NetworkBehaviourIndex, length prefixes) the **single-packet payload budget is ~1200 B per Unreliable message**.
 
-| Delivery | Maximum single-message payload | What happens past the limit |
+NGO 2.x builds its Unreliable pipelines with a fragmentation stage: messages larger than one MTU are split across UDP packets, up to `UnityTransport.MaxPayloadSize` (**default 6144 B**, configurable). Past that cap the send errors out.
+
+| Delivery | Limit | What happens past the design budget |
 |---|---|---|
-| Unreliable RPC | ~1200 B (MTU - framing) | `OverflowException` thrown at send time |
-| Unreliable Custom Message | ~1200 B (MTU - framing) | Same |
+| Unreliable RPC | Design budget ~1200 B (one MTU); hard cap `MaxPayloadSize` (6144 B default) | Fragments across packets — one lost fragment drops the whole message. Send error above the hard cap |
+| Unreliable Custom Message | Same | Same |
 | Reliable RPC | ~64 KB initial buffer, auto-fragments to transport limit | Slower under loss, retransmit queue grows |
 | Reliable Custom Message | Same as Reliable RPC | Same |
 
 ---
 
-## Why Unreliable Doesn't Fragment
+## Why You Still Budget One MTU
 
-Unity's official stance (confirmed on Unity Discussions): fragmenting Unreliable would require
-- CPU overhead on every receive (reassembly buffers)
-- Higher effective latency (must wait for all fragments)
-- Buffering complexity on lossy connections
+NGO 2.x *can* fragment Unreliable, but fragmentation on an unreliable channel compounds loss instead of hiding it:
 
-So Unreliable is intentionally single-packet-only. This is **by design**, not a bug.
+- A message split into `k` fragments survives only if ALL `k` packets arrive: at 5% packet loss, a 5-fragment message loses **~23%** of sends
+- Reassembly adds receive-side latency (must wait for the last fragment) and buffering on lossy links
+- Loss becomes bursty and entity-count-dependent — exactly the failure mode that only appears at scale
+
+So treat ~1200 B as the design budget for anything high-frequency; use the 1200 B–6 KB fragmented range only for low-rate loss-tolerant messages where a dropped message is genuinely free.
+
+**NGO 1.x note**: 1.x did not fragment Unreliable at all — exceeding one MTU threw `OverflowException` at send time. On 1.x projects the 1200 B budget is a hard crash boundary.
 
 ---
 
@@ -47,7 +52,7 @@ SyncSnapshotRpc(EnemyState[] states, int[] ids, int count)
 
   payload = 200 * 24 + 200 * 4 + 4 + 4 + 4 + 4 + 40
           = 4800 + 800 + 16 + 40
-          = 5656 B  -> EXCEEDS UNRELIABLE LIMIT
+          = 5656 B  -> 5 fragments on Unreliable; ~23% snapshot loss at 5% packet loss
 ```
 
 If this is Unreliable, the design is broken at maxN. Fix at design time, not after shipping.

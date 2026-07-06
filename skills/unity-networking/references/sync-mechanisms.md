@@ -4,6 +4,34 @@ Full comparison of every official sync mechanism NGO provides, plus when to use 
 
 ---
 
+## Decision Tree
+
+```
+What are you syncing?
+|
++-- One-shot event (no replay on join)
+|   +-- Frequency < 5 Hz, size < 1 KB    -> Reliable Rpc
+|   +-- Frequency >= 5 Hz                 -> reconsider, you probably want a NetworkVariable or snapshot stream
+|
++-- Persistent state (late-joiners need current value)
+|   +-- Single value / small struct        -> NetworkVariable<T>
+|   +-- Collection                         -> NetworkList<T> or NetworkVariable<NetworkSerializable>
+|   +-- Transform                          -> NetworkTransform (with quantization)
+|
++-- High-frequency entity stream (>10 Hz, many entities, loss-tolerant)
+|   +-- always                             -> Chunked Unreliable Rpc + sequence reassembly
+|                                            (see snapshot-streaming.md)
+|
++-- Bulk one-shot transfer (config, save, large struct)
+|   +-- < 64 KB                            -> CustomMessagingManager Reliable
+|   +-- >= 1 MB                            -> Out-of-band (HTTP / CDN), trigger via Rpc
+|
++-- Late-joiner state that NetworkVariable can't express
+    +-- always                             -> NetworkBehaviour.OnSynchronize (NGO 2.x)
+```
+
+---
+
 ## Mechanism Table
 
 | Mechanism | Delivery | Fragments? | Size class | Late-join | Use for |
@@ -12,7 +40,7 @@ Full comparison of every official sync mechanism NGO provides, plus when to use 
 | `NetworkList<T>` | Reliable | Yes | up to transport limit | Yes (auto) | Persistent collections |
 | `NetworkTransform` | Reliable (built-in delta + quantize) | Yes | small (internally optimized) | Yes (auto) | Transform replication |
 | `Rpc` / `ClientRpc` / `ServerRpc` (Reliable) | Reliable | Yes | <= ~64 KB initial buffer | No | One-shot events, triggers |
-| `Rpc` (Unreliable) | Unreliable | **No** | **<= 1200 B** | No | High-frequency loss-tolerant signals |
+| `Rpc` (Unreliable) | Unreliable | Yes, up to `MaxPayloadSize` (6144 B default) — **but a lost fragment drops the whole message** | **Design budget <= 1200 B** (one MTU) | No | High-frequency loss-tolerant signals |
 | `CustomMessagingManager.SendNamedMessage` (Reliable) | Reliable | Yes | up to transport limit | No | Bulk transfer, custom protocols |
 | `CustomMessagingManager.SendUnnamedMessage` (Reliable) | Reliable | Yes | up to transport limit | No | Minimal-overhead custom protocols |
 | `NetworkBehaviour.OnSynchronize` (NGO 2.x) | Reliable | Yes | up to transport limit | Yes (spawn) | Custom late-join serialization |
@@ -94,7 +122,7 @@ Default is Reliable. Auto-fragments. Don't use for high-frequency streams - reli
 private void SyncSnapshotChunkRpc(int seq, byte idx, byte total, ...) { ... }
 ```
 
-**Hard constraint**: payload must fit MTU (~1200 B safe). NGO does NOT fragment Unreliable RPCs. Overflow throws `OverflowException` at send time.
+**Design constraint**: keep each message within one MTU (~1200 B payload; UTP MTU is 1400 B). NGO 2.x fragments Unreliable up to `UnityTransport.MaxPayloadSize` (default 6144 B, then a send-time error), but losing any fragment drops the whole message — fragmentation multiplies effective loss. On NGO 1.x, exceeding one MTU throws `OverflowException` (no fragmentation).
 
 For variable-size payloads, see `snapshot-streaming.md` for chunking pattern.
 

@@ -9,12 +9,12 @@ Async patterns for Unity: Coroutines, Awaitable (Unity 6+), and UniTask.
 | Approach | Unity Version | Pros | Cons |
 |----------|---------------|------|------|
 | **Coroutines** | All | Simple, no dependencies | No try-catch, harder to compose |
-| **Awaitable** | Unity 6+ | Built-in, zero dependencies | Limited features (no WhenAll) |
-| **UniTask** | Any (package) | Full-featured, performant | External dependency |
+| **Awaitable** | Unity 6+ | Built-in, zero dependencies | No WhenAll/WhenAny, no frame-based delays, no PlayerLoopTiming control (still true as of Unity 6.5) |
+| **UniTask** | Any (package) | Full-featured, performant, actively maintained (2.5.x) | External dependency |
 
-**Recommendation:**
+**Recommendation** (matches Cysharp's official guidance):
 - Libraries: Use Awaitable (zero dependencies)
-- Apps/Games: Use UniTask (full-featured)
+- Apps/Games: Use UniTask (full-featured — Awaitable is effectively a subset of UniTask)
 - Legacy/Simple: Use Coroutines
 
 ---
@@ -161,6 +161,17 @@ private async Awaitable LoadDataAsync()
     }
 }
 ```
+
+### Fire-and-forget (Unity 6.5+)
+
+`Awaitable.LogExceptionsAndForget()` (added in Unity 6.5) logs unobserved exceptions instead of swallowing them:
+
+```csharp
+// Unity 6.5+: exceptions surface in the Console instead of vanishing
+LoadDataAsync().LogExceptionsAndForget();
+```
+
+On earlier versions (or with UniTask), use `UniTask.Void` / an explicit try-catch wrapper for fire-and-forget paths — never bare `async void` without exception handling.
 
 ---
 

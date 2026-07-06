@@ -2,11 +2,13 @@
 
 World Space UI patterns with uGUI: billboards, health bars, and EventChannel integration.
 
+> **Version note**: Unity 6.2+ supports World Space UI natively in UI Toolkit (Panel Renderer in 6.5 improves it further). On 6.2+ projects, prefer UI Toolkit for new world-space UI — use this file for projects pinned to Unity 6000.0/6000.1 or when extending existing uGUI systems.
+
 ---
 
 ## When to Use uGUI
 
-### Recommended use cases
+### Recommended use cases (Unity 6000.0/6000.1, or existing uGUI systems)
 
 - Player name plates
 - NPC name plates
@@ -20,6 +22,7 @@ World Space UI patterns with uGUI: billboards, health bars, and EventChannel int
 - Screen space menus -> Use UI Toolkit
 - HUD elements -> Use UI Toolkit
 - Settings panels -> Use UI Toolkit
+- New world-space UI on Unity 6.2+ -> Use UI Toolkit world-space panels
 
 ---
 
