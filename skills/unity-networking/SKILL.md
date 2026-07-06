@@ -1,47 +1,99 @@
 ---
 name: unity-networking
-description: Design and review Unity multiplayer networking on NGO (Netcode for GameObjects) following Tang3cko standards — payload sizing, reliable vs unreliable delivery, snapshot streaming, NetworkVariable vs RPC vs CustomMessage selection. Use when designing network sync, debugging RPC overflow, or reviewing bandwidth.
+description: Design and review Unity multiplayer networking on NGO (Netcode for GameObjects) 2.x following Tang3cko standards — payload sizing, reliable vs unreliable delivery, snapshot streaming, NetworkVariable vs RPC vs CustomMessage selection. Use when designing network sync, debugging dropped or oversized messages, or reviewing bandwidth.
 when_to_use: Triggers on "NGO", "Netcode", "RPC", "NetworkVariable", "ClientRpc", "ServerRpc", "snapshot", "同期", "ネットワーク", "MTU", "OverflowException", "fragmentation", "bandwidth", "帯域".
 model: sonnet
-allowed-tools: Read Glob Grep Edit Write
+allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 
 # Unity Networking Standards
 
-Help users design, implement, and review Unity multiplayer networking on NGO (Netcode for GameObjects) following Tang3cko standards.
+Help users design, implement, and review Unity multiplayer networking on NGO (Netcode for GameObjects) 2.x following Tang3cko standards.
 
-## Core Principles
+## Phase Tracking
 
-1. **Payload size is part of the design contract** - Every NGO message must fit a predictable size class
-2. **Unreliable means MTU-bound** - Unreliable delivery cannot fragment, so payload must stay under ~1200B
-3. **Pick the mechanism by frequency × persistence** - RPC for events, NetworkVariable for state, CustomMessage for streams
+**At workflow start (designing, debugging, or reviewing path), create tasks for each phase:**
+
+```
+TaskCreate: "Phase 1: Pick mechanism      | Mechanism Selection Guide + load its reference"
+TaskCreate: "Phase 2: Verify payload      | worst-case size at maxN vs Rule 1 budget"
+TaskCreate: "Phase 3: Write/review code   | follow Core Rules"
+TaskCreate: "Phase 4: Self-Check          | MUST pass every item before presenting"
+```
+
+Update status as you progress: `in_progress` when starting, `completed` when done. Mechanism-choice questions skip Phase Tracking.
+
+**Execution checklist (verify at end):**
+
+| Phase | Must Execute | Condition |
+|-------|-------------|-----------|
+| 2 | Compute worst-case payload at `maxN` | Any new/changed sync site |
+| 4 | Self-Check every written/edited file | Code was written or edited |
+
+## Core Rules (always apply)
+
+These rules apply to every sync site. They are the standard — do not generate or approve network code that violates them.
+
+### Rule 1: Payload Size Budget
+
+| Delivery | Per-message budget | Enforcement |
+|---|---|---|
+| **Unreliable** RPC / Named / Unnamed Message | **Design budget <= 1200 B** (one MTU). Hard cap = `UnityTransport.MaxPayloadSize` (default 6144 B) | Send-time error above `MaxPayloadSize`. Between ~1200 B and the cap, NGO 2.x fragments across UDP packets — losing ANY fragment drops the whole message |
+| **Reliable** RPC / Named / Unnamed Message | <= ~64 KB initial buffer, fragments to transport limit | Auto-fragmented, but retransmit storms above ~4 KB at high frequency |
+| NetworkVariable / NetworkList | Reliable-fragmented, no hard ceiling | Same retransmit concern when churning |
+| NetworkTransform | Internally quantized + delta | Use half-precision + axis-disable to shrink |
+
+Any Unreliable sync site should fit one MTU (~1200 B payload; UTP MTU is 1400 B). A fragmented Unreliable message multiplies effective loss — at 5% packet loss, a 5-fragment message loses ~23% of snapshots. Either shrink (quantize / split) or change channel. On NGO 1.x, exceeding one MTU is a hard `OverflowException` (no fragmentation there).
+
+### Rule 2: Frequency × Persistence Matrix
+
+| Frequency | Persistent (needs late-join) | Transient |
+|---|---|---|
+| Low (<= 1 Hz) | NetworkVariable | Reliable Rpc |
+| Medium (1-10 Hz) | NetworkVariable | Reliable Rpc (watch retransmit) |
+| **High (>10 Hz)** | **Avoid NetworkVariable. Snapshot stream + initial sync via NetworkVariable / OnSynchronize** | **Unreliable chunked snapshot stream** |
+
+NetworkVariable at high frequency causes Reliable retransmit storms under packet loss — visible as client hang.
+
+### Rule 3: Forbidden Patterns
+
+- Unreliable RPC with dynamically-sized array of unbounded length
+- `NetworkVariable<LargeStruct>` rewritten every frame
+- Reliable RPC stream at 20+ Hz with payload > 1 KB
+- Sending megabytes through NGO (use HTTP/CDN)
+- Quantization done by callers (use a typed codec at the network boundary)
+
+### Rule 4: Always Compute Worst Case
+
+A sync site that works at `N=10` entities silently fragments (or errors past `MaxPayloadSize`) at `N=50`. Define `maxN` upfront, compute worst-case payload at `maxN`, and document it in a comment at the RPC declaration. If it exceeds 1200 B on Unreliable, fix the design now.
 
 ## Workflow
 
-`references/_core-rules.md` is auto-loaded with the payload budget, delivery rules, and mechanism decision tree. Identify the task type and follow the matching path.
+Identify the task type and follow the matching path.
 
 ### Designing a new sync system
 
 1. Pick the mechanism from the Mechanism Selection Guide below and load its reference
-2. Verify the payload fits the size class for the chosen delivery
+2. Verify the payload fits the size class for the chosen delivery (Rule 1)
 3. Generate code following the loaded standards
+4. Run the Self-Check below before presenting
 
-### Debugging overflow / bandwidth issue
+### Debugging dropped messages / bandwidth issue
 
 1. Check `anti-patterns.md` for the matching failure mode
-2. Classify the issue: size class violation, frequency × persistence mismatch, or reliable retransmission storm
+2. Classify the issue: size budget violation, frequency × persistence mismatch, or reliable retransmission storm
 3. Recommend the correct mechanism
 
 ### Reviewing network code
 
-1. Verify each sync site against the payload size budget
-2. Verify each sync site picks the right mechanism for its frequency × persistence profile
+1. Verify each sync site against the payload size budget (Rule 1) and the frequency × persistence matrix (Rule 2)
+2. Check for Forbidden Patterns (Rule 3) and missing worst-case comments (Rule 4)
 3. Categorize issues by priority (must fix, should fix, nice to have)
 
 ### Choosing a mechanism
 
-1. Load `sync-mechanisms.md` for the full comparison table
-2. Apply the decision tree from `_core-rules.md`, then show trade-offs with code examples
+1. Load `sync-mechanisms.md` for the full comparison table and decision tree
+2. Show trade-offs with code examples
 
 ## Mechanism Selection Guide
 
@@ -55,12 +107,21 @@ Help users design, implement, and review Unity multiplayer networking on NGO (Ne
 | Megabyte-scale blob | Out-of-band (HTTP/CDN) | references/sync-mechanisms.md |
 | Late-join custom state | NetworkBehaviour.OnSynchronize | references/sync-mechanisms.md |
 
+## Self-Check (before presenting generated/edited code)
+
+Verify every file you wrote or changed. If any check fails, fix it first — do not present non-compliant code.
+
+- [ ] Every Unreliable sync site has a worst-case payload comment and fits 1200 B at `maxN`
+- [ ] Mechanism matches the frequency × persistence matrix (Rule 2)
+- [ ] No Forbidden Pattern (Rule 3) present
+- [ ] Quantization lives in a codec class at the network boundary, not in gameplay code
+- [ ] Server validates client-provided values (no trusted sizes/indices/magnitudes)
+
 ## Reference Files
 
 | File | Use When |
 |------|----------|
-| references/_core-rules.md | Auto-loaded: payload budget, delivery rules, mechanism decision tree |
-| references/sync-mechanisms.md | Full mechanism comparison: NetworkVariable, RPC, CustomMessage, OnSynchronize |
-| references/rpc-payload-rules.md | RPC size limits, Reliable vs Unreliable, MTU details |
+| references/sync-mechanisms.md | Full mechanism comparison + decision tree: NetworkVariable, RPC, CustomMessage, OnSynchronize |
+| references/rpc-payload-rules.md | RPC size limits, Reliable vs Unreliable, MTU/fragmentation details, quantization cheatsheet |
 | references/snapshot-streaming.md | High-frequency entity snapshot: chunking, quantization, sequence reassembly |
-| references/anti-patterns.md | Common failure modes: Unreliable overflow, NetworkVariable churn, reliable storm |
+| references/anti-patterns.md | Common failure modes: Unreliable fragmentation loss, NetworkVariable churn, reliable storm |

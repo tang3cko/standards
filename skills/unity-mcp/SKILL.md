@@ -3,18 +3,30 @@ name: unity-mcp
 description: Verify Unity C# compilation via MCP after code changes — domain reload and compile-error checking through the Unity Editor bridge. Use when checking if scripts compile in Unity.
 when_to_use: Triggers on "compile", "コンパイル", "domain reload", "Unity MCP", "ビルドチェック", "compile check", "コンパイルエラー".
 model: sonnet
-allowed-tools: mcp__unity-mcp__*
+allowed-tools: mcp__unity-mcp__* TaskCreate TaskUpdate TaskList
 ---
 
 # Unity MCP Compile Check
 
 Verify C# script compilation in Unity Editor via MCP tools after code changes.
 
+## Phase Tracking
+
+**At workflow start, create tasks for each phase:**
+
+```
+TaskCreate: "Phase 1: Trigger domain reload | MUST run AssetDatabase.Refresh() via MCP"
+TaskCreate: "Phase 2: Check compile errors  | MUST read console via MCP (retry until logs stabilize)"
+TaskCreate: "Phase 3: Report / fix loop     | errors -> fix -> repeat from Phase 1"
+```
+
+Update status as you progress: `in_progress` when starting, `completed` when done. On errors, reset Phases 1-2 to `pending` and loop until the console is clean.
+
 ## Prerequisites
 
-- Unity 6+ with `com.unity.ai.assistant` (2.0+) installed
-- MCP bridge running (Edit > Project Settings > AI > Unity MCP → green status)
-- MCP client connection approved in Unity
+- Unity 6 (6000.0)+ with `com.unity.ai.assistant` installed (the official Unity MCP server ships inside this package; there is no separate `com.unity.mcp` package)
+- MCP bridge running (Edit > Project Settings > AI > Unity MCP Server → green status). The bridge runs a relay binary from `~/.unity/relay/` over stdio
+- MCP client connection approved in Unity (tools can be enabled/disabled per-tool in the same settings page)
 
 ## Compile Check Procedure
 
@@ -22,7 +34,7 @@ After writing or editing C# scripts:
 
 ### Step 1: Trigger Domain Reload
 
-Execute `AssetDatabase.Refresh()` via the MCP command execution tool (e.g., `Unity_RunCommand`):
+Trigger a script reimport/recompile via the MCP script-management tool (official name: `Unity_ManageScript`; older/community servers may expose a command-execution tool instead — run `AssetDatabase.Refresh();` there):
 
 ```
 AssetDatabase.Refresh();
@@ -30,13 +42,11 @@ AssetDatabase.Refresh();
 
 This triggers Unity's domain reload — the editor reimports changed scripts and recompiles assemblies.
 
-**Wait for the reload to complete** before proceeding. Call the console log tool after a few seconds — if the reload is still in progress, logs may not yet reflect the final compilation state. Retry until logs stabilize.
+**Wait for the reload to complete** before proceeding. Call the console tool after a few seconds — if the reload is still in progress, logs may not yet reflect the final compilation state. Retry until logs stabilize.
 
 ### Step 2: Check Compile Errors
 
-Call `Unity_GetConsoleLogs` with error filter:
-
-- `logTypes`: `"error"` (also accepts `"info"`, `"warning"`, comma-separated e.g. `"info,warning,error"`)
+Call the console-reading tool (official name: `Unity_ReadConsole`) filtered to errors. Community servers may name it `Unity_GetConsoleLogs` with a `logTypes` parameter (`"error"`, or comma-separated `"info,warning,error"`).
 
 ### Step 3: Interpret Results
 
@@ -47,6 +57,7 @@ Report errors with file path and line number so the user can locate them.
 
 ## Notes
 
-- **Tool names vary by package version and MCP server configuration.** The names used above (`Unity_RunCommand`, `Unity_GetConsoleLogs`) are representative. Check the actual tools exposed by your MCP server if calls fail.
+- **Official built-in tools** (com.unity.ai.assistant 2.13 docs): `Unity_ManageScene`, `Unity_ManageGameObject`, `Unity_ReadConsole`, `Unity_ManageScript` (validation level configurable: basic/standard/comprehensive/strict). Custom tools can be registered via `McpToolRegistry`.
+- **Tool names vary by package version and MCP server configuration.** If a call fails, list the actual tools exposed by the connected server and use the closest match.
 - MCP server name may vary by setup. If `unity-mcp` tools are unavailable, check the MCP server name in your configuration.
-- The official package exposes tools with a `Unity_` prefix (e.g., `Unity_RunCommand`, `Unity_GetConsoleLogs`, `Unity_Camera_Capture`). Tool availability depends on package version.
+- Don't confuse this with "Assistant MCP Extensions" (the settings page where Unity's Assistant *consumes* external MCP servers — the opposite direction).

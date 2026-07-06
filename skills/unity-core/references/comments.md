@@ -168,6 +168,6 @@ private void Update() { }
 
 ## References
 
-- [_core-rules.md](_core-rules.md) - File structure order
+
 - [naming.md](naming.md) - Naming conventions
 - [code-organization.md](code-organization.md) - File organization

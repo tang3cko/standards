@@ -1,7 +1,7 @@
 # Error Handling
 
 Error handling patterns including null safety, validation, logging, and assertions.
-For quick reference, see [_core-rules.md](_core-rules.md).
+For quick reference, see the SKILL.md Core Rules.
 
 ---
 
@@ -200,6 +200,6 @@ public void DealDamage(int damage)
 
 ## References
 
-- [_core-rules.md](_core-rules.md) - Error handling quick reference
+
 - See `unity-async` skill for performance-related patterns
 - See `unity-architecture` skill for dependency validation

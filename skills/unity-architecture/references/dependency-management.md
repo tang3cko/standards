@@ -1,7 +1,7 @@
 # Dependency Management
 
 Dependency injection priority order and patterns.
-For quick reference, see `unity-core` skill's `_core-rules.md`.
+For quick reference, see the `unity-core` skill's Core Rules (in its SKILL.md).
 
 ---
 

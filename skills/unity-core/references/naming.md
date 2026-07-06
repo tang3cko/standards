@@ -1,7 +1,7 @@
 # Naming Conventions
 
-Detailed naming conventions extending _core-rules.md summary.
-For quick reference, see [_core-rules.md](_core-rules.md).
+Detailed naming conventions extending the SKILL.md Core Rules summary.
+For quick reference, see the SKILL.md Core Rules.
 
 ---
 
@@ -134,6 +134,6 @@ The same rule applies to method parameters and properties, not just fields.
 
 ## References
 
-- [_core-rules.md](_core-rules.md) - Quick reference for all core rules
+
 - [code-organization.md](code-organization.md) - File and namespace organization
 - [comments.md](comments.md) - Documentation and comment conventions

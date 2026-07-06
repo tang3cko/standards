@@ -1,20 +1,42 @@
 ---
 name: unity-ui
-description: Build Unity UI following Tang3cko standards — UI Toolkit (UXML/USS, BEM naming), uGUI for World Space, accessibility. Use when creating or reviewing UI code.
+description: Build Unity UI following Tang3cko standards — UI Toolkit (UXML/USS, BEM naming, world-space support on Unity 6.2+), uGUI for legacy World Space, accessibility. Use when creating or reviewing UI code.
 when_to_use: Triggers on "UI Toolkit", "uGUI", "UXML", "USS", "BEM", "アクセシビリティ", "World Space UI", "UI", "ユーザーインターフェース", "accessibility", "billboard".
 model: sonnet
-allowed-tools: Read Glob Grep Edit Write
+allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 
 # Unity UI
 
 Help users build, review, and improve Unity UI following Tang3cko standards.
 
-## Core Principles
+## Phase Tracking
 
-1. **UI Toolkit for new UI** - UXML structure, USS styling, BEM naming convention
-2. **uGUI for World Space** - Billboards, floating world labels, spatial UI (screen-space HUD belongs to UI Toolkit)
-3. **Accessibility always** - Minimum font sizes, contrast ratios, scalable layouts
+**At workflow start (building or reviewing path), create tasks for each phase:**
+
+```
+TaskCreate: "Phase 1: Pick UI system      | UI System Decision table (check project Unity version)"
+TaskCreate: "Phase 2: Load references     | system reference + accessibility.md"
+TaskCreate: "Phase 3: Write/review UI     | BEM naming, accessibility minimums"
+TaskCreate: "Phase 4: Self-Check          | MUST pass every item before presenting"
+```
+
+Update status as you progress: `in_progress` when starting, `completed` when done. UI-technology questions skip Phase Tracking.
+
+**Execution checklist (verify at end):**
+
+| Phase | Must Execute | Condition |
+|-------|-------------|-----------|
+| 1 | Confirm the project's Unity version before choosing world-space tech | World Space UI |
+| 2 | Read `accessibility.md` | Always |
+| 4 | Self-Check every written/edited file | Code was written or edited |
+
+## Core Rules (always apply)
+
+1. **UI Toolkit is the default for new UI** — UXML structure, USS styling, BEM naming convention. On Unity 6.2+ this includes World Space UI (shipped in 6.2, matured through 6.5's Panel Renderer)
+2. **uGUI only where UI Toolkit can't go** — projects pinned to Unity 6000.0/6000.1 needing world-space UI, or existing uGUI systems being extended
+3. **Accessibility always** — minimum font sizes, contrast ratios, scalable layouts (`references/accessibility.md`)
+4. **BEM naming is mandatory in USS** — `block__element--modifier`; no generic global classes, no deep nesting
 
 ## Workflow
 
@@ -25,7 +47,7 @@ Identify the task type and follow the matching path. Load `accessibility.md` in 
 1. Pick the UI system from the UI System Decision below and load its reference
 2. Load `accessibility.md` for font size and contrast requirements
 3. Generate UI code following the loaded standards
-4. Verify BEM naming (UI Toolkit) or component structure (uGUI)
+4. Run the Self-Check below before presenting
 
 ### Reviewing UI code
 
@@ -43,13 +65,26 @@ Identify the task type and follow the matching path. Load `accessibility.md` in 
 |----------|--------|-----------|
 | Screen-space menus, HUD | UI Toolkit | references/ui-toolkit.md |
 | Settings panels, inventory | UI Toolkit | references/ui-toolkit.md |
-| World Space UI, billboards | uGUI | references/ugui.md |
-| In-game floating labels | uGUI | references/ugui.md |
+| World Space UI (Unity 6.2+) | UI Toolkit (world-space panel) | references/ui-toolkit.md |
+| World Space UI (Unity 6000.0/6000.1) | uGUI | references/ugui.md |
+| Extending an existing uGUI system | uGUI | references/ugui.md |
+
+**Version notes**: World Space UI Toolkit shipped in Unity 6.2. Unity 6.5 introduces Panel Renderer (supersedes `UIDocument`, better world-space compatibility) and makes the Advanced Text Generator the default text system. Check the project's Unity version before choosing.
+
+## Self-Check (before presenting generated/edited code)
+
+Verify every file you wrote or changed. If any check fails, fix it first — do not present non-compliant code.
+
+- [ ] USS classes follow BEM (`block__element--modifier`), no generic global classes
+- [ ] UXML `name` attributes are PascalCase; `class` attributes are kebab-case BEM
+- [ ] Font sizes and contrast meet `accessibility.md` minimums
+- [ ] World Space choice matches the project's Unity version (UI Toolkit on 6.2+, uGUI below)
+- [ ] uGUI world-space canvases cache `Camera.main` and billboard in `LateUpdate`
 
 ## Reference Files
 
 | File | Use When |
 |------|----------|
-| references/ui-toolkit.md | UXML, USS, BEM naming |
-| references/ugui.md | World Space UI, billboards |
+| references/ui-toolkit.md | UXML, USS, BEM naming, world-space panels |
+| references/ugui.md | Legacy World Space UI, billboards (Unity 6000.0/6000.1) |
 | references/accessibility.md | Font sizes, contrast ratios |

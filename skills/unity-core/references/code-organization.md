@@ -102,7 +102,7 @@ public enum QuestType { Gather, Deliver }
 
 ## File Structure Order
 
-See [_core-rules.md](_core-rules.md) for the standard file structure order.
+See the unity-core SKILL.md Core Rules for the standard file structure order.
 
 Additional guidance for larger classes:
 
@@ -311,6 +311,6 @@ Why:
 
 ## References
 
-- [_core-rules.md](_core-rules.md) - File structure order quick reference
+
 - [naming.md](naming.md) - Naming conventions
 - [comments.md](comments.md) - Documentation standards

@@ -4,12 +4,31 @@ description: Organize game concepts and review designs using established game de
 when_to_use: Triggers on "game design", "game concept", "verb theory", "Sakurai", "risk reward", "core loop", "GDD", "game review", "mechanics", "game feel", "pillars", "difficulty", "narrative", "world design", "level design", "environmental storytelling", "ゲームデザイン", "ゲーム設計", "動詞理論", "コアループ", "ゲームコンセプト", "Miyazaki", "宮崎".
 model: opus # deep cross-philosophy design reasoning; guidance-only, no ARL/file writes
 effort: max
-allowed-tools: Read Glob Grep
+allowed-tools: Read Glob Grep TaskCreate TaskUpdate TaskList
 ---
 
 # Game Design
 
 Help users organize game concepts, review game designs, and apply established design theories to their projects.
+
+## Phase Tracking
+
+**At workflow start (concept organizing, design review, or mechanics path), create tasks for each phase:**
+
+```
+TaskCreate: "Phase 1: Load theory references | per the workflow path below"
+TaskCreate: "Phase 2: Apply the framework    | verbs / pitch / pillars / loop, or review checklist"
+TaskCreate: "Phase 3: Validate               | MUST check against Sakurai (+ Miyazaki where relevant) checkpoints"
+```
+
+Update status as you progress: `in_progress` when starting, `completed` when done. Single design-theory questions skip Phase Tracking.
+
+**Execution checklist (verify at end):**
+
+| Phase | Must Execute | Condition |
+|-------|-------------|-----------|
+| 1 | Read the references named by the chosen path | Always |
+| 3 | Validate against `sakurai-philosophy.md` checkpoints (+ `miyazaki-philosophy.md` for difficulty/narrative/world) | Concept or review output |
 
 ## Core Principles
 
