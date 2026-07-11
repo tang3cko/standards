@@ -1,0 +1,57 @@
+// Copy this file into <YourUnityProject>/Assets/Editor/BuildScript.cs and
+// resolve every TODO below - scene list, output path/extension per platform,
+// and scripting backend are inherently project-specific and can't be
+// generalized into a shared script.
+//
+// Invoke via: scripts/build.sh <project_path> BuildScript.BuildDevelopment
+//          or: scripts/build.sh <project_path> BuildScript.BuildRelease
+
+using UnityEditor;
+using UnityEngine;
+
+public static class BuildScript
+{
+    public static void BuildDevelopment() => Build(development: true);
+    public static void BuildRelease() => Build(development: false);
+
+    private static void Build(bool development)
+    {
+        var scenes = new[]
+        {
+            // TODO: list every scene needed for this build, in load order.
+            // Do not rely on EditorBuildSettings.scenes - that's local Editor
+            // state and drifts between machines/CI runners.
+            "Assets/Scenes/Boot.unity",
+            "Assets/Scenes/Main.unity",
+        };
+
+        var target = EditorUserBuildSettings.activeBuildTarget;
+        var options = new BuildPlayerOptions
+        {
+            scenes = scenes,
+            locationPathName = development
+                ? "Builds/Dev/Game.app"     // TODO: adjust name/extension per target platform
+                : "Builds/Release/Game.app",
+            target = target,
+            options = development
+                ? BuildOptions.Development | BuildOptions.AllowDebugging
+                : BuildOptions.None,
+        };
+
+        // TODO: confirm the scripting backend choice per platform - IL2CPP is
+        // required outright on some platforms (e.g. iOS); Mono2x is not always
+        // a valid release option.
+        PlayerSettings.SetScriptingBackend(
+            BuildPipeline.GetBuildTargetGroup(target),
+            development ? ScriptingImplementation.Mono2x : ScriptingImplementation.IL2CPP);
+
+        var report = BuildPipeline.BuildPlayer(options);
+        if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
+        {
+            // build.sh only sees the process exit code - without this, a
+            // failed BuildPipeline.BuildPlayer still exits 0 and looks green.
+            Debug.LogError($"Build failed: {report.summary.result}, {report.summary.totalErrors} errors");
+            EditorApplication.Exit(1);
+        }
+    }
+}

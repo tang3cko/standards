@@ -18,7 +18,8 @@ Shared coding standards and Claude Code skills for Tang3cko projects.
 | [unity-testing](skills/unity-testing/) | Humble Object, Edit Mode vs Play Mode, NUnit, test doubles, asmdef |
 | [unity-ui](skills/unity-ui/) | UI Toolkit (UXML/USS, BEM, world-space on 6.2+), uGUI, accessibility |
 | [unity-networking](skills/unity-networking/) | NGO 2.x: payload sizing, delivery selection, snapshot streaming |
-| [unity-mcp](skills/unity-mcp/) | Compile verification via the official Unity MCP bridge |
+| [unity-mcp](skills/unity-mcp/) | Compile verification via the official Unity MCP bridge (Editor open) |
+| [unity-headless](skills/unity-headless/) | Headless test/build execution via batchmode (Editor closed) |
 | [godot-core](skills/godot-core/) | Godot 4.x + .NET: naming, structure, export/NodePath gotchas, Resource-based decoupling |
 | [godot-testing](skills/godot-testing/) | Godot 4.x + .NET: xUnit + Humble Object, link-referenced pure C# tests |
 | [game-design](skills/game-design/) | Sakurai / verb theory / Miyazaki design philosophies, concept organization |
