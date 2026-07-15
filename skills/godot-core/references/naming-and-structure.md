@@ -53,7 +53,8 @@ ProjectRoot/
 │   ├── {DataType}/         # Events/, Items/, Validators/, Variables/
 │   └── {Name}.tres
 ├── addons/                 # Shared patterns such as ReactiveSO
-└── Tests/                  # Separate .csproj, placed as a peer
+├── Tests/                  # Separate .csproj, placed as a peer
+└── Tools/                  # Verification and build scripts (headless test runners, asset build steps)
 ```
 
 ### Structural principles
@@ -62,6 +63,9 @@ ProjectRoot/
 - **Split Resources by data type**: semantic folders (`Events/`, `Items/`, `Validators/`), not per-feature folders
 - **No Unity-style `Assets/` folder**: Godot resolves relative paths inside `.tscn` / `.tres` on its own
 - **Tests/ is a separate peer .csproj**: excluded from the main build via `<Compile Remove="Tests/**" />`
+- **Tools/ holds verification and build scripts** (headless test runners, retarget/import scripts, CI helpers) — keep it PascalCase, not `scripts/`[^tools-casing]
+
+[^tools-casing]: A lowercase `scripts/` collides with `Scripts/` on macOS's default case-insensitive filesystem — the two merge into one directory, so it cannot exist as a separate top-level folder there. Use `Tools/` for auxiliary scripts instead.
 
 ## .NET Configuration
 

@@ -1,0 +1,92 @@
+using Godot;
+
+// TODO: adjust namespace to match this project.
+namespace ProjectName.Tools;
+
+// One-shot visual verification harness — the offscreen-PNG gate of the three visual gates
+// (see godot-headless SKILL.md Core Rule 3: numeric checks -> offscreen PNG render -> in-game
+// screenshot). Boots a real scene headlessly (in the "window-having-but-effectively-offscreen"
+// sense, NOT --headless - see below), lets it run for a configurable number of frames -
+// optionally injecting input partway through, to prove a change actually reaches the running
+// scene and not just the numeric layer - then screenshots the viewport to disk and quits.
+// Not part of the shipping game; lives under Tools/.
+//
+// Usage: godot-mono --path . --rendering-driver opengl3 --audio-driver Dummy \
+//        res://Tools/<Domain>/VerifyRender.tscn -- \
+//        --out=/abs/path/out.png [--frames=180] [--fast-forward-ms=0]
+//
+// CRITICAL: do NOT combine --headless with --rendering-driver. On Godot 4.6.x, --headless
+// forces the "headless" display driver, which only ever backs the "dummy" rendering driver
+// regardless of any --rendering-driver flag also passed - GetViewport().GetTexture().GetImage()
+// then either throws (null texture) or silently returns a black image. Omitting --headless
+// (and passing --audio-driver Dummy directly instead) opens a window that is effectively
+// offscreen in a CI/dev environment but gets a real GL context and a real screenshot.
+//
+// --fast-forward-ms=MS (optional): if this project's simulation loop clamps per-tick dt and
+// loops internally (a "dt substep" pattern - see godot-architecture), a single large Tick(MS)
+// call is equivalent to many small ones and lets this harness prove a long-run behavior (e.g. a
+// timeout path) without waiting thousands of real headless frames. Remove this parameter/branch
+// entirely if the target project has no such substep-safe Tick API.
+public partial class VerifyRender : Node
+{
+    private string _outPath = "";
+    private int _frames = 180;
+    private double _fastForwardMs;
+    private int _frame;
+
+    public override void _Ready()
+    {
+        foreach (var arg in OS.GetCmdlineUserArgs())
+        {
+            if (arg.StartsWith("--out=")) _outPath = arg.Substring("--out=".Length);
+            else if (arg.StartsWith("--frames=")) _frames = int.Parse(arg.Substring("--frames=".Length));
+            else if (arg.StartsWith("--fast-forward-ms=")) _fastForwardMs = double.Parse(arg.Substring("--fast-forward-ms=".Length));
+            // TODO: add project-specific args here (e.g. --pin=Name:x:z to inject an order,
+            // --cam=N to switch a camera view before capture). Keep each one documented in this
+            // class doc comment the way it's used, per the pattern in this template.
+        }
+
+        if (string.IsNullOrEmpty(_outPath))
+        {
+            GD.PrintErr("VerifyRender requires --out=<path>");
+            GetTree().Quit(1);
+            return;
+        }
+
+        // TODO: point this at the real scene under verification, not a stripped-down stand-in -
+        // the whole point of this gate is to catch integration issues a numeric-only test can't.
+        var mainScene = GD.Load<PackedScene>("res://Scenes/Main/Main.tscn");
+        AddChild(mainScene.Instantiate());
+
+        if (_fastForwardMs > 0)
+        {
+            // TODO: resolve the loaded scene's simulation/controller node and call its
+            // substep-safe Tick/Advance method here, e.g.:
+            //   var controller = GetNodeOrNull<MyController>("Main");
+            //   controller?.Simulation.Tick(_fastForwardMs);
+            GD.Print($"fast-forwarded by {_fastForwardMs}ms (TODO: wire to project's Tick API)");
+        }
+    }
+
+    public override void _Process(double delta)
+    {
+        _frame++;
+
+        // TODO: add frame-gated input injection / camera switches here, following the pattern:
+        //   if (_frame == _frames / 2) { /* inject input */ }
+        // Applying input mid-run (rather than at _Ready) lets a render prove the input actually
+        // propagated through the running scene, not just that the scene booted.
+
+        if (_frame == _frames)
+        {
+            var image = GetViewport().GetTexture().GetImage();
+            var err = image.SavePng(_outPath);
+            GD.Print(err == Error.Ok ? $"saved screenshot to {_outPath}" : $"failed to save screenshot: {err}");
+        }
+
+        if (_frame > _frames + 2)
+        {
+            GetTree().Quit(0);
+        }
+    }
+}

@@ -117,6 +117,89 @@ Workarounds:
 - Reference via known tree relations (`Owner`, `GetParent()`)
 - Inject the dependency with an `[Export] NodePath`
 
+## Camera3D.Current = false auto-promotes another camera
+
+Assigning `Current = false` directly deactivates that camera, but if any other `Camera3D` is alive in the tree, Godot silently auto-promotes one of them to active. This defeats intentional "no camera active" states (e.g. switching to a 2D overview UI while several 3D cameras still exist off-screen).
+
+```csharp
+// NG: with other Camera3D nodes alive, one of them gets silently promoted
+_camera.Current = false;
+
+// OK: explicitly declines auto-promotion
+_camera.ClearCurrent(enableNext: false);
+```
+
+Recurred across multiple camera nodes in the same project (main camera plus secondary/POV cameras) — treat it as a hard rule, not a one-off fix.
+
+## Hand-authored MeshInstance3D freezes in bind pose (no warning)
+
+When the Godot editor imports a rigged model, it auto-generates `skeleton = NodePath("..")` on each `MeshInstance3D` so the mesh finds its `Skeleton3D` parent. If you hand-author a `.tscn` and place a `MeshInstance3D` under a `Skeleton3D` yourself, that implicit property is **not** added.
+
+The failure mode is deceptive: the `Skeleton3D`'s bone poses update correctly (verifiable via `get_bone_pose()`), but the GPU skin never re-deforms — the mesh plays back as a static T-pose with no error or warning. It only surfaces by actually rendering a frame; numeric checks on bone poses pass regardless.
+
+```ini
+# .tscn — required when authoring by hand under a Skeleton3D
+[node name="Body" type="MeshInstance3D" parent="Skeleton3D"]
+skeleton = NodePath("..")
+```
+
+## Never set Container anchors from code (godot#88788)
+
+Calling `SetAnchorsAndOffsetsPreset()` (or setting `AnchorLeft`/`OffsetLeft`/etc.) from code on a `Container`-derived node collides with the container's own layout pass and corrupts positioning (tracked upstream as godot#88788).
+
+- Full-rect children: use a helper that binds the child to the host's rect declaratively, or set anchors in the `.tscn` itself — never imperatively on a Container
+- Floating/free-positioned panels: give the panel **no anchors** and let its parent shell set `Position` / `Size` / `CustomMinimumSize` manually instead
+- Content that should flow with its container: use size flags (`SizeFlagsHorizontal = ExpandFill`) rather than anchors
+
+## Full-screen overlay Control must use MouseFilter.Ignore
+
+`MouseFilter.Pass` still makes the overlay itself a pick target — the overlay is checked first and the click event never reaches the controls beneath it, even though `Pass` sounds like it should let clicks through. `MouseFilter.Ignore` skips the overlay from picking entirely, so children stay clickable while the overlay itself blocks nothing.
+
+```csharp
+// NG: overlay still eats clicks meant for whatever is underneath
+_overlay.MouseFilter = Control.MouseFilterEnum.Pass;
+
+// OK: overlay is invisible to the picker, underlying UI stays clickable
+_overlay.MouseFilter = Control.MouseFilterEnum.Ignore;
+```
+
+The inverse applies to a clickable row's own inner children (icons, labels inside a toast/notification row): give *those* `MouseFilter.Ignore` so the click reaches the row's own `_GuiInput` instead of being consumed by a child first.
+
+## .gitignore patterns fold case on macOS — anchor them to the root
+
+macOS's default `core.ignorecase = true` makes `.gitignore` matching case-insensitive. A bare pattern like `reports` (intended to ignore some report-dump folder) will also match `Scripts/Reports/` or `Tests/Reports/` anywhere in the tree — silently excluding legitimate source directories from version control. The files are never staged, never flagged by `git status` as anything unusual, and the breakage only surfaces later (e.g. a fresh clone or worktree fails to build because a referenced class was never committed).
+
+```gitignore
+# NG: case-folds and matches any "Reports" directory at any depth
+reports
+
+# OK: rooted, so it only matches the intended top-level folder
+/reports/
+```
+
+Anchor project-specific ignore patterns to the root (`/name/`) unless you deliberately want a directory name ignored everywhere.
+
+## Engine warnings: investigate once, record the verdict inline — never silently suppress
+
+A recurring engine-level warning (e.g. an `ObjectDB` leak warning at shutdown) is not something to blanket-suppress or ignore out of habit. Spend the time once to determine whether it is a real leak or a known engine limitation, then leave the verdict as an inline comment — including the upstream issue number and what you did to verify it — so the next person doesn't have to re-investigate from scratch.
+
+```csharp
+// ObjectDB leak warning at shutdown is a known Godot limitation, not a game-code leak:
+// AudioServer defers playback-object deletion to a mix pass that never runs after
+// shutdown (godot#76745, godot#95484). Verified by experiment: stopping the stream
+// mid-run removes the warning; stopping it in _ExitTree() does not. Nothing
+// accumulates at runtime — safe to leave as-is.
+```
+
+## Signal unsubscribe: only required for subscriptions that outlive you
+
+`_ExitTree()` unsubscription (see "Signal-Driven State Propagation" in code-patterns.md) is a lifetime rule, not a blanket one. It only matters when the object you subscribed to **outlives** the subscriber:
+
+- Subscribing to a longer-lived owner (an autoload, a shell-owned service, a parent that survives child removal) — unsubscribe in `_ExitTree()`, or the dangling delegate keeps the subscriber alive as a GC root
+- Subscribing between two nodes with the **same** lifetime (e.g. a shell and a UI element the shell itself owns and frees together) — no unsubscribe needed, since both are collected together anyway
+
+Judge every subscription by "does the emitter live longer than me," not by a uniform "always unsubscribe" reflex — the latter adds boilerplate to same-lifetime pairs without preventing any leak.
+
 ## Label3D rotated 180° on Y mirrors its text
 
 A `Label3D` under a `Camera3D` faces `-Z` by default, so it shows its back to the camera. Fixing that with a 180° Y rotation also flips the X axis — the text becomes a mirror image.

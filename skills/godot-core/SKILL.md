@@ -1,7 +1,7 @@
 ---
 name: godot-core
 description: Write Godot 4.x + .NET (C#) code following Tang3cko standards — naming, project structure, export/NodePath gotchas, Resource-based decoupling patterns, autoloads. Use when writing or reviewing C# code, scenes, or resources in a Godot project.
-when_to_use: Triggers on "Godot", "GodotSharp", ".tscn", ".tres", "NodePath", "autoload", "Area3D", "QueueFree", "GlobalClass", "ゴドー", "ゴドット", "シーン構成".
+when_to_use: Triggers on "Godot", "GodotSharp", ".tscn", ".tres", "NodePath", "autoload", "Area3D", "QueueFree", "GlobalClass", "Camera3D", "Container", "MouseFilter", "ゴドー", "ゴドット", "シーン構成".
 model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
@@ -56,6 +56,10 @@ These fail without an error message — treat them as hard rules:
 - `[Export]` property casing in `.tscn` must match the C# spelling exactly (no snake_case auto-conversion)
 - Never child an `Area3D` under a `StaticBody3D` — place them as siblings under a common `Pivot`
 - `.tres` files are cached by load path (shared instance); set `resource_local_to_scene = true` when per-instance state is needed
+- Never assign `Camera3D.Current = false` directly — call `ClearCurrent(enableNext: false)` (a bare assignment lets Godot silently auto-promote another live camera)
+- A hand-authored `MeshInstance3D` under a `Skeleton3D` needs an explicit `skeleton = NodePath("..")` — without it the mesh freezes in bind pose with no warning
+- Never set anchors/offsets from code on a `Container`-derived node (`SetAnchorsAndOffsetsPreset` etc.) — it collides with the layout pass (godot#88788)
+- A full-screen overlay `Control` must use `MouseFilter.Ignore`, not `Pass` — `Pass` still eats clicks meant for the controls underneath
 
 ### Dependency Priority
 
@@ -98,7 +102,7 @@ Identify the task type and follow the matching path.
 Verify every file you wrote or changed against each item. If any check fails, fix it first — do not present non-compliant code.
 
 - [ ] All file/class/resource names match the Naming table (`.tres` snake_case, everything else PascalCase)
-- [ ] Every Silent-Failure Guard holds (`NodePath = new()`, no typed node exports, exact export casing, no Area3D under StaticBody3D)
+- [ ] Every Silent-Failure Guard holds (`NodePath = new()`, no typed node exports, exact export casing, no Area3D under StaticBody3D, `ClearCurrent(enableNext: false)` not `Current = false`, explicit `skeleton` NodePath on hand-authored MeshInstance3D, no code-driven Container anchors, overlay Control `MouseFilter.Ignore`)
 - [ ] Dependencies use the highest viable rung of the Dependency Priority ladder
 - [ ] Node Signal subscriptions are released in `_ExitTree()`
 - [ ] Namespace matches the project's RootNamespace
@@ -109,5 +113,5 @@ Verify every file you wrote or changed against each item. If any check fails, fi
 | File | Use When |
 |------|----------|
 | references/naming-and-structure.md | Naming conventions, directory structure, .NET configuration |
-| references/gotchas.md | Export/NodePath/casing pitfalls, `_Ready()` ordering, QueueFree, joypad input, Label3D |
+| references/gotchas.md | Export/NodePath/casing pitfalls, `_Ready()` ordering, QueueFree, joypad input, Label3D, Camera3D.Current, skeleton NodePath, Container anchors, MouseFilter, .gitignore case-folding, engine warnings, signal unsubscribe scope |
 | references/code-patterns.md | Interaction system, ReactiveSO (EventChannel/Variable/RuntimeSet), autoloads, player split, group lookup, Signal vs EventChannel |

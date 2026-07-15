@@ -21,7 +21,12 @@ Shared coding standards and Claude Code skills for Tang3cko projects.
 | [unity-mcp](skills/unity-mcp/) | Compile verification via the official Unity MCP bridge (Editor open) |
 | [unity-headless](skills/unity-headless/) | Headless test/build execution via batchmode (Editor closed) |
 | [godot-core](skills/godot-core/) | Godot 4.x + .NET: naming, structure, export/NodePath gotchas, Resource-based decoupling |
-| [godot-testing](skills/godot-testing/) | Godot 4.x + .NET: xUnit + Humble Object, link-referenced pure C# tests |
+| [godot-architecture](skills/godot-architecture/) | Godot-free simulation core: SimEvent pull feed, notify APIs, dt substep |
+| [godot-testing](skills/godot-testing/) | Godot 4.x + .NET: 3 layers — link-referenced xUnit, GdUnit4Net E2E, numeric/visual gates |
+| [godot-animation](skills/godot-animation/) | Retargeting via both-sides BoneMap/RestFixer normalization, pose verification |
+| [godot-headless](skills/godot-headless/) | godot-mono CLI: import/build/test, offscreen PNG rendering (the --headless trap) |
+| [godot-persistence](skills/godot-persistence/) | Save systems: versioned binary + CRC32, atomic writes, backup rotation, sandboxing |
+| [project-conventions](skills/project-conventions/) | Engine-agnostic ops: commit messages with test deltas and known gaps, docs structure, task-tracker integration |
 | [game-design](skills/game-design/) | Sakurai / verb theory / Miyazaki design philosophies, concept organization |
 
 ### Skill structure
