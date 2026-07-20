@@ -235,12 +235,6 @@ namespace ProjectName.UI
 - [ ] Line spacing >= 1.5x
 - [ ] Lines <= 80 characters (40 for CJK)
 
-**All platforms:**
-- 200% text resizing
-- 4.5:1 contrast ratio
-- 1.5x line spacing
-- Max 80 chars/line (40 CJK)
-
 ---
 
 ## References
@@ -248,3 +242,15 @@ namespace ProjectName.UI
 - [ui-toolkit.md](ui-toolkit.md) - UI Toolkit design tokens
 - [ugui.md](ugui.md) - World space UI patterns
 - See `unity-core` skill for Tooltip attribute and Inspector readability
+
+---
+
+## Checklist
+
+Run against every UI file written or reviewed (this file loads in every path):
+
+- [ ] Every font size meets the target platform minimum (console 26px, PC/VR 18px at 1080p; doubled at 4K; DPI-scaled on mobile)
+- [ ] Text/background contrast >= 4.5:1 — including muted, disabled, and modifier states
+- [ ] Layout survives 200% text scaling (no fixed-height text containers, autowrap intact)
+- [ ] Line spacing >= 1.5x; line length capped at ~80 characters (40 for CJK)
+- [ ] Font sizes come from tokens with platform/resolution overrides, never hardcoded px in component styles

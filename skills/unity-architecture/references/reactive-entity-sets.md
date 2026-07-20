@@ -320,3 +320,14 @@ private void OnDisable()
 - [design-principles.md](design-principles.md) - Data-Oriented Design principles
 - [runtime-sets.md](runtime-sets.md) - RuntimeSet vs ReactiveEntitySet comparison
 - [architecture.md](architecture.md) - Architecture decision tree
+
+---
+
+## Checklist
+
+- [ ] State structs contain fields only — logic lives in external static pure-function classes
+- [ ] All mutations go through `SetData`/`UpdateData`; no mutated `GetData` copies silently discarded
+- [ ] Per-entity subscriptions are paired (`SubscribeToEntity` in `OnEnable`, `UnsubscribeFromEntity` in `OnDisable`)
+- [ ] Orchestrator is disposed in `OnDestroy`; every `Allocator.Persistent` snapshot is disposed
+- [ ] 1000+ entity per-frame processing goes through the Orchestrator with Burst-compiled jobs and `LateUpdate` `CompleteAndApply`
+- [ ] Sets that must survive scene transitions are pinned via `ReactiveEntitySetHolder` on a DontDestroyOnLoad object

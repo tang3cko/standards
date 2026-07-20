@@ -203,3 +203,11 @@ public void DealDamage(int damage)
 
 - See `unity-async` skill for performance-related patterns
 - See `unity-architecture` skill for dependency validation
+
+## Checklist
+
+- [ ] Optional event raises use `?.`; required-reference failures log an error and early-return — no silent nulls, no deep nesting
+- [ ] `[SerializeField]` references are validated in `#if UNITY_EDITOR`-guarded `OnValidate()` with `[{GetType().Name}]` prefix and `this` as context object
+- [ ] File I/O and `Resources.Load` are wrapped in try-catch and report failure via return value, not by throwing to the caller
+- [ ] Log level matches severity (Log / LogWarning / LogError / LogException) and every message carries enough context to locate the object
+- [ ] `Assert` is used only for development-time invariants, not player-facing error handling

@@ -25,7 +25,7 @@ Update status as you progress: `in_progress` when starting, `completed` when don
 ## Prerequisites
 
 - Unity 6 (6000.0)+ with `com.unity.ai.assistant` installed (the official Unity MCP server ships inside this package; there is no separate `com.unity.mcp` package)
-- MCP bridge running (Edit > Project Settings > AI > Unity MCP Server → green status). The bridge runs a relay binary from `~/.unity/relay/` over stdio
+- MCP bridge running (Edit > Project Settings > AI > Unity MCP Server → "Unity Bridge: Running" green status; it activates automatically on editor startup). MCP clients connect through a platform-specific relay binary in `~/.unity/relay/` launched with the `--mcp` flag over stdio
 - MCP client connection approved in Unity (tools can be enabled/disabled per-tool in the same settings page)
 
 ## Compile Check Procedure
@@ -46,7 +46,7 @@ This triggers Unity's domain reload — the editor reimports changed scripts and
 
 ### Step 2: Check Compile Errors
 
-Call the console-reading tool (official name: `Unity_ReadConsole`) filtered to errors. Community servers may name it `Unity_GetConsoleLogs` with a `logTypes` parameter (`"error"`, or comma-separated `"info,warning,error"`).
+Call the console-reading tool (official name: `Unity_ReadConsole`; documented params: `Action: Get`, `Types: Error`) filtered to errors. Community servers may name it `Unity_GetConsoleLogs` with a `logTypes` parameter (`"error"`, or comma-separated `"info,warning,error"`).
 
 ### Step 3: Interpret Results
 
@@ -57,7 +57,7 @@ Report errors with file path and line number so the user can locate them.
 
 ## Notes
 
-- **Official built-in tools** (com.unity.ai.assistant 2.13 docs): `Unity_ManageScene`, `Unity_ManageGameObject`, `Unity_ReadConsole`, `Unity_ManageScript` (validation level configurable: basic/standard/comprehensive/strict). Custom tools can be registered via `McpToolRegistry`.
+- **Official built-in tools** (com.unity.ai.assistant 2.15 docs): `Unity_ManageScene`, `Unity_ManageGameObject`, `Unity_ReadConsole`, `Unity_ManageScript` (its validation level is configurable in the server settings: Basic/Standard/Comprehensive/Strict). Custom tools: `[McpTool]` attribute on a static method (schema auto-generated), `IUnityMcpTool<T>` for stateful class-based tools, or `McpToolRegistry.RegisterTool<T>()` at runtime.
 - **Tool names vary by package version and MCP server configuration.** If a call fails, list the actual tools exposed by the connected server and use the closest match.
 - MCP server name may vary by setup. If `unity-mcp` tools are unavailable, check the MCP server name in your configuration.
 - Don't confuse this with "Assistant MCP Extensions" (the settings page where Unity's Assistant *consumes* external MCP servers — the opposite direction).

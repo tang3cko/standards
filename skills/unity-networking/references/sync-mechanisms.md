@@ -2,6 +2,8 @@
 
 Full comparison of every official sync mechanism NGO provides, plus when to use each.
 
+**Topology scope**: everything below is written for the classic client-server (host) topology. NGO 2.x also ships a distributed authority topology (Unity Multiplayer Services session, one client is session owner, authority follows `NetworkObject` ownership). The mechanisms and size classes are the same there, but "server-authoritative" reads as "authority-client-authoritative": write permissions default to owner, and validation must happen on whichever peer holds authority — there is no central server to trust. Tang3cko projects default to client-server; adopting distributed authority is an architecture decision, not a mechanism swap.
+
 ---
 
 ## Decision Tree
@@ -122,9 +124,7 @@ Default is Reliable. Auto-fragments. Don't use for high-frequency streams - reli
 private void SyncSnapshotChunkRpc(int seq, byte idx, byte total, ...) { ... }
 ```
 
-**Design constraint**: keep each message within one MTU (~1200 B payload; UTP MTU is 1400 B). NGO 2.x fragments Unreliable up to `UnityTransport.MaxPayloadSize` (default 6144 B, then a send-time error), but losing any fragment drops the whole message — fragmentation multiplies effective loss. On NGO 1.x, exceeding one MTU throws `OverflowException` (no fragmentation).
-
-For variable-size payloads, see `snapshot-streaming.md` for chunking pattern.
+**Design constraint**: one MTU per message (Rule 1 in SKILL.md; derivation and loss math in `rpc-payload-rules.md`). For variable-size payloads, see `snapshot-streaming.md` for the chunking pattern.
 
 ---
 
@@ -177,3 +177,14 @@ Pattern:
 4. B confirms via Reliable Rpc
 
 Never push this through NGO's pipeline.
+
+---
+
+## Checklist
+
+- [ ] The chosen mechanism came out of the decision tree above — if you picked one first and rationalized after, re-run the tree
+- [ ] Late-join requirement checked explicitly: RPCs and Custom Messages do NOT replay for late joiners; persistent state uses NetworkVariable/NetworkList/OnSynchronize
+- [ ] Nothing high-frequency (>10 Hz) rides on a Reliable mechanism (NetworkVariable churn, Reliable RPC stream)
+- [ ] Transform sync uses NetworkTransform with unused axes disabled and half precision considered, not a hand-rolled NetworkVariable<Vector3>
+- [ ] Anything approaching megabyte scale goes out-of-band (HTTP/CDN), with NGO used only for coordination
+- [ ] If the project uses distributed authority topology, every "server validates" assumption was re-checked against ownership-based authority

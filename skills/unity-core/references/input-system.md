@@ -202,3 +202,11 @@ Assets/
 
 - See `unity-architecture` skill for EventChannel patterns and dependency management
 - See `unity-async` skill for async input processing
+
+## Checklist
+
+- [ ] Gameplay code consumes input via `InputReaderSO` events — no direct Input System polling in gameplay MonoBehaviours
+- [ ] Button-style actions gate on `InputActionPhase.Performed` before invoking their event
+- [ ] Every `OnEnable` subscription has a matching `OnDisable` unsubscription (reader and bridge alike)
+- [ ] Action maps are separated by context (Player / UI / ...) and switched explicitly, never left both enabled by accident
+- [ ] Cross-system consumers go through the EventChannel bridge; only input-adjacent code references the reader directly

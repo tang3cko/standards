@@ -302,3 +302,16 @@ public void Player_TakesDamage_ReducesHealth()
 - [principles.md](principles.md) - FIRST principles
 - [patterns.md](patterns.md) - Humble Object pattern
 - [test-doubles.md](test-doubles.md) - Proper use of test doubles
+
+---
+
+## Checklist
+
+Run every reviewed/presented test against the 8 pitfalls above:
+
+- [ ] Assertions target public behavior — no test exists only to exercise a private helper
+- [ ] Only complex owned dependencies are mocked; simple objects appear as real instances
+- [ ] No static or shared mutable state between tests — fresh objects come from `[SetUp]`
+- [ ] Every GameObject/asset a test creates is destroyed in the test or `[TearDown]`
+- [ ] No test re-verifies Unity or third-party framework behavior — only project code
+- [ ] Each test asserts one concept, and no `[UnityTest]` exists where a plain `[Test]` in Edit Mode would do

@@ -32,7 +32,7 @@ Update status as you progress: `in_progress` when starting, `completed` when don
 
 ## Core Rules (always apply)
 
-1. **UniTask over Coroutine for app/game code** — allocation-free, cancellable, structured async. Awaitable (built-in) is for dependency-free library code; as of Unity 6.5 it still lacks WhenAll/WhenAny and frame-based delays
+1. **UniTask over Coroutine for app/game code** — allocation-free, cancellable, structured async. Awaitable (built-in) is for dependency-free library code; as of Unity 6.5 it still lacks WhenAll/WhenAny, multi-frame delays, and PlayerLoopTiming control (full comparison in `references/async.md`)
 2. **Every async method takes and propagates a CancellationToken** — tie lifetime to `destroyCancellationToken` or an owned `CancellationTokenSource` disposed in `OnDestroy`
 3. **No unobserved exceptions** — fire-and-forget goes through `UniTask.Void`, `Awaitable.LogExceptionsAndForget()` (Unity 6.5+), or an explicit try-catch; never bare `async void` without handling
 4. **Event-driven over polling** — react to changes instead of checking every frame
@@ -52,7 +52,7 @@ Identify the task type and follow the matching path.
 ### Optimizing performance
 
 1. Load `performance.md` for optimization patterns
-2. Check common issues: missing caching (GetComponent, Camera.main), per-frame allocations, polling where events fit
+2. Sweep the code for the anti-pattern/fix pairs catalogued there
 3. Recommend specific optimizations with code examples
 4. Categorize issues by priority (must fix, should fix, nice to have)
 
@@ -79,10 +79,11 @@ Verify every file you wrote or changed. If any check fails, fix it first — do 
 - [ ] No bare `async void` without exception handling; fire-and-forget uses the approved patterns
 - [ ] No per-frame allocations or uncached `GetComponent`/`Camera.main` in hot paths
 - [ ] No polling loop where an event/callback would work
+- [ ] The reference named by the workflow path was actually Read this session, and its end `## Checklist` was run against the output — those checklists carry the file-specific checks this list intentionally omits
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/async.md | Awaitable, UniTask, Coroutines, fire-and-forget |
-| references/performance.md | Caching, pooling, event-driven optimization |
+| File | Load When |
+|------|-----------|
+| references/async.md | Writing, reviewing, or answering questions about async code (Phase 1 of the writing path). Only place with the Coroutine↔Awaitable API mapping, cancellation and fire-and-forget code patterns, the Awaitable pooling caveat, and the UniTask install URL |
+| references/performance.md | Optimizing or reviewing for performance (Phase 1 of the optimizing path). Only place with the concrete anti-pattern/fix pairs: GC avoidance (boxing, closures, LINQ), ObjectPool implementation, LayerMask raycasts, collection pre-allocation, coroutine caching |

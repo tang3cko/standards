@@ -101,3 +101,13 @@ Exclude debug-directory / pdb-path matches from failure criteria in any artifact
 - [testing.md](testing.md) - Headless test execution
 - [building.md](building.md) - Headless player builds
 - [verification.md](verification.md) - Artifact and startup verification
+
+---
+
+## Checklist
+
+- [ ] The symptom was matched against the Summary table before improvising a fix
+- [ ] The scripts' lock check was never bypassed — the Editor was closed (or the other batchmode run finished) before retrying
+- [ ] For `CS0246`-in-batchmode-only symptoms: a stray Licensing Client process was checked for, and the log was read *above* the first `CS0246` for the real licensing/entitlement error
+- [ ] pdb debug-directory path findings were treated as expected toolchain behavior, not reported as defects or leaks
+- [ ] `unity-mcp` and batchmode were sequenced against the project, never run concurrently

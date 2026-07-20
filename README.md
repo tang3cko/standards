@@ -34,10 +34,12 @@ Shared coding standards and Claude Code skills for Tang3cko projects.
 Every code-oriented skill follows the same contract:
 
 - **Phase Tracking** — at workflow start the agent registers each phase as a task (TaskCreate) and updates status as it progresses, with an execution checklist of MUST items verified at the end
-- **Core Rules (always apply)** — inlined in SKILL.md so they are always in context when the skill triggers
-- **Workflow** — task-type paths that name which references/ to load on demand
-- **Self-Check** — a tracked phase: a checklist the agent must pass before presenting generated or edited code
-- **Reference Files** — detailed docs loaded only when the task matches
+- **Core Rules (always apply)** — inlined in SKILL.md so they are always in context when the skill triggers. SKILL.md is the index and the always-apply contract only — the acceptance criteria live in references/
+- **Workflow** — task-type paths that name exactly which references/ files to Read for the task at hand
+- **Self-Check** — a tracked phase: a checklist the agent must pass before presenting generated or edited code. It requires that the workflow-named references were actually Read and that each loaded reference's end-of-file Checklist was run — the Self-Check cannot be completed from SKILL.md alone
+- **Reference Files** — a "Load When" table: each row states the load trigger and what information exists only in that file. Every reference ends with a domain-specific `## Checklist` that the Self-Check delegates to
+
+(The reference-checklist contract is rolled out on the unity-* skills first; godot-* skills migrate next.)
 
 ---
 

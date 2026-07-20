@@ -155,3 +155,14 @@ This pattern keeps the Variable consumers loosely coupled to the Variable implem
 - [event-channels.md](event-channels.md) - EventChannel patterns and types
 - [architecture.md](architecture.md) - ScriptableObject patterns overview
 - [dependency-management.md](dependency-management.md) - Dependency priority
+
+---
+
+## Checklist
+
+- [ ] Consumers subscribe to the paired EventChannel — never directly to the Variable's internal `OnValueChanged`
+- [ ] The Variable writer honors the Publisher Contract: updates the Variable and raises the matched EventChannel in the same frame
+- [ ] Subscribers bootstrap the initial value from the Variable in `OnEnable`, then listen on the channel for changes
+- [ ] Session-scoped Variables call `ResetToInitial()` at startup so stale editor-session values cannot leak in
+- [ ] GPU-synced shader property names start with underscore (`_PlayerHealth`)
+- [ ] Naming: Variable assets are nouns (playerScore), paired channels are `on + PastTense` (onScoreChanged)

@@ -69,22 +69,21 @@ Identify the task type and follow the matching path. Load `accessibility.md` in 
 | World Space UI (Unity 6000.0/6000.1) | uGUI | references/ugui.md |
 | Extending an existing uGUI system | uGUI | references/ugui.md |
 
-**Version notes**: World Space UI Toolkit shipped in Unity 6.2. Unity 6.5 introduces Panel Renderer (supersedes `UIDocument`, better world-space compatibility) and makes the Advanced Text Generator the default text system. Check the project's Unity version before choosing.
+**Version note**: check the project's Unity version before choosing world-space tech — World Space UI Toolkit requires Unity 6.2+. Per-version renderer/text-system specifics (6.5 Panel Renderer, Advanced Text Generator) live in `references/ui-toolkit.md`.
 
 ## Self-Check (before presenting generated/edited code)
 
 Verify every file you wrote or changed. If any check fails, fix it first — do not present non-compliant code.
 
+- [ ] The references named by the workflow path were actually Read this session — `accessibility.md` in every path, plus the chosen UI system's reference. The domain specifics (naming details, size minimums, billboard math) exist only in those files, so skipping them means checking against nothing
+- [ ] The final `## Checklist` of each loaded reference was run against every written/edited file
 - [ ] USS classes follow BEM (`block__element--modifier`), no generic global classes
-- [ ] UXML `name` attributes are PascalCase; `class` attributes are kebab-case BEM
-- [ ] Font sizes and contrast meet `accessibility.md` minimums
 - [ ] World Space choice matches the project's Unity version (UI Toolkit on 6.2+, uGUI below)
-- [ ] uGUI world-space canvases cache `Camera.main` and billboard in `LateUpdate`
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/ui-toolkit.md | UXML, USS, BEM naming, world-space panels |
-| references/ugui.md | Legacy World Space UI, billboards (Unity 6000.0/6000.1) |
-| references/accessibility.md | Font sizes, contrast ratios |
+| File | Load When |
+|------|-----------|
+| references/ui-toolkit.md | Any UI Toolkit work (build, review, or question). Only place with: full BEM/UXML naming rules, design-token structure, Panel Settings + flexbox patterns, 6.2–6.5 version specifics (world space, Panel Renderer, Advanced Text Generator), and the UIDocument/project-wide-InputActionAsset input-kill pitfall |
+| references/ugui.md | Any uGUI world-space work (Unity 6000.0/6000.1, or extending existing uGUI). Only place with: billboard LookAt math, Camera.main caching, Canvas.enabled show/hide, TextMeshPro rule, EventSystem pitfall |
+| references/accessibility.md | Every path, before writing or judging any text/color styling. Only place with: per-platform font minimums (console 26px / PC 18px at 1080p, DPI-scaled mobile), 4.5:1 contrast, 200% resize, line-length limits |

@@ -106,3 +106,13 @@ Use ONLY when ALL conditions are met:
 - [event-channels.md](event-channels.md) - EventChannel details
 - [variables.md](variables.md) - Variable pattern details
 - [runtime-sets.md](runtime-sets.md) - RuntimeSet pattern details
+
+---
+
+## Checklist
+
+- [ ] The chosen approach was walked down from the decision tree starting at the actual problem statement, not picked by habit
+- [ ] Any Singleton satisfies all four acceptance conditions (technically single, app lifecycle, truly global, 10+ references)
+- [ ] Static config data lives in a ScriptableObject asset, not a Singleton or static class
+- [ ] Object tracking uses RuntimeSet (runtime discovery) or SerializeField (design-time known) — no scene scanning
+- [ ] 1000+ entity simulation uses ECS or Data-Oriented Design, not per-GameObject MonoBehaviour state

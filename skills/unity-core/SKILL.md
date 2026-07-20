@@ -70,9 +70,7 @@ Members appear in this order inside a class:
 
 ### Error Handling Essentials
 
-- Null-conditional for optional event raises: `eventChannel?.RaiseEvent();`
-- Validate `[SerializeField]` references in `OnValidate()` (editor-only), logging with `[{GetType().Name}]` prefix and `this` context
-- Early return on invalid input with `Debug.LogError`; no deep nesting
+Null-safe optional event raises (`?.`), serialized references validated in `OnValidate()`, early return over nesting. The full acceptance criteria (try-catch patterns, log levels, Assert usage, context-rich logging) live in `references/error-handling.md` — load it whenever you write error-handling code.
 
 ### Anti-Patterns
 
@@ -110,14 +108,18 @@ Verify every file you wrote or changed against each item. If any check fails, fi
 - [ ] Dependencies use the highest viable rung of the Dependency Priority ladder
 - [ ] `[SerializeField]` references validated in `OnValidate()`; external calls null-safe
 - [ ] No Anti-Pattern present
+- [ ] The references named by the chosen workflow path were actually Read this session — SKILL.md is only the index; the acceptance criteria live in references/, so skipping them means reviewing against an incomplete standard
+- [ ] The `## Checklist` at the end of every reference loaded this session was run item-by-item against the work — those checklists are the per-domain definition of done
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/naming.md | Naming conventions in detail |
-| references/code-organization.md | Directory structure, namespaces, Runtime/Editor boundary, SO Serializer |
-| references/editor-tooling.md | Setup Editor pattern (`BuildAssets` / `WireScene`), idempotence, log suppression |
-| references/comments.md | XML docs, Header/Tooltip attributes |
-| references/error-handling.md | Null safety, OnValidate |
-| references/input-system.md | InputReader pattern |
+Each file below is the only place its listed content exists — SKILL.md deliberately does not restate it.
+
+| File | Load When |
+|------|-----------|
+| references/naming.md | Any identifier decision beyond the Naming table above. Only source for: event/EventChannel field naming (`on`/`On` + past tense), `RuntimeSetSO` suffix, boolean-prefix rules for parameters and properties |
+| references/code-organization.md | Creating files/directories, choosing namespaces, consuming UPM packages, or any editor API use inside runtime classes. Only source for: Runtime/Editor Boundary patterns A–D, Pattern C's five conditions, AssetDatabase allow/escalate table, SO Serializer pattern, private UPM package vendoring |
+| references/editor-tooling.md | Writing any `[MenuItem]` setup/scaffolding editor. Only source for: `BuildAssets()`/`WireScene()` phase split, idempotence requirements, scoped log suppression, prefab structure test pattern |
+| references/comments.md | Adding XML docs, `[Header]`/`[Tooltip]` attributes, or deciding whether to comment. Only source for: when-NOT-to-document rules, TODO/FIXME/NOTE conventions |
+| references/error-handling.md | Writing null checks, try-catch, logging, or `OnValidate()` bodies. Only source for: try-catch patterns for file I/O and `Resources.Load`, log-level guidance, Assert usage |
+| references/input-system.md | Any Input System work. Only source for: full `InputReaderSO` implementation, action-map organization and switching, EventChannel bridge, mock-input testing pattern |

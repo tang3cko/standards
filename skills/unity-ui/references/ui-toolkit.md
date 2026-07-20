@@ -403,3 +403,16 @@ Reference: https://tang3cko.com/posts/unity-inputactionasset-uidocument-scene-tr
 - [accessibility.md](accessibility.md) - Font size and contrast requirements
 - See `unity-core` skill for general naming conventions
 - See `unity-architecture` skill for EventChannel integration with UI
+
+---
+
+## Checklist
+
+Run against every UXML/USS/C# file written or reviewed with this reference loaded:
+
+- [ ] Every USS class is BEM (`block__element--modifier`); no generic global classes (`.panel`, `.title`), no chained elements (`a__b__c`)
+- [ ] UXML `name` attributes are PascalCase (for C# queries); `class` attributes are kebab-case BEM
+- [ ] Colors, font sizes, spacing, and radii use `var(--token)` from Common.uss — no hardcoded values in component USS
+- [ ] Panels size responsively (`%` with `min-/max-` constraints); `flex-grow: 1` is paired with `flex-basis: 0` wherever equal distribution is intended
+- [ ] C# element queries are typed (`root.Q<Label>(...)`), cached in `OnEnable`, and null-checked — never re-queried per update
+- [ ] Gameplay input does not share the project-wide InputActionAsset with UI Toolkit if the last UIDocument panel can be disposed (input-kill pitfall above)

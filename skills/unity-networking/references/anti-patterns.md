@@ -150,3 +150,16 @@ private void ApplyDamageRpc(int requestedDamage, int targetId) {
 **Root cause**: separate Reliable and Unreliable channels don't preserve relative ordering.
 
 **Fix**: keep cause and effect on the same delivery, or include sequence numbers and reconcile on the client.
+
+---
+
+## Checklist
+
+The entries above are diagnosis material; this is the review sweep. Scan the code under review for each trap:
+
+- [ ] No Unreliable RPC takes an array whose length is not bounded by a documented `maxN` (#1, #4)
+- [ ] No NetworkVariable or Reliable RPC is written/sent from a per-tick or per-frame path (#2, #3)
+- [ ] No component keeps its own copy of NGO-authoritative state (scene names, connection state, ownership) — it queries the authoritative system on demand (#5)
+- [ ] Nothing over ~64 KB rides through NGO; megabyte-scale content goes out-of-band (#6)
+- [ ] No `* 100` / `(short)` style quantization appears outside a codec class (#7)
+- [ ] Server-side RPC handlers validate or ignore every client-provided size, index, and magnitude (#8), and causally-linked messages either share a delivery channel or carry sequence numbers (#9)

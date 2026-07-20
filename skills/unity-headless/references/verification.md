@@ -57,7 +57,7 @@ PID=$!
 sleep 5
 kill "$PID" 2>/dev/null || true
 
-bash ${CLAUDE_PLUGIN_ROOT}/skills/unity-headless/scripts/verify_player_log.sh "$HOME/Library/Logs/<CompanyName>/<ProductName>/Player.log"
+bash ${CLAUDE_SKILL_DIR}/scripts/verify_player_log.sh "$HOME/Library/Logs/<CompanyName>/<ProductName>/Player.log"
 ```
 
 Don't treat every warning in the log as a failure — Unity logs plenty of benign warnings on first launch (shader compilation, first-import asset warnings). `verify_player_log.sh` only fails on a missing "engine initialized" line or an explicit fatal/uncaught-exception line, which is the right bar for "starts cleanly."
@@ -75,3 +75,13 @@ See `pitfalls.md` for the pdb debug-directory path false positive — a literal-
 - [../SKILL.md](../SKILL.md) - Core Rules and Editor-state boundary
 - [building.md](building.md) - Producing the artifact this verifies
 - [pitfalls.md](pitfalls.md) - False positives and other gotchas
+
+---
+
+## Checklist
+
+- [ ] Build success was not claimed from `build.sh` exit 0 alone — at minimum the artifact's existence was verified
+- [ ] `Player.log` path was derived from the OS table plus the project's actual `companyName`/`productName`, not guessed
+- [ ] When a launch smoke test was requested: the player was actually run briefly and `verify_player_log.sh` passed on its log
+- [ ] Any assembly literal scan targeted a specific, deliberate string and used its UTF-16LE encoding — no general substring linting
+- [ ] pdb debug-directory path matches were excluded from failure criteria, not reported as leaks

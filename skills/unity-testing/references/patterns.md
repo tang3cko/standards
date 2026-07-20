@@ -305,3 +305,13 @@ cue.SetClipsForTesting(new[] { clip }, isLooping: true);
 - [principles.md](principles.md) - FIRST principles, AAA pattern
 - [test-doubles.md](test-doubles.md) - Test double types and usage
 - [pitfalls.md](pitfalls.md) - Common testing mistakes
+
+---
+
+## Checklist
+
+- [ ] Any MonoBehaviour touched stays a thin shell — new decision logic went into a pure C# class (Humble Object), and the tests target that class in Edit Mode
+- [ ] Test objects needing 3+ properties are created via a Builder or Factory with sensible defaults, not copy-pasted inline construction
+- [ ] Non-deterministic or engine-bound inputs (time, random, Unity APIs) reach the code under test through injected interfaces, not direct calls
+- [ ] Any test-only SO setter is `public`, named `*ForTesting`, gated by `#if UNITY_INCLUDE_TESTS`, and placed before any `#if UNITY_EDITOR` block
+- [ ] No test reaches private state via reflection where a `ForTesting` API or constructor injection would express the same intent

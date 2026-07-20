@@ -31,3 +31,13 @@ Report to the user as the script's own `Total / Passed / Failed / Skipped` line,
 - [../SKILL.md](../SKILL.md) - Core Rules and Editor-state boundary
 - [pitfalls.md](pitfalls.md) - Project lock, licensing client issues
 - [verification.md](verification.md) - Build-side verification (companion to test-side verification here)
+
+---
+
+## Checklist
+
+- [ ] Tests were run via `bash ${CLAUDE_SKILL_DIR}/scripts/test.sh` — no hand-rolled `-batchmode -runTests` invocation
+- [ ] `test_platform` matches the suite: EditMode by default, PlayMode only when the tests need runtime lifecycle
+- [ ] Any `test_filter` uses Unity's documented `-testFilter` syntax (semicolon-separated names, regex, or `!Name` to exclude)
+- [ ] Result reported as the script's `Total/Passed/Failed/Skipped` line plus `FAIL:` lines verbatim — not raw XML or full batchmode logs
+- [ ] A missing result XML was treated as a hard failure and the dumped log tail was actually read, not skipped

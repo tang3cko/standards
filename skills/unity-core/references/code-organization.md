@@ -309,8 +309,52 @@ Why:
 
 ---
 
+## UPM Package Consumption
+
+### Private / org-internal packages: git submodule + `file:` reference
+
+Private UPM packages must be consumed as a git submodule under `Packages/_vendor/<Name>` plus a `file:` reference in `manifest.json` — NOT as an SSH git URL dependency.
+
+```jsonc
+// Packages/manifest.json
+{
+  "dependencies": {
+    // Private package: submodule at Packages/_vendor/ReactiveSO,
+    // file: path points at the package root (where package.json lives)
+    "com.tang3cko.reactiveso": "file:_vendor/ReactiveSO/Assets/ReactiveSO"
+  }
+}
+```
+
+```bash
+git submodule add git@github.com:org/ReactiveSO.git Packages/_vendor/ReactiveSO
+```
+
+Why (verified in a production Unity project, 2026-07):
+
+- GUI-launched Unity does not inherit shell environment variables (`OP_SSH_KEY`, `GIT_SSH_COMMAND`), so UPM's SSH resolution fails with `sign_and_send_pubkey` even when the same URL works from a terminal
+- 1Password's SSH agent suppresses signing prompts from non-foreground processes by design, so there is no interactive recovery path
+- The submodule + `file:` approach removes SSH traffic from Unity startup entirely — git auth happens in the terminal (submodule update), where the agent works
+
+Caveat: the `file:` path must point at the **package root inside the submodule** — the directory containing `package.json` — which may be a subdirectory of the repo (e.g. `file:_vendor/ReactiveSO/Assets/ReactiveSO`).
+
+### HTTPS git URL dependencies
+
+Public OSS packages over HTTPS git URLs (e.g. LitMotion) are unaffected by the SSH problem and remain fine as direct `manifest.json` git URL dependencies.
+
+---
+
 ## References
 
 
 - [naming.md](naming.md) - Naming conventions
 - [comments.md](comments.md) - Documentation standards
+
+## Checklist
+
+- [ ] One public class per file, filename matches the class; only closely related `[Serializable]` types/enums share a file
+- [ ] Namespace is `ProjectName.Category` and matches the directory path
+- [ ] No `OnDrawGizmos*` in runtime classes — gizmos use Pattern D (`[DrawGizmo]` in an Editor asmdef) exclusively
+- [ ] Every `#if UNITY_EDITOR` block in a runtime class satisfies all five Pattern C conditions, and no escalation trigger (second C call, return value used, editor workflow APIs) is present
+- [ ] No editor-state `[SerializeField]` in runtime asmdefs; versioned SO persistence delegates format dispatch to a pure C# serializer class
+- [ ] Private UPM packages are consumed via `Packages/_vendor/` submodule + `file:` reference pointing at the package root, never an SSH git URL in `manifest.json`

@@ -293,3 +293,16 @@ Scene with EventSystem:
 - [accessibility.md](accessibility.md) - Font size requirements
 - See `unity-architecture` skill for EventChannel integration
 - See `unity-async` skill for caching and event-driven patterns
+
+---
+
+## Checklist
+
+Run against every uGUI file written or reviewed with this reference loaded:
+
+- [ ] uGUI is actually warranted here (Unity 6000.0/6000.1 world space, or extending an existing uGUI system) — otherwise use UI Toolkit
+- [ ] `Camera.main` is cached once in `Start`, never queried per frame
+- [ ] Billboarding runs in `LateUpdate` using the rotation-based form, not `LookAt(camera.position)`
+- [ ] Every `OnEnable` EventChannel subscription has a matching `OnDisable` unsubscription
+- [ ] Show/hide uses `Canvas.enabled`, not Destroy/Instantiate; updates are event-driven, not per-frame polling
+- [ ] Text uses `TextMeshProUGUI` (not `UnityEngine.UI.Text`) and interactive UI has an EventSystem in the scene

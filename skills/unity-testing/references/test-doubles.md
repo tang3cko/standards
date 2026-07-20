@@ -240,3 +240,13 @@ public interface IPositionProvider
 - [patterns.md](patterns.md) - Testing patterns
 - [nunit.md](nunit.md) - NUnit assertions for verifying test doubles
 - [pitfalls.md](pitfalls.md) - Over-mocking pitfall
+
+---
+
+## Checklist
+
+- [ ] Each double is the weakest type that does the job (Dummy → Stub → Spy/Fake → Mock) — behavior verification only where the interaction itself is the contract
+- [ ] Simple value objects (cards, configs, DTOs) are real instances, never substitutes
+- [ ] No `Substitute.For` over types you do not own (Unity or third-party APIs) — they are wrapped behind a project interface first
+- [ ] `Received()` verification appears only where HOW a method was called is the behavior under test; state assertions are used everywhere else
+- [ ] Doubles implement project interfaces injected via constructor, not concrete classes patched from outside

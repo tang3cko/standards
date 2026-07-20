@@ -107,6 +107,8 @@ Identify the task type and follow the matching path.
 | Megabyte-scale blob | Out-of-band (HTTP/CDN) | references/sync-mechanisms.md |
 | Late-join custom state | NetworkBehaviour.OnSynchronize | references/sync-mechanisms.md |
 
+Scope: these rules assume the classic client-server (host) topology. NGO 2.x also offers a distributed authority topology (Multiplayer Services session owner, authority follows object ownership) — the size/frequency rules still apply per authority, but "server validates" becomes "authority validates"; see the scope note in `references/sync-mechanisms.md`.
+
 ## Self-Check (before presenting generated/edited code)
 
 Verify every file you wrote or changed. If any check fails, fix it first — do not present non-compliant code.
@@ -116,12 +118,13 @@ Verify every file you wrote or changed. If any check fails, fix it first — do 
 - [ ] No Forbidden Pattern (Rule 3) present
 - [ ] Quantization lives in a codec class at the network boundary, not in gameplay code
 - [ ] Server validates client-provided values (no trusted sizes/indices/magnitudes)
+- [ ] The reference files named by the workflow path you followed were actually Read — the rules above are the compressed contract; the derivations, code patterns, and failure stories live only in references/ — and each loaded reference's closing `## Checklist` was run against your output
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/sync-mechanisms.md | Full mechanism comparison + decision tree: NetworkVariable, RPC, CustomMessage, OnSynchronize |
-| references/rpc-payload-rules.md | RPC size limits, Reliable vs Unreliable, MTU/fragmentation details, quantization cheatsheet |
-| references/snapshot-streaming.md | High-frequency entity snapshot: chunking, quantization, sequence reassembly |
-| references/anti-patterns.md | Common failure modes: Unreliable fragmentation loss, NetworkVariable churn, reliable storm |
+| File | Load When |
+|------|-----------|
+| references/sync-mechanisms.md | Choosing or comparing sync mechanisms. Only place with the full decision tree, per-mechanism code examples (NetworkVariable, NetworkList, NetworkTransform, RPC, CustomMessagingManager, OnSynchronize, out-of-band), and the distributed-authority scope note |
+| references/rpc-payload-rules.md | Sizing any RPC payload or deciding delivery channel. Only place with the worst-case payload formula, the fragmentation-loss math behind the 1200 B budget, the over-budget decision order, and the quantization cheatsheet |
+| references/snapshot-streaming.md | Building or reviewing a >10 Hz entity stream. Only place with the chunk wire format, client reassembly implementation, bandwidth worked example, tuning-knob table, and the late-joiner path split |
+| references/anti-patterns.md | Debugging a live failure or reviewing existing network code. Only place with symptom → root cause → fix write-ups from real Tang3cko incidents, including non-payload traps (local state caching, mixed reliability ordering, trusting client input) |

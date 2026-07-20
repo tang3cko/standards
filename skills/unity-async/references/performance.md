@@ -284,3 +284,16 @@ IEnumerator GoodCoroutine()
 
 - [async.md](async.md) - Coroutine and async patterns
 - See `unity-core` skill for core anti-patterns and error handling
+
+---
+
+## Checklist
+
+Run against every file written or reviewed with this reference loaded:
+
+- [ ] `GetComponent`/`Camera.main`/`Find*` results cached in `Awake`, never resolved per-frame
+- [ ] No LINQ, closures, boxing, or string concatenation in `Update` or other hot paths
+- [ ] Per-frame UI/text refreshes replaced with event-driven updates (EventChannel/RuntimeSet)
+- [ ] Frequently spawned objects go through a pool instead of `Instantiate`/`Destroy` churn
+- [ ] Raycasts specify a `LayerMask` and a max distance
+- [ ] Reused collections are pre-allocated and `Clear()`ed; `WaitForSeconds` instances are cached, not re-newed per yield

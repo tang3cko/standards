@@ -42,8 +42,8 @@ Points that matter, with the reasoning:
 ## Invoking it
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/skills/unity-headless/scripts/build.sh <project_path> BuildScript.BuildDevelopment
-bash ${CLAUDE_PLUGIN_ROOT}/skills/unity-headless/scripts/build.sh <project_path> BuildScript.BuildRelease
+bash ${CLAUDE_SKILL_DIR}/scripts/build.sh <project_path> BuildScript.BuildDevelopment
+bash ${CLAUDE_SKILL_DIR}/scripts/build.sh <project_path> BuildScript.BuildRelease
 ```
 
 The `ExecuteMethod` argument is a passthrough — the same `build.sh` drives dev smoke builds and release builds by selecting which static method to invoke. `build.sh` itself only reports the process exit code; that's why the entry point's own `EditorApplication.Exit(1)` matters (see above) and why the next step is always artifact verification.
@@ -55,3 +55,14 @@ The `ExecuteMethod` argument is a passthrough — the same `build.sh` drives dev
 - [../SKILL.md](../SKILL.md) - Core Rules and Editor-state boundary
 - [verification.md](verification.md) - Verifying the artifact this produces
 - [pitfalls.md](pitfalls.md) - Project lock, licensing client issues
+
+---
+
+## Checklist
+
+- [ ] The entry point lives under an `Editor/`-named folder (e.g. `Assets/Editor/BuildScript.cs`) so it never ships in the player
+- [ ] Scene list is an explicit array in code — not read from `EditorBuildSettings.scenes`
+- [ ] `EditorApplication.Exit(1)` on `BuildResult != Succeeded` survived any customization of the template
+- [ ] Scripting backend is chosen explicitly per target (Mono2x for dev iteration, IL2CPP for release / platforms that require it)
+- [ ] No leftover `TODO` markers in the customized `BuildScript.cs`
+- [ ] Build was invoked via `build.sh`, and artifact verification (`verification.md`) is the next step — exit 0 alone was not reported as success

@@ -120,3 +120,11 @@ private const string LanternBasePrefabPath = "Assets/_Project/Prefabs/Environmen
 
 - [code-organization.md](code-organization.md) - Runtime / Editor Boundary section
 - See `unity-testing` skill for test patterns including `BuildAssets` `OneTimeSetUp` use
+
+## Checklist
+
+- [ ] Work is split into `BuildAssets()` (assets only, no scene mutation) and `WireScene()` (scene only, no asset creation)
+- [ ] Every `Find`/`Load`/`Create` checks existence first — running the setup twice produces zero duplicates
+- [ ] A `PrefabStructureTest` calls `BuildAssets()` in `OneTimeSetUp`, asserts on the prefab tree, and verifies double-call idempotence
+- [ ] Expected setup warnings are suppressed via a scoped `ILogHandler` filtering by log prefix — never global `filterLogType`
+- [ ] Asset and scene paths live in `private const string` at the top of the editor class

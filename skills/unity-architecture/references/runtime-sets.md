@@ -151,3 +151,14 @@ public class EnemyCountDisplay : MonoBehaviour
 
 - [reactive-entity-sets.md](reactive-entity-sets.md) - Per-entity state management
 - [event-channels.md](event-channels.md) - EventChannel notification integration
+
+---
+
+## Checklist
+
+- [ ] Members self-register: `Add` in `OnEnable`, `Remove` in `OnDisable`, both via `?.`
+- [ ] No `FindObjectsOfType`/scene scans where a RuntimeSet already tracks the objects
+- [ ] Iteration over `Items` null-checks entries (destroyed-but-not-yet-removed objects)
+- [ ] Query helpers (closest, in-radius, etc.) live on the custom RuntimeSetSO subclass, not scattered in consumers
+- [ ] Count/membership consumers subscribe to the set's EventChannels (onItemsChanged/onCountChanged) instead of polling
+- [ ] Per-entity state needs were checked against the RuntimeSet-vs-ReactiveEntitySet table and routed accordingly

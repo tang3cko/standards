@@ -165,3 +165,12 @@ public IEnumerator TestGameObject()
 - [principles.md](principles.md) - FIRST principles, AAA pattern
 - [patterns.md](patterns.md) - Humble Object pattern for testable code
 - [assemblies.md](assemblies.md) - Test assembly setup for each mode
+
+---
+
+## Checklist
+
+- [ ] Every Play Mode test can name the concrete requirement that forced it (lifecycle, physics, animation, or scene) — none exists merely because the code under test is a MonoBehaviour
+- [ ] No `[UnityTest]` wraps logic with no frame dependency (a `yield return null` that could be deleted without changing the assertion means the test belongs in Edit Mode)
+- [ ] Logic reachable from a MonoBehaviour was extracted to pure C# and tested in Edit Mode before any Play Mode test was added on top
+- [ ] Every GameObject created in a Play Mode test is destroyed before the test ends (inline or in `[TearDown]`)

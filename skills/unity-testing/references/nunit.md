@@ -1,6 +1,8 @@
 # NUnit Quick Reference
 
-NUnit attributes, assertions, and parameterized tests for Unity.
+NUnit attributes, assertions, and parameterized tests for Unity. The Unity Test
+Framework ships a custom NUnit build based on version 3.5 — newer upstream NUnit
+APIs are not guaranteed to exist.
 
 ---
 
@@ -220,3 +222,14 @@ Assert.That(() => f(), Throws.Nothing);  // Exception
 - [principles.md](principles.md) - AAA pattern for structuring tests
 - [test-doubles.md](test-doubles.md) - Test doubles with NSubstitute
 - [assemblies.md](assemblies.md) - Assembly definitions for NUnit
+
+---
+
+## Checklist
+
+- [ ] Assertions use the constraint model (`Assert.That(x, Is...)`), not classic `Assert.AreEqual`/`Assert.IsTrue`
+- [ ] Float/double comparisons use `.Within(tolerance)` — no exact equality on computed floats
+- [ ] `[TestCase]` appears only in Edit Mode tests; Play Mode parameterization uses `[ValueSource]`
+- [ ] Per-test state is built in `[SetUp]`; `[OneTimeSetUp]` holds only expensive fixtures no test mutates
+- [ ] Intentional error/warning logs are declared with `LogAssert.Expect` so the run does not fail on expected logging
+- [ ] `[UnityTest]` methods return `IEnumerator`; plain `[Test]` methods return `void` — no mismatched signatures

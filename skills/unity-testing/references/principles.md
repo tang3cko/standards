@@ -199,3 +199,13 @@ public void ThirdPartyLibrary_Works() { }
 - [patterns.md](patterns.md) - Testing patterns (Humble Object, Builder, DI)
 - [test-modes.md](test-modes.md) - Edit Mode vs Play Mode guide
 - [pitfalls.md](pitfalls.md) - Common testing mistakes
+
+---
+
+## Checklist
+
+- [ ] Every test name follows `Method_Condition_ExpectedResult` AND claims exactly what the assertions verify (name-as-specification — no name promising a check the body never makes)
+- [ ] Arrange / Act / Assert sections are identifiable in every test, with one logical assertion per test
+- [ ] No unseeded randomness and no wall-clock/`WaitForSeconds` dependence — results are identical on every run
+- [ ] Unit tests stay under the 15ms budget (nothing waits on real time)
+- [ ] Shared state per test comes from `[SetUp]`, so any single test passes when run alone

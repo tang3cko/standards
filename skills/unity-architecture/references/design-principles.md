@@ -159,36 +159,18 @@ entitySet.UpdateData(enemyId, state =>
 
 ---
 
-## Design Checklist
-
-### 1. Observability
-
-- Can the complete state T_i be captured at any moment?
-- Can state be restored deterministically?
-- Can any Observer S_n be applied to captured state?
-
-### 2. Dependency
-
-- Is the dependency provided externally (DI)?
-- Is ScriptableObject used as stable anchor?
-- Can dependencies be swapped for testing?
-
-### 3. Data/Logic separation
-
-- Is state stored in struct (no methods)?
-- Is logic in pure functions (no side effects)?
-- Can logic be tested without Unity?
-
-### 4. Set membership
-
-- Does entity exist in ReactiveEntitySet?
-- Is state managed by RES, not GameObject?
-- Can entity exist without visual representation?
-
----
-
 ## References
 
 - [architecture.md](architecture.md) - Architecture decision tree
 - [dependency-management.md](dependency-management.md) - DI priority order
 - [reactive-entity-sets.md](reactive-entity-sets.md) - RES implementation details
+
+---
+
+## Checklist
+
+- [ ] Observability: the complete state T_i can be captured at any moment and restored deterministically, and any Observer S_n can be applied to captured state
+- [ ] Dependencies are provided externally (Inspector-assigned SO assets as stable anchors) and can be swapped for testing
+- [ ] State lives in field-only structs; logic lives in pure functions with no side effects, testable without Unity
+- [ ] Entity existence is defined by ReactiveEntitySet membership, not by GameObject existence — an entity can exist with no visual representation
+- [ ] Views display entity data without owning it; state is managed by RES, not the GameObject

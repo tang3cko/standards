@@ -133,3 +133,13 @@ Access Event Monitor via `Window -> Reactive SO -> Event Monitor`:
 - [dependency-management.md](dependency-management.md) - EventChannel as priority 1 pattern
 - [variables.md](variables.md) - Variables vs EventChannels comparison
 - [architecture.md](architecture.md) - Architecture decision tree
+
+---
+
+## Checklist
+
+- [ ] A built-in channel type is used where one fits; custom `EventChannelSO<T>` only for complex payloads
+- [ ] Every `RaiseEvent` call uses the null-conditional operator (`onX?.RaiseEvent(...)`)
+- [ ] Subscriptions are paired: subscribe in `OnEnable`, unsubscribe in `OnDisable`
+- [ ] `CreateAssetMenu` paths follow the conventions table (`ProjectName/Events/TypeName Event Channel`)
+- [ ] Channel classes end in `EventChannelSO`; channel assets are named `on + PastTense` (e.g. onEnemyKilled)

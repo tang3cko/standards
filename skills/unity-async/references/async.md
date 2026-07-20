@@ -9,7 +9,7 @@ Async patterns for Unity: Coroutines, Awaitable (Unity 6+), and UniTask.
 | Approach | Unity Version | Pros | Cons |
 |----------|---------------|------|------|
 | **Coroutines** | All | Simple, no dependencies | No try-catch, harder to compose |
-| **Awaitable** | Unity 6+ | Built-in, zero dependencies | No WhenAll/WhenAny, no frame-based delays, no PlayerLoopTiming control (still true as of Unity 6.5) |
+| **Awaitable** | Unity 6+ | Built-in, zero dependencies | No WhenAll/WhenAny, no multi-frame delays (`NextFrameAsync` waits exactly one frame; no `DelayFrame(n)` equivalent), no PlayerLoopTiming control (still true as of Unity 6.5) |
 | **UniTask** | Any (package) | Full-featured, performant, actively maintained (2.5.x) | External dependency |
 
 **Recommendation** (matches Cysharp's official guidance):
@@ -146,6 +146,8 @@ private async Awaitable SpawnEnemiesAsync()
 | `yield return new WaitForEndOfFrame()` | `await Awaitable.EndOfFrameAsync()` |
 | `yield return new WaitForFixedUpdate()` | `await Awaitable.FixedUpdateAsync()` |
 
+**Pooling caveat:** `Awaitable` instances are pooled — never `await` the same instance twice in a method (unlike .NET `Task`).
+
 ### Error handling
 
 ```csharp
@@ -211,3 +213,16 @@ await UniTask.Yield(PlayerLoopTiming.PreUpdate);
 
 - [performance.md](performance.md) - Coroutine caching, event-driven updates
 - See `unity-core` skill for error handling patterns in async code
+
+---
+
+## Checklist
+
+Run against every file written or reviewed with this reference loaded:
+
+- [ ] Approach matches the comparison table: UniTask for app/game code, Awaitable only for dependency-free library code, Coroutine only for trivial delay/sequence cases
+- [ ] Every `await` inside a loop passes the `CancellationToken` (a token-less `WaitForSecondsAsync` keeps the loop alive after the object is destroyed)
+- [ ] Any `CancellationTokenSource` created in code is both `Cancel()`ed and `Dispose()`d in `OnDestroy`; otherwise lifetime rides on `destroyCancellationToken`
+- [ ] Fire-and-forget goes through `UniTask.Void`, `LogExceptionsAndForget()` (Unity 6.5+), or an explicit try-catch — no bare `async void` without handling
+- [ ] No `Awaitable` instance is awaited more than once (they are pooled)
+- [ ] `Time.deltaTime` scales continuous per-frame motion only, never instant actions like jumps

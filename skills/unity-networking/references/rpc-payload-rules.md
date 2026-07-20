@@ -1,6 +1,6 @@
 # RPC Payload Rules
 
-Hard rules for RPC payload sizing. The cost of getting this wrong is `OverflowException` at runtime or Reliable retransmit storms.
+Hard rules for RPC payload sizing. The cost of getting this wrong is silent burst loss from fragmentation, a send-time error past the payload cap (`OverflowException` on NGO 1.x), or Reliable retransmit storms.
 
 ---
 
@@ -8,14 +8,7 @@ Hard rules for RPC payload sizing. The cost of getting this wrong is `OverflowEx
 
 Unity Transport's UDP MTU is **1400 B** (`NetworkParameterConstants.MTU`). After NGO framing (RPC method hash, NetworkObjectId, NetworkBehaviourIndex, length prefixes) the **single-packet payload budget is ~1200 B per Unreliable message**.
 
-NGO 2.x builds its Unreliable pipelines with a fragmentation stage: messages larger than one MTU are split across UDP packets, up to `UnityTransport.MaxPayloadSize` (**default 6144 B**, configurable). Past that cap the send errors out.
-
-| Delivery | Limit | What happens past the design budget |
-|---|---|---|
-| Unreliable RPC | Design budget ~1200 B (one MTU); hard cap `MaxPayloadSize` (6144 B default) | Fragments across packets — one lost fragment drops the whole message. Send error above the hard cap |
-| Unreliable Custom Message | Same | Same |
-| Reliable RPC | ~64 KB initial buffer, auto-fragments to transport limit | Slower under loss, retransmit queue grows |
-| Reliable Custom Message | Same as Reliable RPC | Same |
+NGO 2.x builds its Unreliable pipelines with a fragmentation stage: messages larger than one MTU are split across UDP packets, up to `UnityTransport.MaxPayloadSize` (**default 6144 B**, configurable). Past that cap the send errors out — Reliable payloads are allowed to exceed `MaxPayloadSize`, Unreliable payloads are not. Custom Messages follow the same limits as RPCs of the same delivery. Per-delivery budgets are Rule 1 in SKILL.md; this file carries the derivation and how to compute against it.
 
 ---
 
@@ -110,3 +103,13 @@ Under 5% packet loss:
 - Client appears hung
 
 Use Unreliable + chunked snapshot stream for this profile.
+
+---
+
+## Checklist
+
+- [ ] Worst-case payload computed with the formula above (array at max length + prefixes + ~40 B framing) for every RPC with array or variable-size parameters
+- [ ] The computed worst case is documented in a comment at the RPC declaration, including the verdict (fits / fragments / exceeds cap)
+- [ ] Every Unreliable send site fits ~1200 B at `maxN`; anything in the 1200 B–6 KB fragmented range is low-rate AND genuinely loss-free to drop
+- [ ] Over-budget sites were resolved in the decision order (shrink → change channel → chunk), not by silently switching a 20 Hz stream to Reliable
+- [ ] All quantization uses the cheatsheet ranges (value range fits the chosen integer type at the chosen scale) and converts only at the network boundary

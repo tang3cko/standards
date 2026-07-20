@@ -227,3 +227,13 @@ public override void Execute(...)
 - [event-channels.md](event-channels.md) - EventChannel vs Actions comparison
 - [architecture.md](architecture.md) - ScriptableObject patterns overview
 - [variables.md](variables.md) - Variable pattern for shared state
+
+---
+
+## Checklist
+
+- [ ] Every `Execute` call site uses the null-conditional operator (`action?.Execute()`)
+- [ ] `NotifyActionExecuted`/`LogAction` monitoring calls are wrapped in `#if UNITY_EDITOR`
+- [ ] ActionSO was chosen over EventChannel per the When to Use table (configurable/data-driven behavior, not a simple notification)
+- [ ] `ActionSO<T>` is used when the caller supplies data at execution time; parameterless `ActionSO` otherwise
+- [ ] Composite behavior uses SequenceAction/ConditionalAction assets rather than hardcoded orchestration in a consumer

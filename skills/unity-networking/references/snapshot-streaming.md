@@ -181,3 +181,15 @@ Always measure under simulated 5% packet loss.
 - **Glenn Fiedler / Gaffer On Games** - "Snapshot Compression" and "State Synchronization" articles
 - **Quake III** - the original snapshot interpolation pattern
 - **Overwatch** - delta snapshots + replay reconciliation (GDC 2017)
+
+---
+
+## Checklist
+
+- [ ] "When to Use" criteria all hold (>10 Hz, many entities, authoritative sender, loss-tolerant) — if not, this is the wrong pattern; go back to `sync-mechanisms.md`
+- [ ] `CHUNK_SIZE` tuned so worst-case chunk payload (states + ids + header + ~40 B framing) is <= 1200 B, shown with the arithmetic
+- [ ] Chunk RPC carries `snapshotSeq` + `chunkIdx` + `totalChunks`, and the chunk-index width (`byte` = 8 chunks max via bitmask) covers `maxN / CHUNK_SIZE`
+- [ ] Client reassembly ignores stale seqs, dedupes chunks, applies snapshots atomically only when complete, and cleans up superseded buffers
+- [ ] Wire structs are quantized via a dedicated codec (gameplay stays `float`/`Vector3`), and total bandwidth (chunks × payload × Hz × clients) is computed and acceptable
+- [ ] Late-joiner path is separate: one-shot Reliable full state on connect, periodic Unreliable chunks after — never conflated
+- [ ] Behavior verified (or at least reasoned through) under simulated ~5% packet loss

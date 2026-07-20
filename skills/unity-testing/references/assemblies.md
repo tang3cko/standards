@@ -172,23 +172,22 @@ See [patterns.md](patterns.md) for the full `ForTesting` pattern (naming, file-s
 
 ---
 
-## Quick Checklist
-
-For each test assembly:
-
-- [ ] Name follows pattern: `{Project}.{Module}.Tests.{Mode}`
-- [ ] References production assemblies
-- [ ] `overrideReferences: true`
-- [ ] `precompiledReferences: ["nunit.framework.dll"]`
-- [ ] `autoReferenced: false`
-- [ ] Edit Mode: `includePlatforms: ["Editor"]`
-- [ ] Play Mode: `UNITY_INCLUDE_TESTS` define constraint
-- [ ] Tests appear in Test Runner
-
----
-
 ## References
 
 - [testing.md](testing.md) - Testing overview
 - [test-modes.md](test-modes.md) - Edit Mode vs Play Mode decision
 - [nunit.md](nunit.md) - NUnit attributes and assertions
+
+---
+
+## Checklist
+
+For each test assembly created or modified:
+
+- [ ] Name follows pattern: `{Project}.{Module}.Tests.{Mode}`
+- [ ] References production assemblies; production asmdefs gained no reference back to any test assembly
+- [ ] `overrideReferences: true` with `precompiledReferences: ["nunit.framework.dll"]`
+- [ ] `autoReferenced: false`
+- [ ] Edit Mode: `includePlatforms: ["Editor"]`; Play Mode: `UNITY_INCLUDE_TESTS` define constraint
+- [ ] Play Mode test code references no `UnityEditor` API (use the `ForTesting` seam instead)
+- [ ] Tests appear in Test Runner after a recompile

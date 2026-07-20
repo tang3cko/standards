@@ -72,3 +72,12 @@ See [test-doubles.md](test-doubles.md) for detailed examples.
 - [nunit.md](nunit.md) - NUnit reference
 - [assemblies.md](assemblies.md) - Assembly definitions
 - [pitfalls.md](pitfalls.md) - Common pitfalls
+
+---
+
+## Checklist
+
+- [ ] The test mode was chosen through the decision tree above, not by habit — any Play Mode test can name the branch that forced it
+- [ ] Each replaced dependency's double type matches the quick-decision tree (no Mock where a Stub answers the question)
+- [ ] Every specific topic touched (asmdef setup, NUnit syntax, doubles, patterns) was followed into its dedicated reference file rather than answered from this overview alone
+- [ ] Logic that could be pure C# was extracted before any Play Mode test was written for it

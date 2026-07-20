@@ -137,3 +137,11 @@ The same rule applies to method parameters and properties, not just fields.
 
 - [code-organization.md](code-organization.md) - File and namespace organization
 - [comments.md](comments.md) - Documentation and comment conventions
+
+## Checklist
+
+- [ ] All booleans — fields, parameters, AND properties — carry `is/has/can/should` (or `was/were/are` in past/state contexts)
+- [ ] Serialized EventChannel fields use `on` + past tense (`onQuestCompleted`); C# events use `On` + past tense (`OnHealthChanged`)
+- [ ] Every ScriptableObject-derived type carries its suffix: `SO`, `EventChannelSO`, or `RuntimeSetSO`
+- [ ] Constants (`const` / `static readonly`) are PascalCase — UPPER_SNAKE_CASE only for preprocessor symbols
+- [ ] Methods start with a verb; event handlers use `On`/`Handle` prefixes

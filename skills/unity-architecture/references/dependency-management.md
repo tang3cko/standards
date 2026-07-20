@@ -135,6 +135,59 @@ public class GameManager : MonoBehaviour
 
 ---
 
+## Core/Shell Boundary (pure C# core vs ReactiveSO)
+
+A pure C# gameplay core — engine-agnostic logic such as code ported between engines or shared with CLI simulation tools — must NOT depend on the ScriptableObject framework (Tang3cko.ReactiveSO: `EventChannelSO`, `VariableSO`, `ActionSO`, etc.).
+
+**Why:** SO channels decouple game systems from each other, but they re-couple everything that touches them to the ReactiveSO framework and to `UnityEngine.Object`. Letting that leak into the core destroys engine-independence and the ability to test the core without Unity. The EventChannel rung at the top of the Priority Order applies to *shell-layer* wiring between Unity systems, not to the core's outward API.
+
+The core exposes plain C# events; the MonoBehaviour shell subscribes and relays into EventChannelSO:
+
+```csharp
+// Core (no UnityEngine, no ReactiveSO)
+public class BoardSimulation
+{
+    public event Action<int> ScoreChanged;
+
+    public void ApplyMove(Move move)
+    {
+        // ... pure logic ...
+        ScoreChanged?.Invoke(score);
+    }
+}
+
+// Shell (MonoBehaviour layer) — relays core events into SO channels
+public class BoardPresenter : MonoBehaviour
+{
+    [SerializeField] private IntEventChannelSO onScoreChanged;
+    private BoardSimulation simulation;
+
+    private void OnEnable() => simulation.ScoreChanged += RelayScore;
+    private void OnDisable() => simulation.ScoreChanged -= RelayScore;
+
+    private void RelayScore(int score) => onScoreChanged?.RaiseEvent(score);
+}
+```
+
+**Enforce structurally with asmdefs** — the core asmdef must not reference the ReactiveSO asmdef (and should carry `noEngineReferences` where feasible), so a violation is a compile error, not a review finding:
+
+```json
+// Game.Core.asmdef — engine-agnostic core
+{
+    "name": "Game.Core",
+    "references": [],
+    "noEngineReferences": true
+}
+
+// Game.Shell.asmdef — Unity-side wiring
+{
+    "name": "Game.Shell",
+    "references": ["Game.Core", "Tang3cko.ReactiveSO"]
+}
+```
+
+---
+
 ## Refactoring Example
 
 ### Before (Singleton)
@@ -184,3 +237,13 @@ public class UIManager : MonoBehaviour
 - [architecture.md](architecture.md) - Architecture decision tree
 - [event-channels.md](event-channels.md) - EventChannel details
 - [design-principles.md](design-principles.md) - Asset-based DI principles
+
+---
+
+## Checklist
+
+- [ ] Every dependency sits on the highest viable rung (EventChannel > SerializeField > Find > Singleton), with a stated reason for each step down
+- [ ] `FindFirstObjectByType` appears only as a null-fallback after an unassigned SerializeField, and logs a warning when it also fails
+- [ ] Any Singleton satisfies all four acceptance conditions and clears `Instance` in `OnDestroy`
+- [ ] Pure C# core code has zero references to ReactiveSO types; the core asmdef does not reference the ReactiveSO asmdef
+- [ ] The shell relays core `event Action` events into EventChannelSO with paired `OnEnable`/`OnDisable` subscribe/unsubscribe

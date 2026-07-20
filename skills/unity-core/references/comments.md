@@ -171,3 +171,11 @@ private void Update() { }
 
 - [naming.md](naming.md) - Naming conventions
 - [code-organization.md](code-organization.md) - File organization
+
+## Checklist
+
+- [ ] Serialized fields are grouped under `[Header]` sections; non-obvious ones carry `[Tooltip]`
+- [ ] Public classes, methods, and properties that are not self-explanatory have XML `<summary>` docs
+- [ ] No XML docs on Unity lifecycle methods (`Awake`, `Start`, ...) or on code whose name already says everything
+- [ ] Inline comments state intent, domain rules, or constraints — none restate the next line of code
+- [ ] Deferred work uses `TODO:` / `FIXME:` / `NOTE:` prefixes so it is greppable

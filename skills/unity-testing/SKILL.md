@@ -39,7 +39,7 @@ Update status as you progress: `in_progress` when starting, `completed` when don
 4. **AAA structure** — every test reads as Arrange, Act, Assert; one behavior per test; name = `Method_Condition_ExpectedResult`
 5. **Test assemblies via asmdef** — test code never leaks into runtime assemblies (`UNITY_INCLUDE_TESTS` constraint)
 
-Unity Test Framework note: UTF 2.0 is a core package since Unity 6.2 (docs live in the main Unity Manual under "Testing your code"). `[RequiresPlayMode]` exists for Edit Mode assemblies that need the player loop. For UI Toolkit interaction tests on Unity 6.3+, the separate UI Test Framework package exists.
+Unity Test Framework note: UTF 2.0 is a core package since Unity 6.2 (docs live in the main Unity Manual under "Testing your code"). `[RequiresPlayMode]` lets an Editor-only test assembly run individual tests in the Editor's Play Mode (and `[RequiresPlayMode(false)]` exempts Edit Mode tests in platform assemblies). For UI Toolkit interaction tests on Unity 6.3+, the separate UI Test Framework package exists (`com.unity.ui.test-framework`, versioned with the Editor, e.g. 6.3.0).
 
 ## Workflow
 
@@ -86,16 +86,17 @@ Verify every test you wrote or changed. If any check fails, fix it first — do 
 - [ ] Mode choice matches the Test Mode Decision (no Play Mode test that could be Edit Mode)
 - [ ] Tests are isolated — no shared mutable state, no order dependence, no leftover scene objects/assets
 - [ ] Test asmdef references are correct and runtime assemblies gain no test dependencies
+- [ ] The references named by the chosen workflow path were actually Read this session, and the `## Checklist` at the end of every loaded reference was run against the result — SKILL.md is only the index; the acceptance criteria live in those checklists, so skipping them means presenting unreviewed work
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/testing.md | Testing fundamentals overview |
-| references/principles.md | FIRST principles, AAA pattern, TDD |
-| references/test-modes.md | Edit Mode vs Play Mode decision |
-| references/patterns.md | Humble Object, Builder, Factory patterns |
-| references/test-doubles.md | Mock, Stub, Spy, Fake |
-| references/nunit.md | Attributes and assertions |
-| references/assemblies.md | Test assembly definitions (asmdef) |
-| references/pitfalls.md | Common testing mistakes |
+| File | Load When |
+|------|-----------|
+| references/testing.md | At the start of any writing or strategy path — the only file with the test-doubles quick-decision tree and the topic-to-file navigation map |
+| references/principles.md | Before writing or reviewing any test — the only file with the name-as-specification rule (name must claim exactly what is asserted) and the 15ms unit-test budget |
+| references/test-modes.md | When choosing Edit vs Play Mode for a new test — the only file with the full decision tree and the measured cost comparison (sub-ms vs multi-second player init) |
+| references/patterns.md | When code under test touches MonoBehaviour/ScriptableObject or needs test data — the only file with the full `ForTesting` API rules (public, naming, placement) and Builder/Factory examples |
+| references/test-doubles.md | When a dependency must be replaced — the only file with the 5-type comparison table, NSubstitute syntax, and the "don't mock what you don't own" rule |
+| references/nunit.md | When writing assertions or attributes — the only file with the constraint-model syntax reference, `[TestCase]` vs `[ValueSource]` mode limits, and LogAssert |
+| references/assemblies.md | When creating or fixing test asmdefs — the only file with the exact asmdef JSON (overrideReferences, precompiledReferences, UNITY_INCLUDE_TESTS) and troubleshooting fixes |
+| references/pitfalls.md | When reviewing tests or before presenting written ones — the only file with the 8 bad/good pitfall pairs used as review criteria |
