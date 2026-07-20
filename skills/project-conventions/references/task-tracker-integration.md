@@ -31,3 +31,13 @@ This mirrors the commit-message Known-gaps pattern one level up: the comment is 
 ## Practical mechanics
 
 Use the tracker the project names in its `CLAUDE.md`, through that tracker's own interface, and nothing else — any other tracker, side tool, or ad-hoc list is forbidden. Search that tracker for the existing item before writing, and comment on that item. Don't create a new tracker task for work that's just a commit-scoped detail — that's what the commit's own Known gaps section is for.
+
+## Checklist
+
+Run against every tracker setup or milestone comment before presenting:
+
+- [ ] `CLAUDE.md` names the tracker *and* the exact list/board, in a line that also restates "no progress in docs"
+- [ ] Content is routed by the table: commit-scoped deferrals → the commit's Known gaps; cross-commit progress and status → the tracker
+- [ ] Each milestone comment carries all three parts: what was done, the commit hash, and the next resumption point (including any open decision)
+- [ ] The comment was attached to the existing task found by search — no new task created for a commit-scoped detail
+- [ ] Nothing that belongs in the tracker was written into docs/ or a commit body instead

@@ -79,3 +79,11 @@ See the godot-testing skill for how this maps onto that skill's three-stage gate
 - If an import hangs, reproduce against a clean working tree first to isolate whether a specific asset/config is the cause
 - Confirm the provenance of a copied/inherited asset by byte comparison rather than assuming — this both settles licensing questions and avoids wasted debugging on an asset that turns out to be identical to a known-good one
 - Never trust a subagent's or a prior pass's "visually verified" claim without opening the actual reported image yourself
+
+## Checklist
+
+- [ ] Rest-pose compatibility was judged from an actual skeleton dump comparison (positions in real-world units, mirror-tolerant quaternion difference), not from bone-name overlap or the product description
+- [ ] Every numeric pose gate pairs a magnitude constraint with an orientation constraint that would catch the same joint bent the wrong way
+- [ ] Rendered PNGs cover front AND side angles, multiple time points for loops, and were opened and inspected — a saved file or a zero exit code was not counted as inspection
+- [ ] Composition-level behavior (transitions, timing, placement) was driven through the real game entry point, not judged from single-clip passes
+- [ ] Temporary instrumentation (logs, counters) was removed — the diff was checked for strays

@@ -30,13 +30,13 @@ A `Tick(dt)` implementation that does at most one "big" thing per call — e.g. 
 
 This is exactly the kind of bug that "looks tested" but isn't: unit tests written against small dt values never exercise the multi-item-per-call path, so the bug ships and only surfaces once a speed-multiplier feature is bolted on later.
 
-## Review checklist for this pattern
+Because `Tick` is pure C#, everything below is directly testable without the Godot runtime — see `godot-testing` for the link-reference setup that makes `dotnet test` the fast feedback loop for it.
+
+## Checklist
 
 When designing or reviewing a `Tick(dtMs)` method:
 
-- [ ] Does `Tick` ever return early after handling "one" spawn/job/transition, leaving remaining dt unprocessed?
-- [ ] Is the clamp-and-loop applied in the Godot-layer driver (`_Process`), not inside `Tick` itself? (`Tick` should be dt-size-agnostic; the driver is what guarantees dt never exceeds the safe step)
-- [ ] Does at least one test call `Tick` with a dt several multiples of the normal per-frame value and assert nothing was silently dropped compared to the equivalent number of small-step calls?
-- [ ] Is the clamp value (`MaxSimStepMs` or equivalent) the same value the original design assumed for "one unit of simulated time" — not an arbitrary smaller/larger number chosen for the loop?
-
-Because `Tick` is pure C#, this whole checklist is directly testable without the Godot runtime — see `godot-testing` for the link-reference setup that makes `dotnet test` the fast feedback loop for it.
+- [ ] `Tick` never returns early after handling "one" spawn/job/transition, leaving remaining dt unprocessed
+- [ ] The clamp-and-loop lives in the Godot-layer driver (`_Process`), not inside `Tick` itself (`Tick` should be dt-size-agnostic; the driver is what guarantees dt never exceeds the safe step)
+- [ ] At least one test calls `Tick` with a dt several multiples of the normal per-frame value and asserts nothing was silently dropped compared to the equivalent number of small-step calls
+- [ ] The clamp value (`MaxSimStepMs` or equivalent) is the same value the original design assumed for "one unit of simulated time" — not an arbitrary smaller/larger number chosen for the loop

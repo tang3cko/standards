@@ -33,3 +33,13 @@ Never place any of the following in a numbered namespace (or anywhere in `docs/`
 This content belongs in the task tracker (see references/task-tracker-integration.md). The reason is not aesthetic: a status table goes stale the moment work continues, and a stale doc is worse than no doc because it actively misleads. `docs/` should describe things that stay true regardless of how much is implemented — architecture, concept, standards — so it never needs a "last updated" caveat to be trusted.
 
 When reviewing an existing docs/ tree, flag any status/progress content found and recommend moving it to the tracker rather than deleting the surrounding doc — the doc's non-progress content is usually still valid reference material.
+
+## Checklist
+
+Run against every docs/ placement or review before presenting:
+
+- [ ] Each new/moved doc placed by the heuristic: describes something that *exists* → numbered namespace; still being decided → `99_ideas/`
+- [ ] No status tables, percentage-complete counters, or TODO/done checklists anywhere in docs/ — any found are flagged for the tracker, with the surrounding doc preserved
+- [ ] Speculative or unimplemented design found outside `99_ideas/` is flagged for quarantine
+- [ ] Ideas that have since been built are graduated into the matching numbered namespace, with the `99_ideas/` doc retired or trimmed to the decision record (no duplication)
+- [ ] The affected namespace's `README.md` index still reflects its contents

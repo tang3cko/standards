@@ -14,6 +14,8 @@ Common failure modes when running godot-mono from the CLI, and how to diagnose t
 | A render harness exits 0, prints "saved screenshot", but the PNG is solid black or the process throws on `GetImage()` | `--headless` was combined with `--rendering-driver` — the dummy display driver wins regardless | Drop `--headless`; use `--rendering-driver opengl3 --audio-driver Dummy` alone (see `rendering.md`) |
 | A fresh clone/worktree fails to build with a "type not found" on a file that's clearly in the repo | Asset/script import cache is stale or an `.import`-adjacent file wasn't regenerated | Run `godot-mono --headless --path . --import` before the failing command |
 | `dotnet test`/`run-tests.sh` "passes" but a stray `godot-mono` process lingers afterward, later blocking a new run with a project-lock error | A crashed or force-quit prior run left an orphaned process holding the lock | `ps aux \| grep -i "[g]odot-mono.*--path"`, kill the stray process, re-run |
+| A script in a `.gdignore`d directory still executes via `-s` or `load()` — or an ignore file has no effect at all | `.gdignore` only gates the editor's filesystem scan (and, via that, pck export), not `ResourceLoader`; a misnamed `.godotignore` is silently ignored | Don't rely on `.gdignore` to block execution; name the file exactly `.gdignore` (see Pitfall 5) |
+| A fresh clone cannot run headless `--export-*` — the preset simply isn't there | `export_presets.cfg` excluded by a stock Godot `.gitignore` template | Track the file if it carries no secrets (see Pitfall 6) |
 
 ---
 
@@ -105,8 +107,66 @@ entry for the general mechanism if this is a new failure mode to the reader.
 
 ---
 
+## Pitfall 5: `.gdignore` Gates the Editor Scan Only — Not Execution
+
+### Problem
+
+Expecting `.gdignore` to make a directory invisible to all of Godot — e.g. assuming a script under
+a `.gdignore`d `tools/` directory cannot be executed, or that ignoring a directory changes CLI
+script-run behavior.
+
+### What `.gdignore` actually does
+
+Verified against the engine source (Godot 4.6.3, 2026-07): `.gdignore` is honored only by the
+editor's `EditorFileSystem` scan (`_should_skip_directory` in
+`editor/file_system/editor_file_system.cpp`). It gates editor scanning/indexing (`.uid`
+generation) and, via that, what `--export-*` includes in the pck. It does NOT affect
+`-s script.gd` execution or a direct `res://` `load()` of a script — that path goes straight to
+`ResourceLoader`, which never consults `.gdignore`.
+
+Also: the file must be named `.gdignore` exactly — `.godotignore` is silently ignored, with no
+warning; the directory simply keeps getting scanned.
+
+### Solution
+
+Use `.gdignore` for what it is (keep the editor from scanning/importing a directory, keep it out
+of exports) and never as an execution or load barrier. If an ignore file appears to do nothing,
+check its name first.
+
+---
+
+## Pitfall 6: `export_presets.cfg` Excluded by Stock `.gitignore` Templates
+
+### Problem
+
+A fresh clone cannot run headless `--export-*` — no presets exist — and any `exclude_filter` or
+preset fixes made locally never reach other machines or CI.
+
+### Why the templates exclude it
+
+The popular Godot `.gitignore` templates exclude `export_presets.cfg` because Android keystore
+paths/passwords can be stored in it (godot-proposals#1156).
+
+### Solution
+
+If a project's presets carry no secrets (signing handled outside the presets), track the file.
+Official env-var keystore support (godotengine/godot PR #35930: `GODOT_ANDROID_KEYSTORE_PATH`,
+`GODOT_ANDROID_KEYSTORE_USER`, `GODOT_ANDROID_KEYSTORE_PASSWORD`) exists precisely so the file can
+be tracked safely.
+
+---
+
 ## References
 
 - [../SKILL.md](../SKILL.md) - Core Rules and Editor-lock boundary
 - [commands.md](commands.md) - Full CLI invocation reference
 - [rendering.md](rendering.md) - Offscreen PNG rendering, harness anatomy
+
+## Checklist
+
+- [ ] Confirmed no Editor or stray `godot-mono` process held the project lock (`ps aux | grep -i "[g]odot-mono.*--path"`) before declaring a start failure a bug
+- [ ] A first-run E2E timeout was treated as a cold-cache compile (raise `CompileProcessTimeout`), not as a real hang
+- [ ] Any black/empty PNG was diagnosed against `--headless` in the invocation before touching harness code
+- [ ] Nothing relies on `.gdignore` to block `-s`/`load()` execution, and every ignore file is named exactly `.gdignore`
+- [ ] The fresh-clone headless story holds: `export_presets.cfg` is tracked, or its exclusion is a deliberate secrets decision
+- [ ] Project-local runner scripts live under `Tools/` (or another non-colliding name), never a lowercase `scripts/` beside `Scripts/`

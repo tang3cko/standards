@@ -109,3 +109,12 @@ internal gates reduce risk, they do not eliminate the value of a human looking a
 - **Delegate in complete, reviewable units; keep judgment centralized.** Hand a sub-agent one
   self-contained unit of work (one commit's worth), and keep "look at the rendered result and decide
   what to try next" as the reviewer's job, not the sub-agent's.
+
+## Checklist
+
+- [ ] Every numeric gate pairs a magnitude check with an orientation/sign check — "bent the right amount" without "bent the right way" passes broken poses
+- [ ] Each new gate answers a failure that actually slipped through once, not a speculative failure mode
+- [ ] Renders were captured with a real rendering driver (not `--headless`, which forces the dummy driver), from front AND side, at multiple timestamps for looping clips
+- [ ] Every produced PNG was actually opened and looked at — "the script saved a file" is not verification
+- [ ] Any in-game (Stage 3) check drives the real scene through its real entry point, with instrumentation proving the intended branch actually ran
+- [ ] Any "looks correct" claim (yours or a sub-agent's) cites an image path the reviewer opened, not just a numeric pass

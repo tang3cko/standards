@@ -4,7 +4,7 @@ xUnit-based testing strategy using the Humble Object pattern. Only pure C# logic
 
 ## Policy
 
-- **Framework**: xUnit
+- **Framework**: xUnit (v2 packages: `xunit` + `xunit.runner.visualstudio`). xUnit v3 ships as a separate `xunit.v3` package and turns test projects into standalone executables — the link-reference pattern below works with either, but existing projects stay on v2 (security-fix-only upstream) until a deliberate migration
 - **In scope**: Godot-independent pure C# logic (calculation, data transformation, validation)
 - **Out of scope**: Node-based implementations, UI, scene behavior (manual verification, or future integration tests)
 - **Placement**: `Tests/` as a peer directory, excluded from the main `.csproj` via `<Compile Remove="Tests/**" />`
@@ -27,14 +27,16 @@ ProjectRoot/
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <RootNamespace>Smith.Tests</RootNamespace>
+    <RootNamespace>MyGame.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*" />
     <PackageReference Include="xunit" Version="2.*" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.*" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.*" />
+    <!-- Only needed when linked files use Godot value types (Vector2, Color, ...);
+         a fully engine-free logic layer can drop this reference entirely -->
     <PackageReference Include="GodotSharp" Version="4.6.*" />
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +55,7 @@ Logic lives in pure C# classes separated from Godot nodes, which keeps it testab
 ### Example: CraftingRecipe
 
 ```csharp
-namespace Smith;
+namespace MyGame;
 
 public class CraftingRecipe
 {
@@ -69,7 +71,7 @@ public class CraftingRecipe
 ```
 
 ```csharp
-namespace Smith.Tests;
+namespace MyGame.Tests;
 
 public class RecipeApplierTest
 {
@@ -115,3 +117,12 @@ When the pure logic under test depends on an `internal` class, that dependency m
 Example: `MarchingCubesMesher` references `internal MarchingCubesTables`, so linking only `MarchingCubesMesher.cs` fails to compile.
 
 `InternalsVisibleTo` would also work, but the link approach is preferred because `Tests.csproj` then explicitly documents which pure-logic files depend on which supporting implementations.
+
+## Checklist
+
+- [ ] Every linked file is pure C# — no Godot node dependency anywhere in the link list (Godot value types are acceptable only with the `GodotSharp` package reference in place)
+- [ ] Every `internal` dependency of a linked file is itself linked in `Tests.csproj`, or the build breaks
+- [ ] The main `.csproj` still excludes the test tree via `<Compile Remove="Tests/**" />`
+- [ ] Test files are `{Feature}Test.cs`, methods are `Method_Condition_ExpectedResult`, namespace is `{Project}.Tests`
+- [ ] Each test reads as Arrange / Act / Assert and asserts one behavior
+- [ ] `dotnet test Tests/Tests.csproj` was run (or the user was told it was not, and why)

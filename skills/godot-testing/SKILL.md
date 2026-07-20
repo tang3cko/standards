@@ -123,10 +123,13 @@ Verify every file you wrote or changed against each item. If any check fails, fi
 - [ ] A new gate checks orientation/sign, not just magnitude
 - [ ] Any "it looks right now" claim is backed by an actual rendered image the reviewer opened, not just a numeric pass
 
+**All paths:**
+- [ ] The references named by the chosen workflow path were actually Read this session, and the `## Checklist` at the end of every loaded reference was run against the result — SKILL.md is only the index; the acceptance criteria (csproj linking details, `.runsettings` load-bearing values, gate-stage evidence rules) live in those checklists, so skipping them means presenting unreviewed work
+
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/testing.md | Project structure, Tests.csproj pattern, Humble Object example, scope table, internal-linking |
-| references/e2e-harness.md | Writing/reviewing GdUnit4Net E2E tests: `.runsettings`, engine-error-as-test-failure, save sandboxing, regression test doc-comment convention |
-| references/visual-verification.md | Pose/animation/rendering changes: three-stage visual gate, "differs ≠ correct", sub-agent verification rules |
+| File | Load When |
+|------|-----------|
+| references/testing.md | Before writing Layer 1 tests or answering scope questions — the only file with the full `Tests.csproj` XML (link-reference syntax, package versions), the Choosing What to Test scope table, and the `internal`-dependency linking rule with the `InternalsVisibleTo` trade-off |
+| references/e2e-harness.md | Before writing or reviewing any GdUnit4Net E2E test — the only file with the `.runsettings` XML and why each value is load-bearing (`MaxCpuCount=1`, `--path ..`, `CompileProcessTimeout`), the engine-error-as-failure wiring + self-check test, the sandbox delete-safety code, and the 3-part regression doc-comment convention |
+| references/visual-verification.md | Before adding a Layer 3 gate or judging pose/animation/rendering changes — the only file with the three-stage gate progression, the per-stage catches/cannot-catch table, the headless-render capture rules (front+side, multiple timestamps), and the sub-agent evidence rules |

@@ -25,7 +25,7 @@ ProjectRoot/
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <RootNamespace>Smith.Tests.E2E</RootNamespace>
+    <RootNamespace>MyGame.Tests.E2E</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
@@ -36,6 +36,8 @@ ProjectRoot/
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <!-- Stable pairing (verified 2026-07): api 5.0.0 is the latest stable; adapter 3.1.x
+         forces a prerelease api (5.1.0-rc), so pin both until 5.1 ships stable -->
     <PackageReference Include="gdUnit4.api" Version="5.0.0" />
     <PackageReference Include="gdUnit4.test.adapter" Version="3.0.0" />
     <PackageReference Include="GodotSharp" Version="4.6.*" />
@@ -83,7 +85,7 @@ real wiring, not isolated logic.
 </RunSettings>
 ```
 
-Notes, all verified against real project runs:
+Notes, all verified in a production Godot project, 2026-07:
 
 - **`MaxCpuCount=1` is load-bearing, not a style choice.** `[RequireGodotRuntime]` tests share one
   Godot process; letting the test adapter parallelize would race two Godot instances against the
@@ -264,3 +266,12 @@ public class IntroSequenceE2ETest
 # In the Tests.E2E/ directory
 dotnet test
 ```
+
+## Checklist
+
+- [ ] `.runsettings` keeps its load-bearing values: `MaxCpuCount=1`, `GODOT_BIN` pointing at the mono/.NET binary, and the trailing `--path ..` in `<Parameters>` — each one silently breaks the run if "cleaned up"
+- [ ] The test-suite class carries `[GodotExceptionMonitor]`, `project.godot` has debug-only file logging, and the induced-PushError self-check test exists so the mechanism cannot go dark silently
+- [ ] Any `[ThrowsException]`-pinned expected error has the same flow covered elsewhere under the unmasked monitor (the monitor reports only the first error per test)
+- [ ] Persistence is sandboxed: env var set in `.runsettings`, the test refuses to run when it is unset, and the delete-safety check runs before every recursive delete
+- [ ] A ship-bug regression's doc comment covers all three parts: the original bug, why Layer 1 missed it, and an assertion that the triggering precondition was actually hit
+- [ ] Assertions target the real node tree via `ISceneRunner` — no reflection shortcuts into internals

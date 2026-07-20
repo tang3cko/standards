@@ -93,3 +93,12 @@ if (string.Equals(sandboxDir, realUserDir, StringComparison.OrdinalIgnoreCase)
 ```
 
 This check belongs conceptually next to the persistence code (it exists because of how `SavePaths` works), even though the harness that calls it — `.runsettings` env var wiring, per-test cleanup timing, engine-error-as-failure — is owned by the godot-testing skill. Treat this file's rule as: "persistence code must make the override safe to use"; treat godot-testing's rule as: "the test harness must actually use it correctly." See godot-testing's e2e-harness reference for the harness side.
+
+## Checklist
+
+- [ ] No file in the pure-C# layer (serializer, CRC32, migrator, `SavePaths`, mapper, formatter) touches `Godot.FileAccess`, `Godot.DirAccess`, or `GD.*`; only the coordinator and rotator do
+- [ ] The pure-C# files link-reference into the unit test project and compile without a Godot runtime
+- [ ] The typed mapper round-trips (`Apply(Capture(x))` reproduces `x`) and that round-trip is unit-tested without touching a file
+- [ ] Session-scoped and persistent data live in separate stores, each with its own file family and coordinator instance — no single store with per-key reset rules
+- [ ] Rules/conditions reading both stores name the store explicitly (tagged reference), never a merged flat namespace
+- [ ] Any destructive sandbox operation refuses to run when the sandbox env var is unset, and rejects a sandbox path equal to (or unsafely close to) the real user-data directory

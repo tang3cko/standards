@@ -1,6 +1,6 @@
 # Binary Save Format
 
-A minimal, dependency-free binary format for save data: no third-party serializer, no reflection, no encryption (indie-scale save data has no attacker model that justifies it — omit encryption unless a concrete requirement says otherwise).
+A minimal, dependency-free binary format for save data: no third-party serializer, no reflection, no encryption (indie-scale save data has no attacker model that justifies it — omit encryption unless a concrete requirement says otherwise). Avoiding reflection is also a shipping constraint, not just taste: reflection-based serializers break at runtime on iOS NativeAOT (see save-system.md "Platform Notes" for the JSON case).
 
 ## File Layout
 
@@ -158,3 +158,12 @@ Rules:
 - **Register steps as the schema evolves, never rewrite old steps.** A step that already shipped is a historical fact about what old saves look like; changing it retroactively breaks migration for saves written between the old and new step.
 - **`FromFuture` is not `Invalid`.** A save written by a newer build of the game (player rolled back, or is on a beta channel) is not corrupt — it's just ahead. Treat it as its own status so the caller can message the player correctly ("this save is from a newer version") instead of "corrupted."
 - A project that starts at version 1 with no steps yet still defines `CurrentVersion` and the `Steps` dictionary shape up front — the first schema change only needs to add an entry, not restructure the migrator.
+
+## Checklist
+
+- [ ] File layout is Magic + Version + PayloadLen + Payload + CRC32, little-endian, with CRC32 computed over the payload only
+- [ ] Every payload value is written behind one of the defined type tags; an unsupported type fails during in-memory serialization, never after bytes reach disk
+- [ ] `Deserialize` verifies the checksum *before* parsing the payload, and returns a status enum for every malformed-input case — it never throws
+- [ ] Migration is stepwise (`Steps[v]` produces `v+1`); no shipped step was rewritten, and no "any version straight to latest" shortcut exists
+- [ ] `version > CurrentVersion` yields `FromFuture` (distinct from `Invalid`); missing or negative version yields `Invalid`
+- [ ] `CurrentVersion` and the `Steps` dictionary shape exist even if the project is still at version 1

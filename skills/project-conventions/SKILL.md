@@ -75,13 +75,11 @@ Never write implementation-status tables, percentage-complete, or "TODO/done" ch
 
 ### Task Tracker Integration
 
-- The project's `CLAUDE.md` names the tracker list/board explicitly (e.g. "Task/progress tracking lives in `<tracker>` (list: `<org> - <project>`)")
-- Large milestones get a task comment: what was done + commit hash + the next resumption point
-- The comment, not a docs edit, is where "what's left" lives day-to-day
+The project's `CLAUDE.md` names the tracker list/board explicitly; cross-commit progress lives in tracker comments, not docs or commit bodies. The comment shape and commit-vs-tracker routing live in `references/task-tracker-integration.md`.
 
 ### Resumption Workflow
 
-Before resuming interrupted work (session stall, API disconnect, new session): read the **Known gaps** section of the last completed commit first. It is the intended entry point — do not re-derive state from scratch or re-scan the whole codebase.
+Before resuming interrupted work (session stall, API disconnect, new session): read the **Known gaps** section of the last completed commit first. It is the intended entry point — do not re-derive state from scratch or re-scan the whole codebase. The full procedure lives in `references/resumption-workflow.md`.
 
 ## Workflow
 
@@ -126,12 +124,18 @@ Verify the drafted message against each item. If any check fails, fix it first �
 - [ ] Known gaps is present — explicit "left undone" + reason, even if the answer is "none"
 - [ ] No implementation-status or progress content leaked into a docs/ change bundled in the same commit
 - [ ] Trailer present
+- [ ] `references/commit-messages.md` was actually Read this session — SKILL.md is only the index; the phrasing rules and worked examples live there, so drafting from the Shape alone means drafting against an incomplete standard
+- [ ] The `## Checklist` at the end of the loaded reference was run item-by-item against the drafted message
+
+Non-commit paths have the same gate at Phase 2: the reference named by the chosen path must have been Read this session, and its end `## Checklist` run against the output — each reference is the only place its domain's definition of done exists.
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/commit-messages.md | Drafting or reviewing a commit message, test-count delta phrasing, known-gaps notation |
-| references/docs-structure.md | Placing a new doc, auditing docs/ for stale progress content or misplaced speculative design |
-| references/task-tracker-integration.md | Wiring a project's CLAUDE.md to its task tracker, writing milestone comments |
-| references/resumption-workflow.md | Resuming after a stall, API disconnect, or new session |
+Each file below is the only place its listed content exists — SKILL.md deliberately does not restate it.
+
+| File | Load When |
+|------|-----------|
+| references/commit-messages.md | Drafting or reviewing a commit message. Only source for: summary-line effect-vs-mechanism examples and the parenthetical preview pattern, test-count delta format variants, known-gaps decision-record phrasing, when the bullet body may be skipped |
+| references/docs-structure.md | Placing a new doc or auditing docs/. Only source for: the exists-vs-still-deciding placement heuristic, `99_ideas/` graduation/retirement rule, per-namespace README indexes, how to handle progress content found during review |
+| references/task-tracker-integration.md | Wiring a project's CLAUDE.md to its tracker or writing milestone comments. Only source for: the CLAUDE.md tracker-naming phrasing, commit-vs-tracker content routing table, three-part milestone comment shape, the project-designated-tracker-only rule |
+| references/resumption-workflow.md | Resuming after a stall, API disconnect, or new session. Only source for: the two-command entry-point procedure, the deferral-reasoning rule (continue or explicitly un-defer), tracker cross-check ordering, resumption anti-patterns |

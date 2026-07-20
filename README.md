@@ -39,7 +39,7 @@ Every code-oriented skill follows the same contract:
 - **Self-Check** — a tracked phase: a checklist the agent must pass before presenting generated or edited code. It requires that the workflow-named references were actually Read and that each loaded reference's end-of-file Checklist was run — the Self-Check cannot be completed from SKILL.md alone
 - **Reference Files** — a "Load When" table: each row states the load trigger and what information exists only in that file. Every reference ends with a domain-specific `## Checklist` that the Self-Check delegates to
 
-(The reference-checklist contract is rolled out on the unity-* skills first; godot-* skills migrate next.)
+(The reference-checklist contract applies to all code-oriented skills — unity-*, godot-*, and project-conventions. game-design is a knowledge skill and exempt.)
 
 ---
 

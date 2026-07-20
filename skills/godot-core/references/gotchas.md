@@ -200,6 +200,30 @@ A recurring engine-level warning (e.g. an `ObjectDB` leak warning at shutdown) i
 
 Judge every subscription by "does the emitter live longer than me," not by a uniform "always unsubscribe" reflex — the latter adds boilerplate to same-lifetime pairs without preventing any leak.
 
+## Mobile C# is experimental; iOS runs NativeAOT and rejects reflection
+
+As of Godot 4.7.1 (latest stable, 2026-07), official C#/.NET platform support is stable on **desktop only**. Android and iOS export exist since Godot 4.2 but remain officially **experimental**; the web platform is unsupported for C# entirely. The runtimes also differ per platform: Android ships on Mono (JIT, linux-bionic), while iOS ships on .NET **NativeAOT** — a trimmed, ahead-of-time-compiled runtime with no dynamic code generation.
+
+The practical consequence (verified in a production Godot project, 2026-07): reflection that Mono tolerates breaks on iOS, often silently or only at first use.
+
+- Reflection-based `System.Text.Json` serialization is **disabled at runtime** on iOS — the first (de)serialize call throws `InvalidOperationException`. Shipped C# must use a source-generated `JsonSerializerContext` instead:
+
+  ```csharp
+  // NG on iOS: reflection-based serialization throws InvalidOperationException
+  JsonSerializer.Serialize(saveData);
+
+  // OK: source-generated context works on both runtimes
+  [JsonSerializable(typeof(SaveData))]
+  internal partial class SaveJsonContext : JsonSerializerContext { }
+
+  JsonSerializer.Serialize(saveData, SaveJsonContext.Default.SaveData);
+  ```
+
+- Any new reflection or dynamic-code use in shipped code needs an explicit AOT-compatibility check before it lands. **"Works on Android" proves nothing for iOS** — the JIT runtime masks exactly the class of failure NativeAOT exposes.
+- Even upstream acknowledges the residual risk: Godot roots its bindings and the game assemblies against trimming, but "some reflection usage may still break at runtime" (godotengine.org, "Current state of C# platform support in Godot 4.2").
+
+Sources: docs.godotengine.org C#/.NET basics (platform support), godotengine.org article above, godot-proposals#7895.
+
 ## Label3D rotated 180° on Y mirrors its text
 
 A `Label3D` under a `Camera3D` faces `-Z` by default, so it shows its back to the camera. Fixing that with a 180° Y rotation also flips the X axis — the text becomes a mirror image.
@@ -210,3 +234,12 @@ Fix it with billboarding instead of rotation:
 [node name="Watch" type="Label3D" parent="Head/Camera3D"]
 billboard = 1
 ```
+
+## Checklist
+
+- [ ] Every `[Export] NodePath` is initialized `= new()`; no typed node references are exported, and `[Export]` names in `.tscn` match the C# spelling exactly
+- [ ] Scene structure avoids the silent traps: no `Area3D` under a `StaticBody3D`; hand-authored `MeshInstance3D` under a `Skeleton3D` carries `skeleton = NodePath("..")`
+- [ ] UI code never sets anchors on Container-derived nodes; full-screen overlays use `MouseFilter.Ignore`; cameras are deactivated via `ClearCurrent(enableNext: false)`, never `Current = false`
+- [ ] Lifecycle ordering respected: no same-frame self-reference after `QueueFree()`; no ancestor group-lookup inside a descendant's `_Ready()`; inter-autoload dependencies match the `project.godot` order
+- [ ] Every signal subscription judged by lifetime: subscriptions to longer-lived emitters are released in `_ExitTree()`; same-lifetime pairs are left alone
+- [ ] Shipped code is AOT-safe for iOS: JSON uses source-generated `JsonSerializerContext`, and any new reflection/dynamic-code use has an explicit AOT-compatibility check

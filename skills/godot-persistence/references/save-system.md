@@ -161,6 +161,12 @@ public static class SavePaths
 
 **Must fix — anchor DirAccess at the resolved directory, not a hardcoded scheme.** `BackupRotator` and the save coordinator's rename/remove calls must open their `DirAccess` at `SplitDirAndName(path).Dir`, never at a literal `"user://"`. Once a sandbox override points outside the `user://` scheme, a hardcoded anchor silently fails or operates on the wrong directory.
 
+## Platform Notes (verified in a production Godot project, 2026-07)
+
+**JSON serialization on iOS requires source generation.** If a project serializes save models with `System.Text.Json` (instead of, or alongside, the binary format), remember that Godot C# ships on .NET NativeAOT on iOS, where reflection-based `System.Text.Json` is disabled at runtime. Persistence models must use a source-generated `JsonSerializerContext`. The failure mode is nasty: every save call throws `InvalidOperationException` on iOS while Android (Mono/JIT) works fine — and because the throw happens inside the write path, code that streams JSON straight into the `.tmp` file (instead of serializing to memory first, as the Save Flow above requires) leaves zero-byte `.tmp` orphans behind as the only visible evidence.
+
+**`user://` location on iOS.** The official docs only say mobile `user://` is "unique to the project and not accessible by other applications"; in practice on iOS it resolves inside the app container's `Documents/` directory — meaning save files can be user-visible via the Files app / iTunes file sharing if the corresponding Info.plist keys are enabled.
+
 ## Delete-All / Reset
 
 A "delete all save data" operation (used by "erase save" UI and by test teardown) must:
@@ -168,3 +174,12 @@ A "delete all save data" operation (used by "erase save" UI and by test teardown
 - Enumerate the exact known file set (main, tmp, each backup generation) rather than doing a wildcard/glob delete — an unrelated file that happens to share a path prefix must never be swept up.
 - Go through the same `SplitDirAndName` anchoring as rotation/promotion.
 - Treat a missing file as success, not an error — deleting something already absent should be a no-op.
+
+## Checklist
+
+- [ ] Save flow order is exactly: serialize to memory → write `.tmp` (and probe `GetError()` before disposing) → rotate backups → rename `.tmp` over main; nothing ever writes directly to the main path
+- [ ] Load walks main → bak0 → bak1 → … in freshness order, treats `FromFuture`/`Invalid` migration like a deserialize failure for fallback, and logs any recovery from a non-primary source
+- [ ] `LoadError.NoSaveFound` (nothing ever existed) and `LoadError.AllSourcesCorrupt` (something existed, none usable) are distinct results
+- [ ] Every path is built through the `SavePaths` resolver; the sandbox env var redirects only when set, via `System.Environment` (not `OS.GetEnvironment`)
+- [ ] Every `DirAccess` used for rename/remove is anchored via `SplitDirAndName(path).Dir`, never a literal `"user://"`
+- [ ] If `System.Text.Json` touches save models anywhere, a source-generated `JsonSerializerContext` is wired in (iOS NativeAOT disables the reflection path)

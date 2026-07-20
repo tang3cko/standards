@@ -63,3 +63,14 @@ The second example is the pattern to imitate generally: name the deferred work, 
 - Don't write a summary line that only names the file touched
 - Don't bundle "what changed" and "what's still broken" into the same bullet — known gaps gets its own line(s) so a resuming reader can find it without re-reading the whole body
 - Don't put progress/TODO tracking in the commit body for anything beyond this commit's own scope — that belongs in the task tracker, not git history (see references/task-tracker-integration.md)
+
+## Checklist
+
+SKILL.md's Pre-Commit Check gates section *presence*; this checklist gates the phrasing quality only this file defines. Run it on the drafted message:
+
+- [ ] Summary line previews the change's shape (parenthetical or equivalent) so `git log --oneline` alone conveys it — not just a bare verb phrase
+- [ ] Every bullet whose choice isn't obvious carries its *why* (the constraint or decision), not a diff narration
+- [ ] Test-count framing actually answers "did the suite grow and stay green" — delta, total, or pass ratio chosen deliberately, with a determinism note if flakiness was a risk
+- [ ] Known gaps names each deferred item *and* the reason deferring was right for this scope; "Known gaps: none" written explicitly when true
+- [ ] If the bullet body was skipped (merge/one-liner), confirmed there is genuinely nothing to record — not just a short diff
+- [ ] Nothing in the body tracks work beyond this commit's own scope

@@ -65,3 +65,15 @@ A spatial core has no need for this pattern for movement itself (it computes arr
 ## Payoff
 
 A coordinateless (or correctly-scoped spatial) core stays untouched through unrelated churn — asset replacement, animation-pack swaps, camera rework — because none of that is core logic. A project that ported a 2D prototype to full 3D across multiple asset/animation-pack replacements recorded zero commits to `Scripts/Core/` across the entire process; every "no `Scripts/Core` change" note in that project's asset-migration plan is a direct consequence of this layering, not luck.
+
+The discipline was also verified at full-portability scale in a production Godot project, 2026-07: a complete game core — board/simulation logic, session progression, scoring, and persistence models, roughly half the codebase — was re-ported 1:1 to a different engine with zero changes to any core file; the engine-side shell was the only rewrite. The receiving side of such a port must hold the same line — see the unity-architecture skill's "Core/Shell Boundary" (its `references/dependency-management.md`): the pure C# core must not depend on the ScriptableObject framework either.
+
+## Checklist
+
+When writing or reviewing a Core layer against this reference:
+
+- [ ] No `using Godot;`, no node/scene/`Resource` types, no `[Export]`/`[Signal]` anywhere under `Scripts/Core/`
+- [ ] The coordinateless-vs-spatial call was made per-system by asking "is spatial reasoning the mechanic, or how the mechanic looks?" — not by a blanket project-wide rule
+- [ ] Every notify method is named for the event (`NotifyArrivedAtSeat`), takes an ID plus plain transition data, and never a Godot type
+- [ ] Information flows one way each: Godot layer → core only via `NotifyX(...)`, core → Godot layer only via `DrainEvents()`
+- [ ] `Scripts/Core/**/*.cs` link-references into `Tests/Tests.csproj` and `dotnet test` passes with no Godot runtime

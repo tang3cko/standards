@@ -76,6 +76,10 @@ These fail without an error message — treat them as hard rules:
 Don't: autoload-by-default, typed node `[Export]`s, group lookup of an ancestor inside a descendant's `_Ready()` (depth-first ordering returns null), leaving node Signal subscriptions dangling past `_ExitTree()`.
 Do: split player controller by responsibility (movement vs interaction), compose behavior with `Resource` validators, keep logic in pure C# classes so it stays testable (see godot-testing).
 
+### Platform Support
+
+iOS/Android C#/.NET export is officially **experimental** as of Godot 4.7.1 (latest stable, 2026-07) — desktop only is stable, web is unsupported. iOS ships on NativeAOT: reflection-based `System.Text.Json` is disabled at runtime there, so shipped C# uses source-generated `JsonSerializerContext`, and "works on Android (Mono/JIT)" proves nothing for iOS. Details: `references/gotchas.md`.
+
 ## Workflow
 
 Identify the task type and follow the matching path.
@@ -102,16 +106,20 @@ Identify the task type and follow the matching path.
 Verify every file you wrote or changed against each item. If any check fails, fix it first — do not present non-compliant code.
 
 - [ ] All file/class/resource names match the Naming table (`.tres` snake_case, everything else PascalCase)
-- [ ] Every Silent-Failure Guard holds (`NodePath = new()`, no typed node exports, exact export casing, no Area3D under StaticBody3D, `ClearCurrent(enableNext: false)` not `Current = false`, explicit `skeleton` NodePath on hand-authored MeshInstance3D, no code-driven Container anchors, overlay Control `MouseFilter.Ignore`)
+- [ ] Every Silent-Failure Guard in the list above holds, checked item-by-item
 - [ ] Dependencies use the highest viable rung of the Dependency Priority ladder
-- [ ] Node Signal subscriptions are released in `_ExitTree()`
+- [ ] Node Signal subscriptions to longer-lived emitters are released in `_ExitTree()`
 - [ ] Namespace matches the project's RootNamespace
-- [ ] No Anti-Pattern present
+- [ ] No Anti-Pattern present; shipped code respects the Platform Support constraint (no new unchecked reflection)
+- [ ] The references named by the chosen workflow path were actually Read this session — SKILL.md is only the index; the acceptance criteria live in references/, so skipping them means working against an incomplete standard
+- [ ] The `## Checklist` at the end of every reference loaded this session was run item-by-item against the work — those checklists are the per-domain definition of done
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/naming-and-structure.md | Naming conventions, directory structure, .NET configuration |
-| references/gotchas.md | Export/NodePath/casing pitfalls, `_Ready()` ordering, QueueFree, joypad input, Label3D, Camera3D.Current, skeleton NodePath, Container anchors, MouseFilter, .gitignore case-folding, engine warnings, signal unsubscribe scope |
-| references/code-patterns.md | Interaction system, ReactiveSO (EventChannel/Variable/RuntimeSet), autoloads, player split, group lookup, Signal vs EventChannel |
+Each file below is the only place its listed content exists — SKILL.md deliberately does not restate it.
+
+| File | Load When |
+|------|-----------|
+| references/naming-and-structure.md | Any naming or file-placement decision beyond the Naming table above. Only source for: directory layout (Scripts/Scenes mirroring, Resources split by data type), `Tools/` vs lowercase `scripts/` macOS case-collision, .NET baseline configuration (Sdk version, TargetFramework, Nullable, RootNamespace) |
+| references/gotchas.md | Touching exports, scene-tree lifecycle, input handling, UI Controls, `.gitignore`, or code that ships to mobile. Only source for: the failure mechanics behind every Silent-Failure Guard, QueueFree timing, joypad idle-motion threshold, autoload ordering, `_Ready()` depth-first trap, Label3D mirroring, `.gitignore` case-folding, engine-warning triage, the signal-unsubscribe lifetime rule, iOS NativeAOT / experimental mobile C# constraints |
+| references/code-patterns.md | Designing system communication or composing gameplay systems. Only source for: interaction-system layer layout and the `IInteractable` contract, ReactiveSO implementations (EventChannel/Variable/RuntimeSet code), autoload conventions, player-controller split, group-lookup applicability conditions, Signal-vs-EventChannel decision criteria |

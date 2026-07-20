@@ -60,10 +60,12 @@ Vendor compatibility labels and "included in [Engine] collection" listings descr
 
 ### 4. Secondary bug checklist (distinct from retarget math, still bites)
 
-- **Hand-authored `MeshInstance3D` missing an explicit `skeleton` NodePath**: Godot's importer auto-wires this; a hand-built `.tscn` placing `MeshInstance3D` under `Skeleton3D` does not get it for free. Symptom: the skeleton's bone poses update correctly (`get_bone_pose()` confirms it) but the mesh stays frozen in bind pose — **no error, no warning**. Only a rendered frame reveals it
-- **Skin bind pose not recomputed after rest changes**: regenerating a character scene on a normalized skeleton without recomputing the skin's bind pose from the new rest warps the mesh
-- **Mesh forward axis mismatch**: don't assume `-Z` forward. Confirm the mesh's un-rotated forward axis by rendering, not by convention — a `+Z`-forward mesh under `-Z`-forward logic (e.g. `LookAt`) walks backward, and any seat/placement transform tuned for `-Z` forward doubles the error
-- **Clip length vs. actual hold/stay duration**: an `AnimationFinished`-triggered transition never fires if the gameplay state holding the animation ends before the clip's full length. Verify the numeric relationship (clip length vs. state duration), not just that the clip "looks fine" in isolation
+Four bugs that survive a correct retarget and fail silently — walk this list before re-suspecting the retarget. Full symptoms and fixes: references/gotchas.md.
+
+- **Hand-authored `MeshInstance3D` missing an explicit `skeleton` NodePath** — skeleton animates, mesh stays frozen in bind pose; only a rendered frame reveals it
+- **Skin bind pose not recomputed after a rest change** — mesh renders warped despite correct bone data
+- **Mesh forward axis mismatch** — confirm by rendering, never assume `-Z` forward
+- **Clip length vs. actual hold/stay duration** — a finished-signal transition never fires if the state ends before the clip does; verify the numbers
 
 ### 5. Verification: numeric gate AND visual PNG, both required
 
@@ -83,7 +85,7 @@ Identify the task type and follow the matching path.
 1. Load references/retargeting.md
 2. Dump both rigs' skeletons and compare rest poses per bone before writing any BoneMap (references/verification.md) — never assume from bone-name overlap alone
 3. Build a `BoneMap` (`.tres`) from source bone names to `SkeletonProfileHumanoid` canonical names for each side that needs it
-4. Set `retarget/bone_map`, `retarget/rest_fixer/normalize_position_tracks`, `reset_all_bone_poses_after_import`, and `retarget_method` on both the character's and the animation's `.import` files
+4. Set `retarget/bone_map` and the `retarget/rest_fixer/*` options (references/retargeting.md lists the exact keys) on both the character's and the animation's `.import` files
 5. Extract clips as a verbatim per-track copy once both sides confirm matching canonical rest rotations (Core Rule 1) — write no per-bone correction math
 6. Run the Self-Check below before presenting
 
@@ -110,11 +112,15 @@ Verify every file/config you wrote or changed against each item. If any check fa
 - [ ] Every `MeshInstance3D` under a `Skeleton3D` has an explicit `skeleton` NodePath
 - [ ] A numeric pose gate AND a visually-inspected rendered PNG both back the verification claim
 - [ ] Any `AnimationFinished`-triggered transition was checked against the actual hold/stay duration, not assumed
+- [ ] The references named by the chosen workflow path were actually Read this session — SKILL.md is only the index; the exact `.import` keys, comparison math, and failure history live in references/, so skipping them means working from an incomplete standard
+- [ ] The `## Checklist` at the end of every reference loaded this session was run item-by-item against the work — those checklists are the per-domain definition of done
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/retargeting.md | Two-sided BoneMap/rest_fixer setup steps, the banned-technique failure log in full, extraction script shape |
-| references/verification.md | Skeleton dump / rest-pose comparison procedure, numeric pose gates, rendered-PNG check, verification ordering |
-| references/gotchas.md | Secondary bugs: skeleton NodePath omission, skin bind pose recompute, mesh forward axis, clip-length-vs-duration |
+Each file below is the only place its listed content exists — SKILL.md deliberately does not restate it.
+
+| File | Load When |
+|------|-----------|
+| references/retargeting.md | Setting up or editing any retarget pipeline (BoneMap `.tres`, `.import` retarget options, extraction script). Only source for: the exact `retarget/rest_fixer/*` option keys, the five-attempt failure log in full, the extraction script shape, root-motion axis handling |
+| references/verification.md | Judging whether a rig/retarget/asset is actually correct, or before committing to a new rig. Only source for: skeleton dump procedure, mirror-tolerant quaternion comparison (`q` vs `-q`), T-pose shortcut, gate categories, PNG render angles/timing, the full verification ordering |
+| references/gotchas.md | A correctly-retargeted animation still renders or plays wrong. Only source for: symptoms and fixes for skeleton NodePath omission, skin bind pose recompute, mesh forward axis confirmation, clip-length-vs-hold-duration remedies |

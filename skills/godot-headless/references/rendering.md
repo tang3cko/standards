@@ -88,3 +88,12 @@ differ from rest, so it's working" is not a substitute for an attached image at 
 - [../SKILL.md](../SKILL.md) - Core Rules 2 and 3
 - [commands.md](commands.md) - Full CLI invocation reference
 - [pitfalls.md](pitfalls.md) - Diagnosing a black/null screenshot after the fact
+
+## Checklist
+
+- [ ] The render invocation omits `--headless` and passes `--rendering-driver opengl3 --audio-driver Dummy`
+- [ ] The harness loads the real scene under verification, not a stripped-down stand-in
+- [ ] Injected input is applied partway through the frame run (not at `_Ready()`), so the render proves propagation through the running scene
+- [ ] `Quit()` is deferred a couple of frames after `SavePng` — quitting immediately races the save against teardown
+- [ ] `--fast-forward-ms` exists only if the project's simulation `Tick` is substep-safe; otherwise it was left out
+- [ ] The produced PNG was actually opened and inspected, and gate 3 (in-game screenshot through real flow) remains planned for anything shipping

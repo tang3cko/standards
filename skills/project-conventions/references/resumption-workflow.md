@@ -28,3 +28,13 @@ This works because commit messages and tracker comments are written *as* resumpt
 - Don't re-scan the whole codebase or re-run a full audit before checking the last commit's Known gaps first
 - Don't assume silence means "nothing left" — if a commit has no Known gaps, that should be an explicit "Known gaps: none", not an absence to interpret
 - Don't treat a deferred item's reasoning as still open for debate unless something material has changed since it was deferred
+
+## Checklist
+
+Run before starting any post-interruption work:
+
+- [ ] `git log -1` / `git show` run and the last completed commit's Known gaps read *before* any codebase scanning or auditing
+- [ ] The tracker's latest milestone comment cross-checked when it may be newer than the commit's context
+- [ ] Each deferred item either continued as deferred, or un-deferred with a new explicit reason — no silently redoing the defer/un-defer analysis
+- [ ] No work restarted that the Known gaps or tracker comment marks as already done or deliberately scoped out
+- [ ] A missing Known gaps section treated as unknown state to verify, not as "nothing left"

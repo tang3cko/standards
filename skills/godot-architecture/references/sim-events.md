@@ -85,3 +85,13 @@ In short: if the emitting code is inside `Scripts/Core/`, it must be `SimEvent` 
 - Keep `SimEvent` a single class with an enum `Kind` plus a superset of optional payload fields, not a class hierarchy — it stays trivially serializable and the Godot layer can `switch` on `Kind` without casting.
 - `DrainEvents()` must clear on drain — a forgotten clear silently re-delivers stale events every subsequent frame.
 - Because `SimEvent` and `DrainEvents()` are pure C#, they're exactly what a link-referenced xUnit test asserts on directly (`sim.Tick(...); Assert.Contains(events, e => e.Kind == SimEventKind.ServeCompleted)`) — see `godot-testing`.
+
+## Checklist
+
+When writing or reviewing an event feed against this reference:
+
+- [ ] `SimEvent` is a single plain C# class: enum `Kind` plus a superset of optional payload fields — no class hierarchy, no Godot types
+- [ ] `DrainEvents()` clears the internal list on drain, so no event is delivered twice
+- [ ] Exactly one drain site exists: the Godot-layer driver drains once per frame/tick and fans out; no other code calls `DrainEvents()` (a second caller would steal events)
+- [ ] Emitters inside `Scripts/Core/` use `SimEvent` only; Godot-node-to-Godot-node communication uses `EventChannel`/`Signal` instead of a second drain feed
+- [ ] At least one link-referenced test asserts directly on drained events after `Tick(...)`

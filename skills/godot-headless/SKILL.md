@@ -3,7 +3,7 @@ name: godot-headless
 description: Run Godot 4.x + .NET (C#) tests and CLI verification without the Editor open — godot-mono batchmode asset import, --build-solutions compile checks, dotnet test (xUnit link-reference + GdUnit4Net E2E), and offscreen PNG render harnesses for visual verification. Use when setting up or debugging CLI/CI-driven Godot test, import, or render execution.
 when_to_use: Triggers on "godot headless", "godot-mono", "batchmode", "--headless", "--import", "--build-solutions", "GODOT_BIN", "GdUnit4Net", "run-tests.sh", "rendering-driver", "offscreen render", "PNG render", "スクリーンショット検証", "ヘッドレス", "ビルド検証".
 model: sonnet
-allowed-tools: Read Glob Grep Bash Write Edit TaskCreate TaskUpdate TaskList
+allowed-tools: Read Glob Grep Bash(bash:*) Bash(godot-mono:*) Bash(dotnet:*) Write Edit TaskCreate TaskUpdate TaskList
 ---
 
 # Godot Headless Operations
@@ -54,7 +54,7 @@ Update status as you progress: `in_progress` when starting, `completed` when don
 
 ## Workflow
 
-Identify the task type and follow the matching path.
+Identify the task type and follow the matching path. The workflow steps below name reference files at the point they become load-bearing — Read them there, not from memory: each holds material (`.runsettings` fields, harness anatomy, symptom→cause diagnosis) that exists nowhere in this file.
 
 ### Verifying assets import / C# compiles cleanly (no test run)
 
@@ -64,7 +64,7 @@ Identify the task type and follow the matching path.
 
 ### Running dotnet test (xUnit unit + GdUnit4Net E2E)
 
-1. Run: `bash ${CLAUDE_PLUGIN_ROOT}/skills/godot-headless/scripts/run-tests.sh <project_path> [unit|e2e|all]`
+1. Run: `bash ${CLAUDE_SKILL_DIR}/scripts/run-tests.sh <project_path> [unit|e2e|all]`
 2. Read the printed per-layer summary and overall PASS/FAIL
 3. If the E2E layer fails to start (no `GODOT_BIN`, compile timeout, project lock), load `references/pitfalls.md`
 4. Run the Self-Check below
@@ -95,14 +95,18 @@ Verify every run you report on, and any project-specific file you wrote or chang
 - [ ] A visual-verification claim is backed by an inspected rendered image, not a numeric-only pass
 - [ ] Any customized `VerifyRender.cs` has no leftover `TODO` markers
 - [ ] No two `godot-mono`/`dotnet test` invocations were run concurrently against the same project path
+- [ ] Every reference file named by the workflow path taken was actually Read this session — the details they carry (`.runsettings` fields, harness anatomy, symptom→cause table) are not summarized here, so skipping them means working from guesses
+- [ ] Each loaded reference's final `## Checklist` was run against the work it covers — those items encode failure modes that look like success (black PNG, exit 0 with failures) and won't surface on their own
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/commands.md | Full CLI command reference: import, build-solutions, both dotnet test layers, `.runsettings` fields (`GODOT_BIN`, `MaxCpuCount`, `CompileProcessTimeout`) and why each exists |
-| references/rendering.md | The `--headless`-forces-dummy-driver trap in full, the PNG harness anatomy (load scene → advance N frames → inject input → `save_png`), designing verification args (`--out`, `--frames`, `--fast-forward-ms`) |
-| references/pitfalls.md | Project lock (second process refuses to start), GdUnit4Net compile timeout, black/null screenshot from a `--headless` render, orphaned `godot-mono` processes, `Tools/` vs `scripts/` case-folding |
+Each file is the only place its listed content exists — the table rows are load triggers, not summaries.
+
+| File | Load When |
+|------|-----------|
+| references/commands.md | Any direct `godot-mono`/`dotnet test` invocation beyond the Core Rule 1 one-liners. Sole home of: the per-command reasoning and flags (why `--quit`, when `--import` first), and the `.runsettings` field table (`GODOT_BIN`, `Parameters`, `MaxCpuCount`, `CompileProcessTimeout`, `TestSessionTimeout`, env-var sandboxing) |
+| references/rendering.md | Any PNG render task — before writing or tuning a harness. Sole home of: the dummy-driver trap in full, the harness anatomy (parse args → load real scene → advance frames → inject input mid-run → `SavePng` → deferred quit), and verification-argument design (`--out`, `--frames`, the `--fast-forward-ms` substep-safety rule) |
+| references/pitfalls.md | A headless run fails, hangs, or produces silently-wrong output. Sole home of: the symptom→cause table, lock diagnosis command, cold-cache timeout rationale, `.gdignore` scope (editor scan only), `export_presets.cfg` tracking, and the `Tools/` vs `scripts/` case-folding mechanism |
 
 ## Bundled Scripts
 

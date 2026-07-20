@@ -180,4 +180,13 @@ public override void _ExitTree()
 
 The advantage of the node Signal over an EventChannel: the state owner and the event source coincide, keeping the dependency graph straightforward.
 
-Caution: always unsubscribe node Signals in `_ExitTree()`. Unlike EventChannels, a lingering subscription after the node leaves the tree risks keeping a GC root alive.
+Caution: unsubscribe node Signals in `_ExitTree()` when the emitter outlives the subscriber — a lingering subscription risks keeping a GC root alive. See "Signal unsubscribe: only required for subscriptions that outlive you" in `gotchas.md` for the lifetime rule.
+
+## Checklist
+
+- [ ] Cross-system communication goes through a Resource-based EventChannel (`.tres` exported on both sides), not direct node references
+- [ ] A node's own Signal is used instead of an EventChannel only when all three criteria hold: single emitter, guaranteed in scene, observe-only dependency
+- [ ] Conditional behavior is composed from `Resource` validators (reusable as `.tres`), not hardcoded branch logic inside the interactable
+- [ ] Player-facing systems are split by responsibility (movement node vs interaction node), each independently testable
+- [ ] Group lookup is used only for a unique scene-local service, with lookup failure tolerated or guarded, and never from a descendant's `_Ready()` toward an ancestor
+- [ ] Autoloads are reserved for global-lifetime systems and notify state changes via Signals with read-only query APIs

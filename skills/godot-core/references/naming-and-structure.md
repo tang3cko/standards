@@ -78,3 +78,11 @@ Baseline settings for Godot 4.x + .NET projects.
 | Nullable | disable |
 | ImplicitUsings | enable (Tests only) |
 | RootNamespace | Project name (e.g. `Smith`) |
+
+## Checklist
+
+- [ ] Names match the conventions table: `.tres` files snake_case; scenes, scripts, classes, and folders PascalCase; interfaces `I{Concept}`; namespace is the project name
+- [ ] Every `[Export]` name referenced in a `.tscn` matches the C# spelling exactly (no snake_case conversion assumed)
+- [ ] New files land in the standard layout: `Scripts/` and `Scenes/` hierarchies mirror each other; `Resources/` is split by data type, not per feature; no Unity-style `Assets/`
+- [ ] Auxiliary/build scripts live in `Tools/` (PascalCase) — never a lowercase `scripts/`, which collides with `Scripts/` on case-insensitive macOS
+- [ ] `Tests/` is a peer `.csproj` excluded from the main build via `<Compile Remove="Tests/**" />`, and the `.csproj` matches the .NET Configuration baseline

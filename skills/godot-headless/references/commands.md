@@ -75,3 +75,11 @@ no `--headless` here, ever, or the render is silently black/null.
 - [../SKILL.md](../SKILL.md) - Core Rules and workflow paths
 - [rendering.md](rendering.md) - The dummy-driver trap and PNG harness anatomy
 - [pitfalls.md](pitfalls.md) - Project lock, compile timeout, black-screenshot diagnosis
+
+## Checklist
+
+- [ ] `--import` was run first if the `.godot/` cache could be stale (fresh clone, new asset, cache wipe) — stale-cache failures masquerade as code bugs
+- [ ] Every `--build-solutions` invocation includes `--quit` — without it the process can sit after the build finishes
+- [ ] The E2E run passed `--settings Tests.E2E/.runsettings`, and its `GODOT_BIN` points at the intended `godot-mono` binary
+- [ ] `MaxCpuCount` is still 1 in `.runsettings` — it is a correctness requirement, not a performance knob
+- [ ] No command whose goal is an actual screenshot carries `--headless` (E2E's `--headless` is fine — SceneRunner tests never read pixels)

@@ -23,3 +23,10 @@ Don't assume a character mesh's un-rotated forward direction — confirm it by r
 A transition pattern driven by an animation-finished signal only fires if the clip is allowed to play to completion. If the gameplay state holding that animation ends (state timer, despawn, etc.) before the clip's full length, the transition **never fires** — not intermittently, reliably never, for every instance where the state duration is shorter than the clip. This is easy to miss because the clip looks correct in isolated preview (where nothing cuts it short).
 
 Check the actual numeric relationship (clip length vs. state hold duration) whenever wiring a finished-signal-driven transition off a clip that wasn't specifically authored to fit the hold window. If the full clip doesn't fit, either trim what portion of the clip actually needs to play and drive the transition off a timer scaled to playback speed, or shorten/lengthen the hold state to fit the full clip — don't leave the transition wired to a signal that structurally cannot fire.
+
+## Checklist
+
+- [ ] Every `MeshInstance3D` under a `Skeleton3D` in a hand-authored `.tscn` has its `skeleton` NodePath explicitly set — verified in the scene file, not assumed from the importer's behavior
+- [ ] Any workflow step that changed a skeleton's rest pose also recomputed the skin's bind pose from the new rest
+- [ ] The mesh's un-rotated forward axis was confirmed by rendering, and any needed correction is a single rotation at the mesh-instance level — no downstream consumer special-cases it
+- [ ] For every finished-signal-driven transition: clip length vs. state hold duration compared numerically, and the transition restructured (timer or hold-window change) if the full clip cannot play out

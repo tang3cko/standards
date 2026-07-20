@@ -29,8 +29,8 @@ Applying it to **both** sides means both skeletons end up exposing the same cano
 3. **Apply to both `.import` files** — the character's and the animation source's:
    - `retarget/bone_map` → the `.tres` from step 2
    - `retarget/rest_fixer/normalize_position_tracks = true`
-   - `reset_all_bone_poses_after_import = true`
-   - `retarget_method = 1`
+   - `retarget/rest_fixer/reset_all_bone_poses_after_import = true`
+   - `retarget/rest_fixer/retarget_method = 1`
 4. **Reimport both**, then verify (references/verification.md) that both sides now expose **identical per-bone rest rotations** under the shared canonical names before writing any extraction code. Only bone *positions* (proportions — arm/leg length differences between characters) are expected to differ; rotations should match.
 5. **Extract with a verbatim per-track copy**: for each `ROTATION_3D`/`POSITION_3D` track on the source animation, create a same-typed track on the output addressed to the same canonical bone name (only the NodePath's node prefix changes, e.g. from the source scene's skeleton node name to the target scene's), and copy every key's time/value pair unchanged. No per-bone math.
 6. **Root motion**: check whether the source clip's root-motion bone position track is stationary (in-place) or accumulates over the clip (baked root motion). If a looping locomotion clip accumulates position on the movement axis and movement is otherwise code-driven, zero only the accumulating axis/axes at extraction time — verify which axis by sampling first/last-key values directly rather than assuming; incidental sway on a non-movement axis should be kept.
@@ -44,3 +44,11 @@ A one-shot headless script (run via the engine's script-execution mode) that:
 3. Adds each result to an `AnimationLibrary` and saves it as a project resource
 
 Keep the script idempotent (safe to rerun, overwrites the same output path) and keep the "why" comments about rest-pose verification and root-motion axis findings inline — the next person extending it to a new clip/rig needs the same rest-pose check repeated, not assumed.
+
+## Checklist
+
+- [ ] Both the character's and the animation source's `.import` carry `retarget/bone_map` plus all three `retarget/rest_fixer/*` options from the setup steps — not one side only
+- [ ] Both sides were reimported and confirmed to expose identical per-bone rest *rotations* under the canonical names before any extraction code was written (positions/proportions may differ)
+- [ ] Extraction is a verbatim per-track key copy with only the NodePath prefix rewritten — nothing in it resembles a row of the failure log (raw name-match copy, delta-from-rest, chain exceptions, conjugation)
+- [ ] Root-motion axis behavior was determined by sampling first/last key values of the source clip, not assumed; only the accumulating axis was zeroed
+- [ ] The extraction script is idempotent and carries inline "why" comments for the rest-pose check and root-motion findings

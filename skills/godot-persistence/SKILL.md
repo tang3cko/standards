@@ -143,11 +143,15 @@ Verify every file you wrote or changed against each item. If any check fails, fi
 - [ ] Session-scoped and persistent data live in separate stores, not one store with conditional reset logic
 - [ ] A test harness that recursively deletes a sandbox directory refuses to run when the sandbox env var is unset, and rejects a sandbox path that matches (or looks unsafely close to) the real user-data directory
 - [ ] Format/migration/path-resolution logic is pure C# (no `Godot.FileAccess`/`DirAccess`/`GD.*`); only the I/O coordinator and backup rotator touch the Godot runtime
+- [ ] The references named by the chosen workflow path were actually Read this session — SKILL.md is only the index; the reference implementations and Must-fix rationale live in references/, so skipping them means writing or reviewing against an incomplete standard
+- [ ] The `## Checklist` at the end of every reference loaded this session was run item-by-item against the work — those checklists are the per-domain definition of done
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/binary-format.md | Serializer/deserializer layout, type tags, CRC32, DeserializeStatus, stepwise version migration |
-| references/save-system.md | Atomic write ordering, N-generation backup rotation, load fallback chain, SavePaths resolver, sandbox env var, DirAccess anchoring pitfalls |
-| references/testable-architecture.md | Humble Object split for persistence code, session-vs-persistent store separation, link-referencing pure C# persistence logic into tests |
+Each file below is the only place its listed content exists — SKILL.md deliberately does not restate it.
+
+| File | Load When |
+|------|-----------|
+| references/binary-format.md | Any serializer, deserializer, or migrator work. Only source for: payload wire encoding (type tags, key/length encoding), the checksum-before-parse ordering rule, full CRC32 implementation, migrator reference implementation, the "never rewrite a shipped migration step" rule |
+| references/save-system.md | Any write/rotate/load-fallback/path/delete work. Only source for: the `.tmp`/`.bakN` file-family layout, save/load reference implementations, `SavePaths`/`SplitDirAndName` code, the `Godot.Environment` vs `System.Environment` shadowing gotcha, delete-all rules, iOS platform notes (NativeAOT JsonSerializerContext requirement, `user://` → app-container Documents/) |
+| references/testable-architecture.md | Layering decisions, session/persistent split, or making persistence logic unit-testable. Only source for: the `Scripts/Persistence/` file inventory, typed `Capture`/`Apply` mapper pattern, two-store rationale and rule-tagging, the sandbox-guard reference implementation |
