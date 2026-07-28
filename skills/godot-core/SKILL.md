@@ -2,7 +2,6 @@
 name: godot-core
 description: Write Godot 4.x + .NET (C#) code following Tang3cko standards — naming, project structure, export/NodePath gotchas, Resource-based decoupling patterns, autoloads. Use when writing or reviewing C# code, scenes, or resources in a Godot project.
 when_to_use: Triggers on "Godot", "GodotSharp", ".tscn", ".tres", "NodePath", "autoload", "Area3D", "QueueFree", "GlobalClass", "Camera3D", "Container", "MouseFilter", "ゴドー", "ゴドット", "シーン構成".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

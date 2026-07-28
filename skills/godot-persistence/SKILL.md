@@ -2,7 +2,6 @@
 name: godot-persistence
 description: Design and implement save/persistence systems for Godot 4.x + .NET following Tang3cko standards — binary save format with CRC32 checksums and version migration, atomic tmp-then-rename writes, N-generation backup rotation with fallback loading, session-vs-persistent data separation, and env-var-sandboxed save paths for tests. Use when writing or reviewing save/load code in a Godot project.
 when_to_use: Triggers on "save", "セーブ", "persistence", "永続化", "CRC", "バックアップ", "backup", "user://", "SaveData", "atomic write", "アトミック書き込み", "ロールバック", "SavePaths", "SaveSystem".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

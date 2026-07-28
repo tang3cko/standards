@@ -2,7 +2,6 @@
 name: project-conventions
 description: Apply Tang3cko engine-agnostic project operating conventions — commit messages with test-count deltas and known gaps, numbered docs/ namespaces, keeping progress tracking out of docs, task tracker integration, backlog granularity (Story-sized tickets and landing verification), and resuming interrupted work. Use when writing a commit message, structuring or reviewing docs/, wiring up a task tracker, filing or auditing a backlog, or resuming work after an interruption, in any Unity/Godot project.
 when_to_use: Triggers on "commit message", "コミットメッセージ", "docs構造", "docs structure", "運用規約", "known gaps", "既知の制約", "進捗管理", "task tracker", "再開", "resume", "resumption", "backlog", "バックログ", "起票", "粒度", "granularity", "Story", "Epic", "milestone", "マイルストーン", "ロードマップ", "roadmap".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

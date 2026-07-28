@@ -2,7 +2,6 @@
 name: unity-networking
 description: Design and review Unity multiplayer networking on NGO (Netcode for GameObjects) 2.x following Tang3cko standards — payload sizing, reliable vs unreliable delivery, snapshot streaming, NetworkVariable vs RPC vs CustomMessage selection. Use when designing network sync, debugging dropped or oversized messages, or reviewing bandwidth.
 when_to_use: Triggers on "NGO", "Netcode", "RPC", "NetworkVariable", "ClientRpc", "ServerRpc", "snapshot", "同期", "ネットワーク", "MTU", "OverflowException", "fragmentation", "bandwidth", "帯域".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

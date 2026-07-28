@@ -2,8 +2,6 @@
 name: unity-architecture
 description: Design Unity systems using ScriptableObject architecture following Tang3cko standards — EventChannel, RuntimeSet, Variable, ActionSO, ReactiveSO patterns. Use when designing system communication, choosing an SO pattern, or reviewing architecture.
 when_to_use: Triggers on "アーキテクチャ", "EventChannel", "RuntimeSet", "Variable", "ActionSO", "ReactiveSO", "依存", "設計", "ScriptableObject", "SO", "architecture", "dependency".
-model: opus
-effort: max
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

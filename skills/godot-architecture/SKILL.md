@@ -2,8 +2,6 @@
 name: godot-architecture
 description: Design Godot 4.x + .NET simulation architecture following Tang3cko standards — Godot-free Core layer, SimEvent pull feeds, external notify APIs, dt substep loops. Use when layering a simulation/game-logic system, deciding what belongs in Scripts/Core, or reviewing Godot simulation architecture.
 when_to_use: Triggers on "Godot architecture", "SimEvent", "Godot-free", "シミュレーション設計", "dt", "サブステップ", "Scripts/Core", "座標レス", "リンク参照テスト", "Tick".
-model: opus
-effort: max
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

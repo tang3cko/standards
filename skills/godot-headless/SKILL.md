@@ -2,7 +2,6 @@
 name: godot-headless
 description: Run Godot 4.x + .NET (C#) tests and CLI verification without the Editor open — godot-mono batchmode asset import, --build-solutions compile checks, dotnet test (xUnit link-reference + GdUnit4Net E2E), and offscreen PNG render harnesses for visual verification. Use when setting up or debugging CLI/CI-driven Godot test, import, or render execution.
 when_to_use: Triggers on "godot headless", "godot-mono", "batchmode", "--headless", "--import", "--build-solutions", "GODOT_BIN", "GdUnit4Net", "run-tests.sh", "rendering-driver", "offscreen render", "PNG render", "スクリーンショット検証", "ヘッドレス", "ビルド検証".
-model: sonnet
 allowed-tools: Read Glob Grep Bash(bash:*) Bash(godot-mono:*) Bash(dotnet:*) Write Edit TaskCreate TaskUpdate TaskList
 ---
 

@@ -2,7 +2,6 @@
 name: godot-animation
 description: Retarget humanoid animation FBX (Mixamo, Synty ANIMATION packs, etc.) onto Godot 4.x character rigs following Tang3cko standards — official BoneMap/rest_fixer normalization on both sides, banned ad-hoc retarget math, and the visual verification steps numeric gates alone miss. Use when importing or retargeting character animation, wiring BoneMap resources, or debugging a broken/twisted retargeted pose.
 when_to_use: Triggers on "retarget", "リターゲット", "BoneMap", "SkeletonProfileHumanoid", "Mixamo", "Synty", "ANIMATION pack", "rig", "skeleton", "bone map", "rest pose", "rest_fixer", "アニメーション", "ボーンマップ", "レストポーズ", "スケルトン".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

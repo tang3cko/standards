@@ -2,8 +2,6 @@
 name: game-design
 description: Organize game concepts and review designs using established game design theories — Sakurai (risk-reward, accessibility, game feel), Tajiri's verb theory (mechanics as verbs), Miyazaki (accomplishment through adversity, fragmentary narrative, interconnected world design), and concept frameworks (pillars, core loop, GDD). Use when designing, reviewing, or brainstorming game concepts, mechanics, difficulty, narrative, or world design.
 when_to_use: Triggers on "game design", "game concept", "verb theory", "Sakurai", "risk reward", "core loop", "GDD", "game review", "mechanics", "game feel", "pillars", "difficulty", "narrative", "world design", "level design", "environmental storytelling", "ゲームデザイン", "ゲーム設計", "動詞理論", "コアループ", "ゲームコンセプト", "Miyazaki", "宮崎".
-model: opus # deep cross-philosophy design reasoning; guidance-only, no ARL/file writes
-effort: max
 allowed-tools: Read Glob Grep TaskCreate TaskUpdate TaskList
 ---
 

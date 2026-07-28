@@ -2,7 +2,6 @@
 name: unity-headless
 description: Run Unity tests and player builds headlessly (batchmode/CI) for any Unity game project via the skill's bundled scripts/test.sh and scripts/build.sh, executeMethod player builds, build artifact verification, and the Editor-open/closed boundary with unity-mcp. Use when setting up or debugging CLI/CI-driven Unity test or build execution.
 when_to_use: Triggers on "batchmode", "-batchmode", "headless", "CUI実行", "ヘッドレス", "CI", "BuildPipeline", "executeMethod", "test.sh", "build.sh", "ProjectVersion.txt", "Licensing Client", "entitlement", "コマンドラインビルド", "コマンドラインテスト".
-model: sonnet
 allowed-tools: Read Glob Grep Bash(bash:*) Write Edit TaskCreate TaskUpdate TaskList
 ---
 

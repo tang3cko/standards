@@ -2,7 +2,6 @@
 name: unity-async
 description: Write performant async Unity code and optimize projects following Tang3cko standards — UniTask, Awaitable, coroutines, caching, pooling, event-driven patterns. Use when writing async code or optimizing performance.
 when_to_use: Triggers on "UniTask", "async", "await", "Coroutine", "パフォーマンス", "performance", "pooling", "Profiler", "caching", "最適化", "optimization".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

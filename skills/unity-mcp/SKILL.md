@@ -2,7 +2,6 @@
 name: unity-mcp
 description: Verify Unity C# compilation via MCP after code changes — domain reload and compile-error checking through the Unity Editor bridge. Use when checking if scripts compile in Unity.
 when_to_use: Triggers on "compile", "コンパイル", "domain reload", "Unity MCP", "ビルドチェック", "compile check", "コンパイルエラー".
-model: sonnet
 allowed-tools: mcp__unity-mcp__* TaskCreate TaskUpdate TaskList
 ---
 

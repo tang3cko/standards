@@ -2,7 +2,6 @@
 name: godot-testing
 description: Write and review tests for Godot 4.x + .NET projects following Tang3cko standards — xUnit link-referenced pure C# unit tests, GdUnit4Net SceneRunner E2E tests, and Tools/ numeric regression gates. Use when writing tests or reviewing test code in a Godot project.
 when_to_use: Triggers on "Godot test", "xUnit", "Tests.csproj", "dotnet test", "Humble Object", "E2E", "GdUnit", "GdUnit4Net", "SceneRunner", "Tests.E2E", "regression gate", "Godotテスト", "テスト", "link reference", "リンク参照", "E2Eテスト", "回帰ゲート".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

@@ -2,7 +2,6 @@
 name: unity-core
 description: Write Unity C# code following Tang3cko core standards — naming, code organization, error handling, Input System, editor tooling. Use when writing or reviewing Unity C# code structure.
 when_to_use: Triggers on "Unity", "C#", "naming", "null check", "InputReader", "namespace", "コード整理", "命名規則", "code style", "error handling".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

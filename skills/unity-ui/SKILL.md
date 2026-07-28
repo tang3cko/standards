@@ -2,7 +2,6 @@
 name: unity-ui
 description: Build Unity UI following Tang3cko standards — UI Toolkit (UXML/USS, BEM naming, world-space support on Unity 6.2+), uGUI for legacy World Space, accessibility. Use when creating or reviewing UI code.
 when_to_use: Triggers on "UI Toolkit", "uGUI", "UXML", "USS", "BEM", "アクセシビリティ", "World Space UI", "UI", "ユーザーインターフェース", "accessibility", "billboard".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 

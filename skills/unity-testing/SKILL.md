@@ -2,7 +2,6 @@
 name: unity-testing
 description: Write and review Unity tests following Tang3cko standards — Humble Object, Edit Mode vs Play Mode, NUnit, test doubles, test assemblies. Use when writing tests or reviewing test code.
 when_to_use: Triggers on "テスト", "NUnit", "Humble Object", "mock", "stub", "asmdef", "Edit Mode", "Play Mode", "test", "testing", "TDD", "テスト駆動".
-model: sonnet
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 
