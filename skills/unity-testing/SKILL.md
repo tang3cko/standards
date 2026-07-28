@@ -7,7 +7,13 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Unity Testing
 
-Help users write, review, and improve Unity tests following Tang3cko testing standards.
+Tang3cko's Unity test standards: Humble Object, Edit Mode by default, AAA structure, asmdef-scoped
+test assemblies. The Core Rules below are always in force; the acceptance criteria live in
+references/.
+
+The failure that costs the most is logic left inside a MonoBehaviour. It forces a slow, flaky Play
+Mode test for something that should have been a sub-millisecond Edit Mode test — extract first,
+then test.
 
 ## Phase Tracking
 

@@ -7,7 +7,14 @@ allowed-tools: Read Glob Grep TaskCreate TaskUpdate TaskList
 
 # Game Design
 
-Help users organize game concepts, review game designs, and apply established design theories to their projects.
+Four design theories applied to concept work and design review: Sakurai (risk-reward, player
+perspective, accessible depth), Tajiri's verb theory (mechanics as verbs, actions before objects),
+Miyazaki (accomplishment through adversity, fragmentary narrative, interconnected world design),
+and concept frameworks (pitch, pillars, core loop, GDD).
+
+They disagree, and the disagreements are the useful part — Sakurai designs for the player who will
+put the controller down, Miyazaki for the player who will not. A review that only reaches for one
+of them will approve a design the other would reject, so name which lens a judgement came from.
 
 ## Phase Tracking
 
@@ -27,13 +34,6 @@ Update status as you progress: `in_progress` when starting, `completed` when don
 |-------|-------------|-----------|
 | 1 | Read the references named by the chosen path | Always |
 | 3 | Validate against `sakurai-philosophy.md` checkpoints (+ `miyazaki-philosophy.md` for difficulty/narrative/world) | Concept or review output |
-
-## Core Principles
-
-1. **Sakurai Philosophy** - Risk-reward, player perspective, accessible depth, squeeze-and-release
-2. **Verb Theory** - Define mechanics as verbs; design actions before objects
-3. **Miyazaki Philosophy** - Accomplishment through adversity, fragmentary narrative, interconnected world design, dignified grotesque
-4. **Concept Organization** - Elevator pitch, design pillars, core loop, GDD structure
 
 ## Workflow
 
@@ -76,10 +76,10 @@ Identify the task type and follow the matching path.
 
 ## Reference Files
 
-| File | Use When |
-|------|----------|
-| references/sakurai-philosophy.md | Reviewing designs, evaluating game feel, checking risk-reward balance |
-| references/miyazaki-philosophy.md | Evaluating difficulty design, narrative structure, world design, boss design, aesthetic direction |
-| references/miyazaki-influences.md | Tracing design decisions to their origins (gamebooks, literature, manga) |
-| references/verb-theory.md | Defining mechanics, extracting core verbs, designing interactions |
-| references/concept-organization.md | Structuring ideas, writing pitches, building GDD sections |
+| File | Load When |
+|------|-----------|
+| references/sakurai-philosophy.md | Judging any design against the player's experience — risk-reward structure, game feel, accessible depth, squeeze-and-release pacing. Holds the Consolidated Design Review Checklist every review is scored against |
+| references/miyazaki-philosophy.md | Difficulty, death design, narrative delivery, world interconnection, or aesthetic direction. Holds the counterweight to Sakurai's accessibility position — accomplishment earned through adversity, fragmentary storytelling, dignified grotesque |
+| references/miyazaki-influences.md | Tracing a design decision back to what shaped it (gamebooks, literature, manga) — background, not a review criterion |
+| references/verb-theory.md | Defining or auditing mechanics. Holds the verb-extraction workflow, the verb-object matrix, and the combination analysis |
+| references/concept-organization.md | Turning an idea into a communicable concept — elevator pitch, design pillars, core loop, one-sheet, GDD sections |

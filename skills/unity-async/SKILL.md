@@ -7,7 +7,13 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Unity Async & Performance
 
-Help users write performant async code and optimize Unity projects following Tang3cko standards.
+Tang3cko's standards for async Unity code (UniTask, Awaitable, coroutines) and performance work.
+The Core Rules below are always in force; the code patterns and the anti-pattern/fix pairs live in
+references/.
+
+The rule broken most often is cancellation — an async method that neither accepts a
+`CancellationToken` nor passes it to what it awaits, leaving work running past the lifetime of the
+object that started it.
 
 ## Phase Tracking
 

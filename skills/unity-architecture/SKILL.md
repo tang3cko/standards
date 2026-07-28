@@ -7,7 +7,12 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Unity Architecture
 
-Help users design, implement, and review Unity system architecture using ScriptableObject-based patterns following Tang3cko standards.
+Tang3cko's Unity system architecture: systems are wired through ScriptableObject assets —
+EventChannel, RuntimeSet, Variable, ActionSO, ReactiveSO — not through scene references. The Core
+Rules below are always in force; the decision tables and acceptance criteria live in references/.
+
+The boundary broken most often is Core Rule 5: a pure C# core that takes a ReactiveSO dependency.
+The core exposes plain `event Action`; only the MonoBehaviour shell touches EventChannelSO.
 
 ## Phase Tracking
 

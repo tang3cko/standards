@@ -7,7 +7,11 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Godot Core Standards
 
-Help users write, review, and refactor Godot 4.x + .NET (C#) code following Tang3cko core standards.
+Tang3cko's Godot 4.x + .NET (C#) standards for naming, project structure, and Resource-based
+decoupling. The Core Rules below are always in force; the acceptance criteria live in references/.
+
+The Silent-Failure Guards are the part that bites. Every one of them fails with no error message
+and no warning, so violating code reads as correct in review and ships broken.
 
 ## Phase Tracking
 

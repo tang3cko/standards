@@ -7,7 +7,12 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Unity UI
 
-Help users build, review, and improve Unity UI following Tang3cko standards.
+Tang3cko's Unity UI standards: UI Toolkit by default (UXML/USS, BEM), uGUI only where UI Toolkit
+cannot go, accessibility in every path. The Core Rules below are always in force; the naming rules,
+size minimums, and billboard math live in references/.
+
+Two things decide most reviews: USS classes that skip BEM, and a world-space decision made without
+first checking the project's Unity version — World Space UI Toolkit requires 6.2+.
 
 ## Phase Tracking
 

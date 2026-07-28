@@ -7,7 +7,13 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Godot Animation Retargeting
 
-Help users import, retarget, and verify humanoid character animation in Godot 4.x + .NET projects following Tang3cko standards.
+Tang3cko's standards for importing, retargeting, and verifying humanoid character animation in
+Godot 4.x + .NET projects.
+
+Every entry in the failure log came from the same move: writing per-bone correction math instead of
+normalizing both rigs first. Each formula fixes the limb in front of you and breaks another, and
+the fix for that breaks a third. If custom math looks necessary, the normalization step was skipped
+or misconfigured — that is the bug, not the math.
 
 ## Phase Tracking
 

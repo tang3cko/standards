@@ -7,7 +7,14 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Project Conventions
 
-Help users write commit messages, structure `docs/`, wire up task tracker integration, and resume interrupted work following Tang3cko project operating conventions. This skill is about *process*, not engine code — pair it with the engine-specific core skill (unity-core / godot-core) when the task also touches source code.
+Tang3cko's engine-agnostic operating conventions: commit messages, `docs/` structure, task-tracker
+integration, backlog granularity, and resuming interrupted work. This skill is about *process*, not
+engine code — pair it with the engine-specific core skill (unity-core / godot-core) when the task
+also touches source code.
+
+The part omitted most often is **Known gaps**. A commit message without it reads as complete work,
+so the next session — or the next agent — re-derives state from the diff instead of reading the one
+sentence that would have told it what was deliberately left undone.
 
 ## Phase Tracking
 

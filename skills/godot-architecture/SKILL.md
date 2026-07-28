@@ -7,7 +7,12 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Godot Architecture
 
-Help users design, implement, and review the layering of a Godot 4.x + .NET simulation — where the game-logic core lives, how it feeds the Godot layer, and how it survives large dt without silently under-executing.
+Tang3cko's layering for a Godot 4.x + .NET simulation — where the game-logic core lives, how it
+feeds the Godot layer, and how it survives large dt without silently under-executing.
+
+The failure this layering exists to prevent is silent. A core that quietly reaches for a Godot type
+still compiles and still runs; you only find out when the test project cannot link it, or when a
+frame hitch makes a one-Tick-per-frame loop under-execute and nothing reports an error.
 
 This skill covers whole-simulation layering (Core vs Godot layer, event feed, tick loop). For individual Resource/EventChannel/interaction patterns inside the Godot layer, see `godot-core`. For the test project that proves the Core layer is decoupled, see `godot-testing`.
 

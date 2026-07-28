@@ -7,7 +7,14 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Godot Testing
 
-Help users write, review, and improve tests for Godot 4.x + .NET projects following Tang3cko testing standards. Tests span three layers — xUnit link-referenced pure C#, GdUnit4Net E2E, and Tools/ numeric regression gates — each catching what the layer below structurally cannot.
+Tang3cko's test standards for Godot 4.x + .NET. Tests span three layers — xUnit link-referenced
+pure C#, GdUnit4Net E2E, and `Tools/` numeric regression gates — each catching what the layer below
+structurally cannot.
+
+The mistake that matters most is treating a layer's pass as proof it did not make. A green Layer 1
+run says nothing about scene wiring, and a numeric gate that reports "differs from rest" says
+nothing about whether the result is correct — a limb twisted into an impossible pose also differs
+from rest.
 
 ## Phase Tracking
 

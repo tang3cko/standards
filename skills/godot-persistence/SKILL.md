@@ -7,7 +7,13 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Godot Persistence Standards
 
-Help users design, write, and review save/load and persistence code for Godot 4.x + .NET projects following Tang3cko standards.
+Tang3cko's standards for save/persistence in Godot 4.x + .NET: versioned binary format with CRC32,
+atomic writes, backup rotation, session-vs-persistent separation. The Core Rules below are always
+in force; the reference implementations live in references/.
+
+The rule broken most often is the ordering of the save flow. Serialize to memory → write tmp →
+rotate backups → rename over main: every reordering of those four steps reopens a crash window
+that testing on a machine that does not crash will never show you.
 
 ## Phase Tracking
 

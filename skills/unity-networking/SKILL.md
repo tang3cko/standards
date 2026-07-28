@@ -7,7 +7,13 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Unity Networking Standards
 
-Help users design, implement, and review Unity multiplayer networking on NGO (Netcode for GameObjects) 2.x following Tang3cko standards.
+Tang3cko's standards for Unity multiplayer networking on NGO (Netcode for GameObjects) 2.x —
+payload sizing, delivery selection, snapshot streaming. The Core Rules below are always in force;
+the derivations, code patterns, and incident write-ups live in references/.
+
+The rule skipped most often is Rule 4. A sync site that works at `N=10` fragments silently at
+`N=50`, so the worst case at `maxN` gets computed and written at the RPC declaration — before the
+code ships, not after a player reports a hang.
 
 ## Phase Tracking
 

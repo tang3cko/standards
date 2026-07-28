@@ -7,7 +7,13 @@ allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 
 # Unity Core Standards
 
-Help users write, review, and refactor Unity C# code following Tang3cko core coding standards.
+Tang3cko's Unity C# standards for naming, code organization, error handling, the Input System, and
+editor tooling. The Core Rules below are always in force; the acceptance criteria live in
+references/.
+
+The rule broken most often is the Dependency Priority ladder — reaching for `Find`/`GetComponent`
+or a Singleton where an EventChannel or `[SerializeField]` would have worked. It compiles, it
+runs, and it is still a violation.
 
 ## Phase Tracking
 
