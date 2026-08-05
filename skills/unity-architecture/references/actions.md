@@ -22,20 +22,13 @@ namespace ProjectName.Actions
         [SerializeField] private Vector3 offset;
         [SerializeField] private float duration = 2f;
 
-        public override void Execute(
-            string callerMember = "",
-            string callerFile = "",
-            int callerLine = 0)
+        // Execute() is non-virtual on the base class so caller tracking and Monitor
+        // notification stay centralized. Derived classes implement OnExecute().
+        protected override void OnExecute()
         {
             var instance = Object.Instantiate(effectPrefab);
             instance.transform.position += offset;
             Object.Destroy(instance, duration);
-
-#if UNITY_EDITOR
-            var callerInfo = new CallerInfo(callerMember, callerFile, callerLine);
-            NotifyActionExecuted(callerInfo);
-            LogAction($"Spawned {effectPrefab.name}");
-#endif
         }
     }
 }
@@ -65,17 +58,9 @@ public class DamageAction : ActionSO<int>
     [Header("Settings")]
     [SerializeField] private GameObject damageVFX;
 
-    public override void Execute(int damage,
-        string callerMember = "",
-        string callerFile = "",
-        int callerLine = 0)
+    protected override void OnExecute(int damage)
     {
         Debug.Log($"Dealing {damage} damage");
-
-#if UNITY_EDITOR
-        var callerInfo = new CallerInfo(callerMember, callerFile, callerLine);
-        NotifyActionExecuted(callerInfo);
-#endif
     }
 }
 ```
@@ -92,7 +77,7 @@ public class SequenceAction : ActionSO
 {
     [SerializeField] private ActionSO[] actions;
 
-    public override void Execute(...)
+    protected override void OnExecute()
     {
         foreach (var action in actions)
         {
@@ -112,7 +97,7 @@ public class ConditionalAction : ActionSO
     [SerializeField] private ActionSO trueAction;
     [SerializeField] private ActionSO falseAction;
 
-    public override void Execute(...)
+    protected override void OnExecute()
     {
         if (condition != null && condition.Value)
             trueAction?.Execute();
@@ -199,26 +184,26 @@ rewardAction.Execute();
 rewardAction?.Execute();
 ```
 
-### Missing #if UNITY_EDITOR for monitoring
+### Trying to override `Execute` instead of `OnExecute`
+
+`ActionSO.Execute()` is non-virtual. It captures caller info, invokes `OnExecute()`, and notifies
+the Monitor Window in one place, so no derived class can forget to. The caller parameters exist
+only under `#if UNITY_EDITOR`, because `CallerFilePath` would otherwise bake absolute source paths
+into player builds.
 
 ```csharp
-// Bad: Monitoring code in release build
-public override void Execute(...)
+// Bad: does not compile — Execute is not virtual
+public override void Execute(...) { }
+
+// Good: implement the hook the base class calls
+protected override void OnExecute()
 {
     DoSomething();
-    NotifyActionExecuted(callerInfo); // Error in build!
-}
-
-// Good
-public override void Execute(...)
-{
-    DoSomething();
-
-#if UNITY_EDITOR
-    NotifyActionExecuted(new CallerInfo(callerMember, callerFile, callerLine));
-#endif
 }
 ```
+
+Derived classes therefore never call `NotifyActionExecuted` or `LogAction` themselves, and need no
+`#if UNITY_EDITOR` guard for monitoring — the base class already handles both.
 
 ---
 
@@ -233,7 +218,8 @@ public override void Execute(...)
 ## Checklist
 
 - [ ] Every `Execute` call site uses the null-conditional operator (`action?.Execute()`)
-- [ ] `NotifyActionExecuted`/`LogAction` monitoring calls are wrapped in `#if UNITY_EDITOR`
+- [ ] Derived classes implement `protected override void OnExecute()` — `Execute()` is non-virtual and must not be overridden
+- [ ] No derived class calls `NotifyActionExecuted`/`LogAction`; the base class already does it
 - [ ] ActionSO was chosen over EventChannel per the When to Use table (configurable/data-driven behavior, not a simple notification)
 - [ ] `ActionSO<T>` is used when the caller supplies data at execution time; parameterless `ActionSO` otherwise
 - [ ] Composite behavior uses SequenceAction/ConditionalAction assets rather than hardcoded orchestration in a consumer

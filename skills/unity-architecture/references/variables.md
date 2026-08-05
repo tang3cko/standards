@@ -86,19 +86,24 @@ fixed4 frag(v2f i) : SV_Target
 
 ## Anti-Patterns
 
-### Direct Variable subscription
+### Reaching through the Variable to get at its channel
+
+`VariableSO<T>.OnValueChanged` exposes the paired channel asset, so subscribing through it works —
+but it makes the subscriber depend on the Variable as well as on the channel, for no benefit.
+Serialize the channel asset directly instead.
 
 ```csharp
-// Bad: Subscribing directly to Variable's internal event creates tight coupling
-// between the subscriber and the Variable's implementation. If the Variable is
-// swapped or refactored, all direct subscribers break. Using a separate
-// EventChannel allows the Variable and its consumers to evolve independently.
+// Bad: now the subscriber needs a reference to the Variable too
+[SerializeField] private IntVariableSO playerScore;
 playerScore.OnValueChanged.OnEventRaised += UpdateUI;
 
-// Good: Subscribe to the dedicated EventChannel instead
+// Good: depend only on the channel asset
 [SerializeField] private IntEventChannelSO onScoreChanged;
 onScoreChanged.OnEventRaised += UpdateUI;
 ```
+
+Both reach the same channel asset; the second one keeps the display decoupled from where the
+value lives.
 
 ### Ignoring initial value reset
 
@@ -125,10 +130,35 @@ Variable and EventChannel have orthogonal responsibilities:
 - **Variable** = single source of truth for the **value** (persisted, queryable)
 - **EventChannel** = single notification path for the **change**
 
-These are **not** redundant systems. The writer of a Variable is responsible for both: updating the Variable and raising the matched EventChannel in the same frame.
+**The Variable owns the pairing, and raises the channel itself.** `VariableSO<T>` holds a serialized `EventChannelSO<T>` field, and the `Value` setter raises it whenever the value actually differs:
 
 ```csharp
-// Settings UI (publisher)
+// Tang3cko.ReactiveSO — VariableSO<T>
+[SerializeField] private EventChannelSO<T> onValueChanged;   // an asset reference, not a C# event
+
+public T Value
+{
+    set
+    {
+        if (!EqualityComparer<T>.Default.Equals(this.value, value))
+        {
+            this.value = value;
+            RaiseValueChangedEvent(value);   // the Variable raises the paired channel
+        }
+    }
+}
+```
+
+So the writer assigns `Value` and nothing else:
+
+```csharp
+// Good: the Variable raises onMasterVolumeChanged by itself
+public void OnVolumeSliderChanged(float value)
+{
+    masterVolume.Value = value;
+}
+
+// Bad: fires the channel twice
 public void OnVolumeSliderChanged(float value)
 {
     masterVolume.Value = value;
@@ -136,7 +166,7 @@ public void OnVolumeSliderChanged(float value)
 }
 ```
 
-Subscribers read the Variable for initial value (e.g. on `OnEnable`) and listen on the EventChannel for changes:
+Wire the channel asset into the Variable asset's `onValueChanged` field once, in the Inspector. Subscribers then listen on that channel asset and bootstrap the initial value from the Variable:
 
 ```csharp
 private void OnEnable()
@@ -146,7 +176,9 @@ private void OnEnable()
 }
 ```
 
-This pattern keeps the Variable consumers loosely coupled to the Variable implementation (rule from Anti-Patterns above) while preserving a single value as the source of truth.
+This keeps consumers coupled to a channel asset rather than to the Variable, while the Variable remains the single source of truth for the value.
+
+> If a change must be announced *without* a Variable behind it — a transient event with no queryable state — raise a standalone EventChannel directly. The rule above applies only to a channel that is wired into a Variable's `onValueChanged`.
 
 ---
 
@@ -160,8 +192,8 @@ This pattern keeps the Variable consumers loosely coupled to the Variable implem
 
 ## Checklist
 
-- [ ] Consumers subscribe to the paired EventChannel — never directly to the Variable's internal `OnValueChanged`
-- [ ] The Variable writer honors the Publisher Contract: updates the Variable and raises the matched EventChannel in the same frame
+- [ ] Consumers subscribe to the channel asset wired into the Variable's `onValueChanged`, not to the Variable object
+- [ ] The writer only assigns `Value` — it never also raises that Variable's paired channel, which would fire it twice
 - [ ] Subscribers bootstrap the initial value from the Variable in `OnEnable`, then listen on the channel for changes
 - [ ] Session-scoped Variables call `ResetToInitial()` at startup so stale editor-session values cannot leak in
 - [ ] GPU-synced shader property names start with underscore (`_PlayerHealth`)
