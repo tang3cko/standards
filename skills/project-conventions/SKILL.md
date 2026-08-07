@@ -1,7 +1,7 @@
 ---
 name: project-conventions
-description: Apply Tang3cko engine-agnostic project operating conventions — commit messages with test-count deltas and known gaps, numbered docs/ namespaces, keeping progress tracking out of docs, task tracker integration, backlog granularity (Story-sized tickets and landing verification), and resuming interrupted work. Use when writing a commit message, structuring or reviewing docs/, wiring up a task tracker, filing or auditing a backlog, or resuming work after an interruption, in any Unity/Godot project.
-when_to_use: Triggers on "commit message", "コミットメッセージ", "docs構造", "docs structure", "運用規約", "known gaps", "既知の制約", "進捗管理", "task tracker", "再開", "resume", "resumption", "backlog", "バックログ", "起票", "粒度", "granularity", "Story", "Epic", "milestone", "マイルストーン", "ロードマップ", "roadmap".
+description: Apply Tang3cko engine-agnostic project operating conventions — commit messages with test-count deltas and known gaps, numbered docs/ namespaces, decision records (ADR) and their propagation, keeping progress tracking out of docs, task tracker integration, backlog granularity (Story-sized tickets and landing verification), and resuming interrupted work. Use when writing a commit message, structuring or reviewing docs/, filing or superseding an ADR, wiring up a task tracker, filing or auditing a backlog, or resuming work after an interruption, in any Unity/Godot project.
+when_to_use: Triggers on "commit message", "コミットメッセージ", "docs構造", "docs structure", "運用規約", "known gaps", "既知の制約", "進捗管理", "task tracker", "再開", "resume", "resumption", "backlog", "バックログ", "起票", "粒度", "granularity", "Story", "Epic", "milestone", "マイルストーン", "ロードマップ", "roadmap", "ADR", "決定記録", "設計決定", "decision record", "波及先", "propagation", "superseded", "撤回", "withdrawn".
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
 
@@ -21,7 +21,7 @@ sentence that would have told it what was deliberately left undone.
 **At workflow start (commit message, docs structuring, tracker setup, or resumption path), create tasks for each phase:**
 
 ```
-TaskCreate: "Phase 1: Load reference     | matching the path (commit-messages/docs-structure/task-tracker-integration/backlog-granularity/resumption-workflow)"
+TaskCreate: "Phase 1: Load reference     | matching the path (commit-messages/docs-structure/adr-conventions/task-tracker-integration/backlog-granularity/resumption-workflow)"
 TaskCreate: "Phase 2: Draft/review output | follow Core Rules"
 TaskCreate: "Phase 3: Pre-Commit Check    | MUST pass every item before presenting a commit message"
 ```
@@ -71,9 +71,31 @@ A commit is a resumption point: someone (including a future agent) must be able 
 | `02_game-design/` | Game concept, core loop, narrative, characters |
 | `03_development/` | Process docs: testing strategy, asset/audio requirements |
 | `05_standards/` | Project-local standards deltas (numbering leaves room to insert a namespace later) |
+| `06_decisions/` | ADRs — decision records and their propagation |
 | `99_ideas/` | Unimplemented, speculative design — isolated from authoritative docs |
 
 `99_ideas/` is a quarantine bucket: anything not yet decided or not yet built goes here, never mixed into the numbered namespaces that describe what exists.
+
+### Decision Records (ADR)
+
+A design decision that is **made, narrowed, reversed or withdrawn** gets an ADR in `06_decisions/`,
+and so does answering an earlier ADR's open question. The accident this prevents is a decision
+changing in code while the old version survives in a doc, a comment, `CLAUDE.md` or a tracker
+ticket — so a later session implements from a stale spec. That is why **the Propagation table is the
+body of an ADR**, not an appendix to it.
+
+Three rules break most often and are worth stating here rather than only in the reference:
+
+- **Append-only.** A filed ADR is never rewritten. Changes are a *new* ADR; the only edits permitted
+  on the old one are its Status line and one link line beneath it
+- **Consent, not authorship.** A decision belongs in an ADR *once the user has agreed to it*. Having
+  shown it to them is not agreement. Recording an unagreed decision as the user's is the worst
+  failure the namespace has, because it destroys the ledger's ability to say who is accountable
+- **No implementation status.** Built / in progress / assigned lives in the tracker, never here
+
+The numbering slot, the three permitted `Decided:` header forms, the required sections, and the
+tracker-search procedure behind the Propagation table live in `references/adr-conventions.md`. Each
+project also restates the rules in its own `06_decisions/README.md`.
 
 ### No Progress in docs/
 
@@ -106,6 +128,13 @@ Identify the task type and follow the matching path.
 1. Load `references/docs-structure.md`
 2. Place new docs by namespace; flag any progress/status content for removal to the tracker
 3. Flag speculative/unimplemented content found outside `99_ideas/`
+
+### Filing or reviewing an ADR
+
+1. Load `references/adr-conventions.md`
+2. Confirm the decision has the user's agreement, and pick the matching `Decided:` header form
+3. Full-text search the tracker on every name the subject goes by, *then* write the Propagation table
+4. Run that reference's `## Checklist` against the draft before presenting
 
 ### Setting up or reviewing task tracker integration
 
@@ -153,6 +182,7 @@ Each file below is the only place its listed content exists — SKILL.md deliber
 |------|-----------|
 | references/commit-messages.md | Drafting or reviewing a commit message. Only source for: summary-line effect-vs-mechanism examples and the parenthetical preview pattern, test-count delta format variants, known-gaps decision-record phrasing, when the bullet body may be skipped |
 | references/docs-structure.md | Placing a new doc or auditing docs/. Only source for: the exists-vs-still-deciding placement heuristic, `99_ideas/` graduation/retirement rule, per-namespace README indexes, how to handle progress content found during review |
+| references/adr-conventions.md | Filing, reviewing or superseding an ADR, or setting up `06_decisions/`. Only source for: the namespace slot and why a project that filled `04_` keeps it, append-only and the exactly-two-permitted-edits rule, the Superseded/Withdrawn vocabulary and why answering an open question is neither, the three permitted `Decided:` header forms and the consent-vs-having-been-shown distinction, the required sections, the tracker-search procedure behind the Propagation table, dated-numbers-in-ADR vs no-numbers-in-current-shape-docs |
 | references/task-tracker-integration.md | Wiring a project's CLAUDE.md to its tracker or writing milestone comments. Only source for: the CLAUDE.md tracker-naming phrasing, commit-vs-tracker content routing table, three-part milestone comment shape, the project-designated-tracker-only rule |
 | references/backlog-granularity.md | Filing, splitting, or auditing tracker items, or planning a milestone/roadmap. Only source for: the Milestone/Epic/Story/Task layer model and where filing stops, the one-ADR-or-one-feature Story definition, the vertical-slice and kind-of-data splitting rules, when an ADR is split out vs. folded in, the parallel-band and cost-deferred ordering rules, the landing question and the product-completeness category sweep |
 | references/resumption-workflow.md | Resuming after a stall, API disconnect, or new session. Only source for: the two-command entry-point procedure, the deferral-reasoning rule (continue or explicitly un-defer), tracker cross-check ordering, resumption anti-patterns |
