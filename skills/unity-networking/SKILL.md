@@ -11,7 +11,7 @@ Tang3cko's standards for Unity multiplayer networking on NGO (Netcode for GameOb
 payload sizing, delivery selection, snapshot streaming. The Core Rules below are always in force;
 the derivations, code patterns, and incident write-ups live in references/.
 
-The rule skipped most often is Rule 4. A sync site that works at `N=10` fragments silently at
+The rule skipped most often is Rule 4. A sync site that works at `N=10` starts throwing at
 `N=50`, so the worst case at `maxN` gets computed and written at the RPC declaration — before the
 code ships, not after a player reports a hang.
 
@@ -43,12 +43,14 @@ These rules apply to every sync site. They are the standard — do not generate 
 
 | Delivery | Per-message budget | Enforcement |
 |---|---|---|
-| **Unreliable** RPC / Named / Unnamed Message | **Design budget <= 1200 B** (one MTU). Hard cap = `UnityTransport.MaxPayloadSize` (default 6144 B) | Send-time error above `MaxPayloadSize`. Between ~1200 B and the cap, NGO 2.x fragments across UDP packets — losing ANY fragment drops the whole message |
+| **Unreliable** RPC / Named / Unnamed Message | **Design budget <= 1200 B** (one MTU). Hard cap = `NetworkManager.MaximumTransmissionUnitSize & ~7` (**1296 B** by default) | `OverflowException` at send time above the cap. **No fragmentation** — the message is not split, it is refused |
 | **Reliable** RPC / Named / Unnamed Message | <= ~64 KB initial buffer, fragments to transport limit | Auto-fragmented, but retransmit storms above ~4 KB at high frequency |
 | NetworkVariable / NetworkList | Reliable-fragmented, no hard ceiling | Same retransmit concern when churning |
 | NetworkTransform | Internally quantized + delta | Use half-precision + axis-disable to shrink |
 
-Any Unreliable sync site should fit one MTU (~1200 B payload; UTP MTU is 1400 B). A fragmented Unreliable message multiplies effective loss — at 5% packet loss, a 5-fragment message loses ~23% of snapshots. Either shrink (quantize / split) or change channel. On NGO 1.x, exceeding one MTU is a hard `OverflowException` (no fragmentation there).
+Any Unreliable sync site should fit one MTU (~1200 B payload; UTP MTU is 1400 B). Either shrink (quantize / split) or change channel.
+
+**`UnityTransport.MaxPayloadSize` (default 6144 B) is not the Unreliable ceiling.** NGO's own non-fragmented limit — `NetworkMessageManager.DefaultNonFragmentedMessageMaxSize`, `1300 & ~7` = 1296 B — stops the send first, with `OverflowException("RPC parameters are too large for unreliable delivery.")`. Verified against the NGO 2.11.0 / `com.unity.transport` 2.6.0 package source on 2026-08-10; re-verify on other versions. Earlier revisions of this standard described 2.x as fragmenting Unreliable up to 6144 B — that was wrong, and it cost Multiplayer_009 a real bug (6 of 10 snapshot packets lost at 77 entities over Relay). See `references/rpc-payload-rules.md`.
 
 ### Rule 2: Frequency × Persistence Matrix
 
@@ -70,7 +72,7 @@ NetworkVariable at high frequency causes Reliable retransmit storms under packet
 
 ### Rule 4: Always Compute Worst Case
 
-A sync site that works at `N=10` entities silently fragments (or errors past `MaxPayloadSize`) at `N=50`. Define `maxN` upfront, compute worst-case payload at `maxN`, and document it in a comment at the RPC declaration. If it exceeds 1200 B on Unreliable, fix the design now.
+A sync site that works at `N=10` entities throws at `N=50`, once the payload passes NGO's 1296 B Unreliable ceiling. Define `maxN` upfront, compute worst-case payload at `maxN`, and document it in a comment at the RPC declaration. If it exceeds 1200 B on Unreliable, fix the design now.
 
 ## Workflow
 
@@ -130,6 +132,6 @@ Verify every file you wrote or changed. If any check fails, fix it first — do 
 | File | Load When |
 |------|-----------|
 | references/sync-mechanisms.md | Choosing or comparing sync mechanisms. Only place with the full decision tree, per-mechanism code examples (NetworkVariable, NetworkList, NetworkTransform, RPC, CustomMessagingManager, OnSynchronize, out-of-band), and the distributed-authority scope note |
-| references/rpc-payload-rules.md | Sizing any RPC payload or deciding delivery channel. Only place with the worst-case payload formula, the fragmentation-loss math behind the 1200 B budget, the over-budget decision order, and the quantization cheatsheet |
+| references/rpc-payload-rules.md | Sizing any RPC payload or deciding delivery channel. Only place with the worst-case payload formula, the derivation of NGO's 1296 B Unreliable ceiling and why the design budget sits below it, the over-budget decision order, and the quantization cheatsheet |
 | references/snapshot-streaming.md | Building or reviewing a >10 Hz entity stream. Only place with the chunk wire format, client reassembly implementation, bandwidth worked example, tuning-knob table, and the late-joiner path split |
 | references/anti-patterns.md | Debugging a live failure or reviewing existing network code. Only place with symptom → root cause → fix write-ups from real Tang3cko incidents, including non-payload traps (local state caching, mixed reliability ordering, trusting client input) |

@@ -6,7 +6,7 @@ Failure modes seen in real Tang3cko projects. Each entry: symptom -> root cause 
 
 ## 1. Unreliable RPC with Unbounded Array
 
-**Symptom**: works in early playtests; once entity count crosses a threshold, snapshots silently start dropping in bursts under real-network loss (NGO 2.x fragments the message, and one lost fragment kills the whole snapshot). Past `MaxPayloadSize` (6144 B default) the send errors out. On NGO 1.x this instead throws `OverflowException` at send time.
+**Symptom**: works in early playtests; once entity count crosses a threshold, snapshots start disappearing under load. On NGO 2.11 the send throws `OverflowException("RPC parameters are too large for unreliable delivery.")` once the payload passes 1296 B (`MaximumTransmissionUnitSize & ~7`) — it does **not** fragment. Because only the ticks at peak entity count exceed the ceiling, the failure reads as intermittent packet loss rather than as a size bug: Multiplayer_009 saw 6 of 10 snapshot packets vanish at 77 entities over Relay before finding the cause.
 
 ```csharp
 // BAD
@@ -14,7 +14,7 @@ Failure modes seen in real Tang3cko projects. Each entry: symptom -> root cause 
 private void SyncStatesRpc(EnemyState[] states, int[] ids, int count) { ... }
 ```
 
-**Root cause**: array grows beyond one MTU; fragmentation on Unreliable multiplies effective packet loss.
+**Root cause**: the array grows past one MTU at high `N`, and Unreliable has no fragmented fallback above it — the message is refused outright.
 
 **Fix**: chunk into MTU-safe slices with sequence reassembly. See `snapshot-streaming.md`.
 
@@ -69,7 +69,8 @@ void Update() {
 
 ```csharp
 // Worst case: 200 entities * 24 B + 200 * 4 B + framing ~= 5.7 KB
-// EXCEEDS one-MTU budget (~1200 B) - would fragment into 5 packets - must chunk
+// EXCEEDS one-MTU budget (~1200 B) and NGO's 1296 B Unreliable ceiling
+// -> OverflowException at send time, not fragmentation - must chunk
 [Rpc(SendTo.NotServer, Delivery = RpcDelivery.Unreliable)]
 private void SyncStatesRpc(...) { ... }
 ```

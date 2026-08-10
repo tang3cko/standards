@@ -42,7 +42,7 @@ What are you syncing?
 | `NetworkList<T>` | Reliable | Yes | up to transport limit | Yes (auto) | Persistent collections |
 | `NetworkTransform` | Reliable (built-in delta + quantize) | Yes | small (internally optimized) | Yes (auto) | Transform replication |
 | `Rpc` / `ClientRpc` / `ServerRpc` (Reliable) | Reliable | Yes | <= ~64 KB initial buffer | No | One-shot events, triggers |
-| `Rpc` (Unreliable) | Unreliable | Yes, up to `MaxPayloadSize` (6144 B default) — **but a lost fragment drops the whole message** | **Design budget <= 1200 B** (one MTU) | No | High-frequency loss-tolerant signals |
+| `Rpc` (Unreliable) | Unreliable | **No** — throws `OverflowException` past 1296 B (`MaximumTransmissionUnitSize & ~7`); `MaxPayloadSize` is never reached | **Design budget <= 1200 B** (one MTU) | No | High-frequency loss-tolerant signals |
 | `CustomMessagingManager.SendNamedMessage` (Reliable) | Reliable | Yes | up to transport limit | No | Bulk transfer, custom protocols |
 | `CustomMessagingManager.SendUnnamedMessage` (Reliable) | Reliable | Yes | up to transport limit | No | Minimal-overhead custom protocols |
 | `NetworkBehaviour.OnSynchronize` (NGO 2.x) | Reliable | Yes | up to transport limit | Yes (spawn) | Custom late-join serialization |
