@@ -103,7 +103,7 @@ Never write implementation-status tables, percentage-complete, or "TODO/done" ch
 
 ### Task Tracker Integration
 
-The project's `CLAUDE.md` names the tracker list/board explicitly; cross-commit progress lives in tracker comments, not docs or commit bodies. The comment shape and commit-vs-tracker routing live in `references/task-tracker-integration.md`.
+The project's `CLAUDE.md` names the tracker list/board explicitly; cross-commit progress lives in tracker comments, not docs or commit bodies. **Use only the tracker that project names — reaching for any other tracker, tool, or ad-hoc list is forbidden.** If no tracker is named, ask; do not pick one. The comment shape and commit-vs-tracker routing live in `references/task-tracker-integration.md`.
 
 ### Backlog Granularity
 

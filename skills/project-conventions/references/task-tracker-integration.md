@@ -20,7 +20,7 @@ A commit's Known gaps is scoped to that commit. The tracker is scoped to the fea
 
 ## Milestone comments
 
-When a significant chunk of work lands (a milestone, not every commit), add a comment to the relevant tracker task/reminder with:
+When a significant chunk of work lands (a milestone, not every commit), add a comment to the relevant tracker item with:
 
 1. What was done (brief, human-readable — not a diff dump)
 2. The commit hash it corresponds to
@@ -30,13 +30,16 @@ This mirrors the commit-message Known-gaps pattern one level up: the comment is 
 
 ## Practical mechanics
 
-Use the tracker the project names in its `CLAUDE.md`, through that tracker's own interface, and nothing else — any other tracker, side tool, or ad-hoc list is forbidden. Search that tracker for the existing item before writing, and comment on that item. Don't create a new tracker task for work that's just a commit-scoped detail — that's what the commit's own Known gaps section is for.
+Use the tracker the project names in its `CLAUDE.md`, through that tracker's own interface, and nothing else. Any other tracker, any side tool, any ad-hoc list or file kept "just for this session" is forbidden — a second place to look is how progress state goes stale and contradicts itself. If `CLAUDE.md` names no tracker, ask which one to use; do not choose one, and do not fall back to writing status into docs or the repo.
+
+Whatever the tracker is, the mechanics are the same: search it for the existing item before writing, comment on that item, and don't open a new one for work that's just a commit-scoped detail — that's what the commit's own Known gaps section is for.
 
 ## Checklist
 
 Run against every tracker setup or milestone comment before presenting:
 
 - [ ] `CLAUDE.md` names the tracker *and* the exact list/board, in a line that also restates "no progress in docs"
+- [ ] Only that named tracker was used — no other tool, no side list, and no tracker picked without being told which one
 - [ ] Content is routed by the table: commit-scoped deferrals → the commit's Known gaps; cross-commit progress and status → the tracker
 - [ ] Each milestone comment carries all three parts: what was done, the commit hash, and the next resumption point (including any open decision)
 - [ ] The comment was attached to the existing task found by search — no new task created for a commit-scoped detail
