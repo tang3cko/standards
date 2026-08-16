@@ -81,7 +81,7 @@ Do: split player controller by responsibility (movement vs interaction), compose
 
 ### Platform Support
 
-iOS/Android C#/.NET export is officially **experimental** as of Godot 4.7.1 (latest stable, 2026-07) — desktop only is stable, web is unsupported. iOS ships on NativeAOT: reflection-based `System.Text.Json` is disabled at runtime there, so shipped C# uses source-generated `JsonSerializerContext`, and "works on Android (Mono/JIT)" proves nothing for iOS. Details: `references/gotchas.md`.
+iOS/Android C#/.NET export is officially **experimental** as of Godot 4.7.1 (2026-07) — desktop only is stable, web is unsupported. iOS ships on NativeAOT: reflection-based `System.Text.Json` is disabled at runtime there, so shipped C# uses source-generated `JsonSerializerContext`, and "works on Android (Mono/JIT)" proves nothing for iOS. Details: `references/gotchas.md`.
 
 ## Workflow
 

@@ -36,7 +36,7 @@ ProjectRoot/
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
-    <!-- Stable pairing (verified 2026-07): api 5.0.0 is the latest stable; adapter 3.1.x
+    <!-- Stable pairing (verified 2026-07): api 5.0.0; adapter 3.1.x
          forces a prerelease api (5.1.0-rc), so pin both until 5.1 ships stable -->
     <PackageReference Include="gdUnit4.api" Version="5.0.0" />
     <PackageReference Include="gdUnit4.test.adapter" Version="3.0.0" />

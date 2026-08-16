@@ -202,7 +202,7 @@ Judge every subscription by "does the emitter live longer than me," not by a uni
 
 ## Mobile C# is experimental; iOS runs NativeAOT and rejects reflection
 
-As of Godot 4.7.1 (latest stable, 2026-07), official C#/.NET platform support is stable on **desktop only**. Android and iOS export exist since Godot 4.2 but remain officially **experimental**; the web platform is unsupported for C# entirely. The runtimes also differ per platform: Android ships on Mono (JIT, linux-bionic), while iOS ships on .NET **NativeAOT** — a trimmed, ahead-of-time-compiled runtime with no dynamic code generation.
+As of Godot 4.7.1 (2026-07), official C#/.NET platform support is stable on **desktop only**. Android and iOS export exist since Godot 4.2 but remain officially **experimental**; the web platform is unsupported for C# entirely. The runtimes also differ per platform: Android ships on Mono (JIT, linux-bionic), while iOS ships on .NET **NativeAOT** — a trimmed, ahead-of-time-compiled runtime with no dynamic code generation.
 
 The practical consequence (verified in a production Godot project, 2026-07): reflection that Mono tolerates breaks on iOS, often silently or only at first use.
 

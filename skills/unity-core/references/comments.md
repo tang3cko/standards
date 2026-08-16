@@ -153,7 +153,7 @@ playerHealth.Heal(10);
 ## TODO Comments
 
 ```csharp
-// TODO: Add DOTween animation in Phase 2
+// TODO: Add DOTween animation
 public void PlayCard(CardSO card) { }
 
 // FIXME: Incomplete cleanup handling on host disconnect
