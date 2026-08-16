@@ -17,8 +17,8 @@ however good its rationale reads.
 
 ```
 docs/06_decisions/
-  README.md      the operating rules for this namespace, plus the Contents index
-  TEMPLATE.md    copied to file a new one; takes no number, not listed in Contents
+  README.md      what this namespace is for, and where its rules live
+  TEMPLATE.md    copied to file a new one; takes no number
   ADR-0001-....md
 ```
 
@@ -28,8 +28,8 @@ something else must not be forced to renumber. **A project that filled `04_` wit
 before this convention existed keeps it there** — the slot number is not what the rules are about,
 and renumbering breaks every link into it.
 
-The operating rules live in the namespace's own `README.md`, not only in this skill. A contributor
-reading `docs/` must be able to find them without knowing the skill exists.
+A contributor reading `docs/` must be able to find the rules without knowing the skill exists, so
+the namespace's `README.md` **points at this file**.
 
 ## Naming and numbering
 
@@ -56,8 +56,8 @@ rewriting it destroys the thing that made it worth keeping.
   it is a new ADR
 
 A project that violated this before the rule existed **does not retroactively fix it** — rewriting
-an already-rewritten body is itself a rewrite. Record the deviation in the namespace README and
-treat the file as immutable from that point.
+an already-rewritten body is itself a rewrite. Treat the file as immutable from that point, and
+record the deviation in the next ADR that touches the same decision.
 
 ### Status vocabulary
 
@@ -197,4 +197,3 @@ Run against every ADR before presenting:
       one link line beneath it changed
 - [ ] An ADR that merely answers an earlier one's Open question left that earlier ADR `Accepted` and
       untouched
-- [ ] The namespace `README.md` Contents index lists the new ADR

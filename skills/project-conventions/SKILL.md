@@ -94,8 +94,8 @@ Three rules break most often and are worth stating here rather than only in the 
 - **No implementation status.** Built / in progress / assigned lives in the tracker, never here
 
 The numbering slot, the three permitted `Decided:` header forms, the required sections, and the
-tracker-search procedure behind the Propagation table live in `references/adr-conventions.md`. Each
-project also restates the rules in its own `06_decisions/README.md`.
+tracker-search procedure behind the Propagation table live in `references/adr-conventions.md`. A
+project's `06_decisions/README.md` points at that file.
 
 ### No Progress in docs/
 
@@ -181,7 +181,7 @@ Each file below is the only place its listed content exists — SKILL.md deliber
 | File | Load When |
 |------|-----------|
 | references/commit-messages.md | Drafting or reviewing a commit message. Only source for: summary-line effect-vs-mechanism examples and the parenthetical preview pattern, the worked verification examples, known-gaps decision-record phrasing, when the bullet body may be skipped |
-| references/docs-structure.md | Placing a new doc or auditing docs/. Only source for: the exists-vs-still-deciding placement heuristic, `99_ideas/` graduation/retirement rule, per-namespace README indexes, how to handle progress content found during review |
+| references/docs-structure.md | Placing a new doc or auditing docs/. Only source for: the exists-vs-still-deciding placement heuristic, `99_ideas/` graduation/retirement rule, how to handle progress content found during review |
 | references/adr-conventions.md | Filing, reviewing or superseding an ADR, or setting up `06_decisions/`. Only source for: the namespace slot and why a project that filled `04_` keeps it, append-only and the exactly-two-permitted-edits rule, the Superseded/Withdrawn vocabulary and why answering an open question is neither, the three permitted `Decided:` header forms and the consent-vs-having-been-shown distinction, the required sections, the tracker-search procedure behind the Propagation table, dated-numbers-in-ADR vs no-numbers-in-current-shape-docs |
 | references/task-tracker-integration.md | Wiring a project's CLAUDE.md to its tracker or writing milestone comments. Only source for: the CLAUDE.md tracker-naming phrasing, commit-vs-tracker content routing table, three-part milestone comment shape, the project-designated-tracker-only rule |
 | references/backlog-granularity.md | Filing, splitting, or auditing tracker items, or planning a milestone/roadmap. Only source for: the Milestone/Epic/Story/Task layer model and where filing stops, the one-ADR-or-one-feature Story definition, the vertical-slice and kind-of-data splitting rules, when an ADR is split out vs. folded in, the parallel-band and cost-deferred ordering rules, the landing question and the product-completeness category sweep |

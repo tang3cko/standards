@@ -13,9 +13,9 @@ docs/
   99_ideas/          unimplemented, speculative design — quarantined
 ```
 
-Numbering is deliberately non-contiguous (there is no `04_` in this list) — it leaves room to insert a namespace later without renumbering everything that follows. Each namespace typically has its own `README.md` acting as an index for that section.
+Numbering is deliberately non-contiguous (there is no `04_` in this list) — it leaves room to insert a namespace later without renumbering everything that follows.
 
-`06_decisions/` is where a decision's *history* lives; the numbered namespaces above it describe only the **current shape** and link here for the "why". A project that filled `04_` with its decisions before this slot was assigned keeps them there — renumbering breaks every link into the namespace, and the slot number is not what the rules are about. The rules themselves are in `references/adr-conventions.md`, and each project restates them in that namespace's own `README.md` so a contributor can find them from `docs/` alone.
+`06_decisions/` is where a decision's *history* lives; the numbered namespaces above it describe only the **current shape** and link here for the "why". A project that filled `04_` with its decisions before this slot was assigned keeps them there — renumbering breaks every link into the namespace, and the slot number is not what the rules are about. The rules themselves are in `references/adr-conventions.md`, and that namespace's `README.md` points at them rather than restating them.
 
 Placement heuristic: ask "does this doc describe something that exists, or something someone is still deciding?" The former goes in `00`-`05`; the latter goes in `99_ideas/`.
 
@@ -46,4 +46,3 @@ Run against every docs/ placement or review before presenting:
 - [ ] Speculative or unimplemented design found outside `99_ideas/` is flagged for quarantine
 - [ ] Ideas that have since been built are graduated into the matching numbered namespace, with the `99_ideas/` doc retired or trimmed to the decision record (no duplication)
 - [ ] A doc describing *why* a decision was made links to its ADR rather than restating the history; the numbered namespace carries only the current shape
-- [ ] The affected namespace's `README.md` index still reflects its contents
