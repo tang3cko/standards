@@ -26,7 +26,7 @@ Shared coding standards and Claude Code skills for Tang3cko projects.
 | [godot-animation](skills/godot-animation/) | Retargeting via both-sides BoneMap/RestFixer normalization, pose verification |
 | [godot-headless](skills/godot-headless/) | godot-mono CLI: import/build/test, offscreen PNG rendering (the --headless trap) |
 | [godot-persistence](skills/godot-persistence/) | Save systems: versioned binary + CRC32, atomic writes, backup rotation, sandboxing |
-| [project-conventions](skills/project-conventions/) | Engine-agnostic ops: commit messages with test deltas and known gaps, docs structure, task-tracker integration, backlog granularity |
+| [project-conventions](skills/project-conventions/) | Engine-agnostic ops: commit messages, docs structure, decision records, task-tracker integration, backlog granularity |
 | [game-design](skills/game-design/) | Sakurai / verb theory / Miyazaki design philosophies, concept organization |
 
 ### Skill structure

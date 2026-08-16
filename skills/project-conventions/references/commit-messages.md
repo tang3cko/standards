@@ -9,7 +9,7 @@ A commit message is not a changelog entry — it is a resumption point. Anyone (
 
 - <change detail>
 - <change detail>
-- <test-count delta>
+- <how it was verified>
 - <known gaps>
 
 🤖 Generated with Claude Code
@@ -37,17 +37,15 @@ Example bullet that carries a design decision, not just a mechanical description
 
 This states the change (status chip states) *and* the constraint it upholds (never leak correctness feedback — a deliberate design property of the system), so a reader who wasn't there still knows why the states are shaped this way.
 
-## Test-count delta
+## Verification
 
-State counts, not just "tests added". The reader needs to know the suite grew and by how much, and whether the whole suite still passes.
+Name what was run and what it reported, in the words the harness printed, so the next reader knows which claims rest on a run and which rest on reading:
 
-Formats seen in practice:
+- `run-tests.sh: pass. repro-view.sh: inside=YES, hidden-from-owner=YES` — the harnesses and what they actually printed
+- `Tests: the suite passes; a new case pins the give-up branch` — what was added, by what it pins rather than by how many
+- `Tests: not affected. No code changed.` — when that is the truth, which is a useful thing to say plainly
 
-- `ユニット688＋E2E 9/9（2連続実行で決定性確認）` — unit total after this commit, E2E pass ratio, plus a determinism note when flakiness was a risk
-- `xUnit 14テスト追加` — delta only, when the running total isn't the interesting number
-- `純C#3クラス＋xUnitテスト拡張（ブランチ時点995パス）` — production classes added alongside the test count, with the branch-wide total
-
-Pick whichever framing answers "did this commit make the suite bigger and did it stay green" — a bare "tests pass" with no number does not.
+If a run did not complete, say so. A run that did not finish is void, not a pass.
 
 ## Known gaps
 
@@ -70,7 +68,7 @@ SKILL.md's Pre-Commit Check gates section *presence*; this checklist gates the p
 
 - [ ] Summary line previews the change's shape (parenthetical or equivalent) so `git log --oneline` alone conveys it — not just a bare verb phrase
 - [ ] Every bullet whose choice isn't obvious carries its *why* (the constraint or decision), not a diff narration
-- [ ] Test-count framing actually answers "did the suite grow and stay green" — delta, total, or pass ratio chosen deliberately, with a determinism note if flakiness was a risk
+- [ ] Verification names the runs and their verdicts, and says plainly when a run did not complete
 - [ ] Known gaps names each deferred item *and* the reason deferring was right for this scope; "Known gaps: none" written explicitly when true
 - [ ] If the bullet body was skipped (merge/one-liner), confirmed there is genuinely nothing to record — not just a short diff
 - [ ] Nothing in the body tracks work beyond this commit's own scope

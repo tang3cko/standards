@@ -1,6 +1,6 @@
 ---
 name: project-conventions
-description: Apply Tang3cko engine-agnostic project operating conventions — commit messages with test-count deltas and known gaps, numbered docs/ namespaces, decision records (ADR) and their propagation, keeping progress tracking out of docs, task tracker integration, backlog granularity (Story-sized tickets and landing verification), and resuming interrupted work. Use when writing a commit message, structuring or reviewing docs/, filing or superseding an ADR, wiring up a task tracker, filing or auditing a backlog, or resuming work after an interruption, in any Unity/Godot project.
+description: Apply Tang3cko engine-agnostic project operating conventions — commit messages with verification and known gaps, numbered docs/ namespaces, decision records (ADR) and their propagation, keeping progress tracking out of docs, task tracker integration, backlog granularity (Story-sized tickets and landing verification), and resuming interrupted work. Use when writing a commit message, structuring or reviewing docs/, filing or superseding an ADR, wiring up a task tracker, filing or auditing a backlog, or resuming work after an interruption, in any Unity/Godot project.
 when_to_use: Triggers on "commit message", "コミットメッセージ", "docs構造", "docs structure", "運用規約", "known gaps", "既知の制約", "進捗管理", "task tracker", "再開", "resume", "resumption", "backlog", "バックログ", "起票", "粒度", "granularity", "Story", "Epic", "milestone", "マイルストーン", "ロードマップ", "roadmap", "ADR", "決定記録", "設計決定", "decision record", "波及先", "propagation", "superseded", "撤回", "withdrawn".
 allowed-tools: Read Glob Grep Edit Write TaskCreate TaskUpdate TaskList
 ---
@@ -46,7 +46,7 @@ Apply these to every commit, docs edit, or tracker interaction. Detailed rationa
 
 - <change detail 1>
 - <change detail 2>
-- <test-count delta: "xUnit N added (M passing total), E2E x/y">
+- <how it was verified: what was run, and what it reported>
 - <known gaps: what's deliberately left undone, and why>
 
 🤖 Generated with Claude Code
@@ -56,7 +56,7 @@ Apply these to every commit, docs edit, or tracker interaction. Detailed rationa
 |------|------|
 | Summary line | One line, names the effect not just the mechanism ("harden X" not "edit Y.cs") |
 | Change bullets | One bullet per logical change; note *why* when the choice isn't obvious |
-| Test-count delta | State counts, not just "added tests" — before/after or added/total, per suite (unit, E2E) |
+| Verification | Name what was run and what it reported |
 | Known gaps | Explicit: what's left, and the decision behind leaving it (a deferred-scope note is a decision record, not an apology) |
 | Trailer | Standard Claude Code trailer |
 
@@ -165,7 +165,7 @@ Verify the drafted message against each item. If any check fails, fix it first �
 
 - [ ] Summary line states the effect, one line
 - [ ] Change bullets are logical units, not a raw diff narration
-- [ ] Test-count delta is present and states counts per suite (not just "added tests")
+- [ ] Verification names what was run and what it reported
 - [ ] Known gaps is present — explicit "left undone" + reason, even if the answer is "none"
 - [ ] No implementation-status or progress content leaked into a docs/ change bundled in the same commit
 - [ ] Trailer present
@@ -180,7 +180,7 @@ Each file below is the only place its listed content exists — SKILL.md deliber
 
 | File | Load When |
 |------|-----------|
-| references/commit-messages.md | Drafting or reviewing a commit message. Only source for: summary-line effect-vs-mechanism examples and the parenthetical preview pattern, test-count delta format variants, known-gaps decision-record phrasing, when the bullet body may be skipped |
+| references/commit-messages.md | Drafting or reviewing a commit message. Only source for: summary-line effect-vs-mechanism examples and the parenthetical preview pattern, the worked verification examples, known-gaps decision-record phrasing, when the bullet body may be skipped |
 | references/docs-structure.md | Placing a new doc or auditing docs/. Only source for: the exists-vs-still-deciding placement heuristic, `99_ideas/` graduation/retirement rule, per-namespace README indexes, how to handle progress content found during review |
 | references/adr-conventions.md | Filing, reviewing or superseding an ADR, or setting up `06_decisions/`. Only source for: the namespace slot and why a project that filled `04_` keeps it, append-only and the exactly-two-permitted-edits rule, the Superseded/Withdrawn vocabulary and why answering an open question is neither, the three permitted `Decided:` header forms and the consent-vs-having-been-shown distinction, the required sections, the tracker-search procedure behind the Propagation table, dated-numbers-in-ADR vs no-numbers-in-current-shape-docs |
 | references/task-tracker-integration.md | Wiring a project's CLAUDE.md to its tracker or writing milestone comments. Only source for: the CLAUDE.md tracker-naming phrasing, commit-vs-tracker content routing table, three-part milestone comment shape, the project-designated-tracker-only rule |
