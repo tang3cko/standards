@@ -21,6 +21,31 @@ EditMode tests run inside the Editor process without entering Play Mode — no p
 
 ---
 
+## The test-count ratchet (opt-in)
+
+Zero collected tests is the extreme case of a more general blind spot: **a suite that quietly got smaller still reports green**. A renamed class drops out of a filter, a file moves out of an assembly, a fixture stops being compiled — every remaining test passes, and nothing says that forty of them stopped existing.
+
+Set `TEST_COUNT_FLOOR_DIR` to turn on the guard:
+
+```bash
+TEST_COUNT_FLOOR_DIR=<project>/TestResults bash scripts/test.sh <project_path>
+```
+
+| | |
+|---|---|
+| Where the floor lives | `<dir>/test-count-high-water-<platform>-<filter>`, one integer. **Point `<dir>` at a gitignored path** — the floor is an observation made on this machine, not a fact about the repository |
+| One floor per filter | A filtered run is a subset; comparing it against the whole suite's mark would fail every time. The filter is part of the number's identity, not a detail about it |
+| Below the floor | Exit 3, naming how many tests disappeared |
+| No floor recorded yet | Exit 3, **not a warning**. "Every test passed" with no floor means nothing here checked that the whole suite ran |
+| Above the floor | The floor is raised — but only when the run also passed. A failing run's total is not a number anyone should be held to next time |
+| Shrinking on purpose | `ESTABLISH_BASELINE=1` records the current count in both directions. Deliberately a separate gesture from running the tests, so an intentional cut and a silent one never look alike |
+
+Without `TEST_COUNT_FLOOR_DIR` none of this applies and the exit codes behave exactly as they did before the ratchet existed.
+
+**Do not replace this with a hardcoded expected-minimum constant.** That was the earlier shape of the same idea, and the way it fails is on record: the constant arrived copied from a previous project, was never bumped, sat eleven tests below the real suite, and stopped catching anything long before anyone noticed. A floor that is written by observation cannot drift from what was observed.
+
+---
+
 ## Reading the Summary
 
 Report to the user as the script's own `Total / Passed / Failed / Skipped` line, plus each `FAIL:` line verbatim. Don't paste raw XML or full batchmode logs unless asked — that defeats the point of headless summarization.

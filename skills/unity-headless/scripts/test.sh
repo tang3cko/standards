@@ -14,8 +14,21 @@
 # separated names, regex, or "!Name" to exclude - see Unity Test Framework docs).
 # test_platform defaults to EditMode.
 #
+# Optional test-count ratchet, off unless TEST_COUNT_FLOOR_DIR is set:
+#   TEST_COUNT_FLOOR_DIR=<dir>   keep a per-platform, per-filter high-water mark
+#                                of the test count there, and fail a later run
+#                                that collects fewer. Point it at a gitignored
+#                                directory - the floor is local observation, not
+#                                a fact about the repository
+#   ESTABLISH_BASELINE=1         record the current count as the floor, in both
+#                                directions. The only way to shrink a suite on
+#                                purpose, and deliberately a separate gesture
+#                                from running the tests
+#
 # Exit codes: 0 = all tests passed, 1 = failures, setup error, or crash,
-#             2 = the run collected no tests at all (see summarize_test_results.py).
+#             2 = the run collected no tests at all,
+#             3 = the suite shrank below its floor, or the ratchet was asked for
+#                 with no floor established yet (see summarize_test_results.py).
 
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -64,4 +77,14 @@ if [ ! -f "$RESULTS_XML" ]; then
   exit 1
 fi
 
-python3 "${SCRIPT_DIR}/summarize_test_results.py" "$RESULTS_XML"
+SUMMARIZE_ARGS=("$RESULTS_XML")
+if [ -n "${TEST_COUNT_FLOOR_DIR:-}" ]; then
+  # One floor per platform and filter. A filtered run is a subset, and comparing
+  # a subset against the whole suite's high-water mark would fail every time -
+  # so the filter is part of the identity of the number, not a detail about it.
+  FILTER_KEY="$(printf '%s' "${TEST_FILTER:-all}" | tr -c 'A-Za-z0-9._-' '_')"
+  SUMMARIZE_ARGS+=(--floor-file "${TEST_COUNT_FLOOR_DIR}/test-count-high-water-${TEST_PLATFORM}-${FILTER_KEY}")
+  [ "${ESTABLISH_BASELINE:-}" = "1" ] && SUMMARIZE_ARGS+=(--establish-baseline)
+fi
+
+python3 "${SCRIPT_DIR}/summarize_test_results.py" "${SUMMARIZE_ARGS[@]}"
