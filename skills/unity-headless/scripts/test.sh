@@ -14,7 +14,8 @@
 # separated names, regex, or "!Name" to exclude - see Unity Test Framework docs).
 # test_platform defaults to EditMode.
 #
-# Exit codes: 0 = all tests passed, 1 = failures, setup error, or crash.
+# Exit codes: 0 = all tests passed, 1 = failures, setup error, or crash,
+#             2 = the run collected no tests at all (see summarize_test_results.py).
 
 set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -38,7 +39,15 @@ RESULTS_XML="${PROJECT_PATH}/TestResults.xml"
 LOG_FILE="${PROJECT_PATH}/test.log"
 rm -f "$RESULTS_XML"
 
-ARGS=(-batchmode -nographics -quit -projectPath "$PROJECT_PATH" -runTests
+# No -quit here, deliberately. Combined with -runTests the editor quits before
+# the run produces anything: measured 2026-08-19 on Action_006 with Unity
+# 6000.3.11f1, back to back on the same project - without -quit, 445/445 and a
+# result XML; with -quit, "Exiting batchmode successfully now!" and no XML at
+# all. -runTests exits on its own once the run finishes, so -quit buys nothing.
+# Unity's own docs do not mention -quit on the run-tests-from-command-line page;
+# this is field measurement, first seen in Puzzle_003 and recorded in
+# Multiplayer_012's ADR-0002, now reproduced on a second project.
+ARGS=(-batchmode -nographics -projectPath "$PROJECT_PATH" -runTests
       -testPlatform "$TEST_PLATFORM" -testResults "$RESULTS_XML" -logFile "$LOG_FILE")
 [ -n "$TEST_FILTER" ] && ARGS+=(-testFilter "$TEST_FILTER")
 

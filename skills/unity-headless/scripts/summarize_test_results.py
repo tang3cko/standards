@@ -6,7 +6,8 @@ Usage:
 
 Invoked by test.sh - not usually run standalone.
 
-Exit codes: 0 = no failures, 1 = one or more failures, 2 = bad input.
+Exit codes: 0 = no failures, 1 = one or more failures, 2 = bad input or a run
+that collected no tests at all.
 """
 import sys
 import xml.etree.ElementTree as ET
@@ -29,6 +30,13 @@ def main() -> int:
     skipped = root.get("skipped", "0")
 
     print(f"Total={total} Passed={passed} Failed={failed} Skipped={skipped}")
+
+    # A run that collected nothing is not a pass. The usual cause is a
+    # -testFilter that matches no test - a renamed class, a typo - which
+    # otherwise reports Total=0 Failed=0 and grades as green.
+    if int(total) == 0:
+        print("error: 0 tests ran - a filter that matches nothing is not a pass.", file=sys.stderr)
+        return 2
 
     for test_case in root.iter("test-case"):
         if test_case.get("result") == "Failed":
