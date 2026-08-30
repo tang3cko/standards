@@ -78,6 +78,22 @@ The entry struct is `FAutomationTestExcludelistEntry` (`Runtime/AutomationTest/P
 
 Excluded tests report as **Skipped** with the reason attached — the state is set in `FAutomationWorkerModule::HandleRunTestsMessage` (`Runtime/AutomationWorker/Private/AutomationWorkerModule.cpp`), against the `EAutomationState` enum (`Runtime/AutomationTest/Public/AutomationState.h`). A reason is not optional in practice: a skip with no reason becomes permanent.
 
+## A `-game` run against a stale binary (Mac)
+
+Building while the editor is open cannot replace the base module dylib, so UBT writes a numbered hot-reload dylib next to it. The editor picks up the new one; **a `-game` process launched afterwards loads the base one**, which is the build from before your change:
+
+```
+Binaries/Mac/libUnrealEditor-<Module>-0001.dylib   17:12:35  ← this build
+Binaries/Mac/libUnrealEditor-<Module>.dylib        16:59:32  ← what -game loads
+Source/.../LobbySubsystem.cpp                      17:12:15
+```
+
+The build reports `Succeeded`, the run starts, and the behaviour does not change — which reads as "the fix does not work" when it is the old binary being measured. The tell is that the build output does **not** print `Deploying now!`; when it does, the base dylib was replaced.
+
+Recovery: close the editor, delete `Binaries/Mac/libUnrealEditor-<Module>-[0-9]*.dylib`, rebuild.
+
+Guard it in the script that launches `-game`, before the editor starts, with a check that fails loudly in two distinct cases — a numbered dylib newer than the base (the editor was open), and source newer than the base with no numbered dylib to explain it (never built). Compare mtimes; that does not prove the binary matches the source (a failed build after a touch still passes), it only refuses to measure a binary that is obviously not the one you think it is. Apply it only to `-game` launches — a numbered dylib under a running editor is live coding working as designed.
+
 ## Checklist
 
 - [ ] Every automated run asserts that the report exists and that the test count is above an expected minimum — never on the exit code alone
@@ -86,3 +102,4 @@ Excluded tests report as **Skipped** with the reason attached — the state is s
 - [ ] CI timeouts account for cold editor startup, and the suite is not split across invocations to parallelise
 - [ ] No UI appearance claim rests on `HighResShot` or an automation screenshot
 - [ ] Every excluded test carries a written reason
+- [ ] Any script that launches `-game` refuses to start when a numbered hot-reload dylib is newer than the base, or the source is newer than the base — a measurement of the wrong binary is not a result
