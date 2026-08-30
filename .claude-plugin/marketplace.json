@@ -5,15 +5,22 @@
     "email": "tang3cko@gmail.com"
   },
   "metadata": {
-    "description": "Tang3cko standards for Unity development and documentation",
-    "version": "4.0.0"
+    "description": "Tang3cko standards for Unity, Godot, and game design",
+    "version": "5.0.0",
+    "pluginRoot": "./plugins"
   },
   "plugins": [
     {
-      "name": "tang3cko-standards",
-      "description": "Tang3cko shared skills for Unity development, documentation, and repository setup",
-      "source": "./",
-      "strict": false
+      "name": "tang3cko-unity",
+      "source": "tang3cko-unity"
+    },
+    {
+      "name": "tang3cko-godot",
+      "source": "tang3cko-godot"
+    },
+    {
+      "name": "tang3cko-core",
+      "source": "tang3cko-core"
     }
   ]
 }

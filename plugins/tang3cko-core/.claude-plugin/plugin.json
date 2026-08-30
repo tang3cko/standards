@@ -1,0 +1,11 @@
+{
+  "name": "tang3cko-core",
+  "description": "Tang3cko foundation — engine-agnostic game design theory (Sakurai, verb theory, Miyazaki, concept organization) for designing and reviewing game concepts",
+  "version": "1.0.0",
+  "author": {
+    "name": "Tang3cko",
+    "email": "tang3cko@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/tang3cko/standards"
+}

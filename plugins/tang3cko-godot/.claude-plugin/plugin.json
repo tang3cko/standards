@@ -1,0 +1,14 @@
+{
+  "name": "tang3cko-godot",
+  "description": "Tang3cko Godot 4.x + .NET standards — naming and structure, Godot-free simulation core, three-layer testing, animation retargeting, headless CLI execution, and save/persistence systems",
+  "version": "1.0.0",
+  "author": {
+    "name": "Tang3cko",
+    "email": "tang3cko@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/tang3cko/standards",
+  "dependencies": [
+    "tang3cko-core"
+  ]
+}

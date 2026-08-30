@@ -1,0 +1,14 @@
+{
+  "name": "tang3cko-unity",
+  "description": "Tang3cko Unity standards — naming and code organization, ScriptableObject architecture, async and performance, testing, UI, NGO networking, MCP compile checks, and headless test/build execution",
+  "version": "1.0.0",
+  "author": {
+    "name": "Tang3cko",
+    "email": "tang3cko@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/tang3cko/standards",
+  "dependencies": [
+    "tang3cko-core"
+  ]
+}
