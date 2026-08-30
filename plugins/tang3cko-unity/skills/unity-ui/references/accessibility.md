@@ -117,16 +117,19 @@ public class FontScaler : MonoBehaviour
 
 ## Line Spacing and Width
 
+**USS has no `line-height` property.** The 1.5x line-spacing target applies to uGUI only, where TextMeshPro exposes Line Spacing. In UI Toolkit the nearest control is `-unity-paragraph-spacing`, which is the gap between paragraphs, not between lines — so do not flag a UI Toolkit screen for line spacing, and do not carry a `--line-height` token that nothing can consume.
+
 ```css
+/* UI Toolkit: what is actually expressible */
 .quest-description {
     font-size: 18px;
-    line-height: 27px;     /* 1.5x line spacing */
-    max-width: 600px;      /* Max 80 characters per line */
+    max-width: 600px;                 /* Max 80 characters per line */
+    -unity-paragraph-spacing: 27px;   /* 1.5x font size between paragraphs */
 }
+```
 
-.quest-paragraph {
-    margin-bottom: 40px;   /* 1.5x larger than line spacing */
-}
+```
+uGUI / TextMeshPro: Line Spacing = 50 (percent of font size) → 1.5x
 ```
 
 ---
@@ -232,7 +235,7 @@ namespace ProjectName.UI
 
 - [ ] Text resizes to 200% without breaking
 - [ ] Contrast ratio >= 4.5:1
-- [ ] Line spacing >= 1.5x
+- [ ] Line spacing >= 1.5x (uGUI/TextMeshPro only — not expressible in USS)
 - [ ] Lines <= 80 characters (40 for CJK)
 
 ---
@@ -252,5 +255,5 @@ Run against every UI file written or reviewed (this file loads in every path):
 - [ ] Every font size meets the target platform minimum (console 26px, PC/VR 18px at 1080p; doubled at 4K; DPI-scaled on mobile)
 - [ ] Text/background contrast >= 4.5:1 — including muted, disabled, and modifier states
 - [ ] Layout survives 200% text scaling (no fixed-height text containers, autowrap intact)
-- [ ] Line spacing >= 1.5x; line length capped at ~80 characters (40 for CJK)
+- [ ] Line length capped at ~80 characters (40 for CJK); on uGUI, TextMeshPro line spacing >= 1.5x (UI Toolkit has no line-height — do not report it as a violation there)
 - [ ] Font sizes come from tokens with platform/resolution overrides, never hardcoded px in component styles
