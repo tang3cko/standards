@@ -5,7 +5,7 @@
     "email": "tang3cko@gmail.com"
   },
   "metadata": {
-    "description": "Tang3cko standards for Unity, Godot, and game design",
+    "description": "Tang3cko standards for Unity, Godot, Unreal Engine, and game design",
     "version": "5.0.0",
     "pluginRoot": "./plugins"
   },
@@ -17,6 +17,10 @@
     {
       "name": "tang3cko-godot",
       "source": "tang3cko-godot"
+    },
+    {
+      "name": "tang3cko-unreal",
+      "source": "tang3cko-unreal"
     },
     {
       "name": "tang3cko-core",

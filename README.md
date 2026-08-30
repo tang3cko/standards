@@ -12,9 +12,10 @@ Shared coding standards and Claude Code skills for Tang3cko projects, distribute
 |--------|----------|
 | `tang3cko-unity` | Unity: naming, ScriptableObject architecture, async/performance, testing, UI, NGO networking, MCP compile checks, headless test/build |
 | `tang3cko-godot` | Godot 4.x + .NET: naming/structure, Godot-free simulation core, testing, animation retargeting, headless CLI, save/persistence |
+| `tang3cko-unreal` | Unreal Engine C++: naming and the reflection contract, pointers and validity, class selection, placement by authority and lifetime, delegates and replication, CQTest-first testing with headless runs |
 | `tang3cko-core` | Engine-agnostic foundation: Sakurai / verb theory / Miyazaki design philosophies, concept organization |
 
-`tang3cko-unity` and `tang3cko-godot` declare `tang3cko-core` as a dependency, so installing either pulls it in.
+`tang3cko-unity`, `tang3cko-godot`, and `tang3cko-unreal` declare `tang3cko-core` as a dependency, so installing any of them pulls it in.
 
 ### Skills
 
@@ -34,6 +35,9 @@ Shared coding standards and Claude Code skills for Tang3cko projects, distribute
 | [godot-animation](plugins/tang3cko-godot/skills/godot-animation/) | Retargeting via both-sides BoneMap/rest_fixer normalization, pose verification |
 | [godot-headless](plugins/tang3cko-godot/skills/godot-headless/) | godot-mono CLI: import/build/test, offscreen PNG rendering (the --headless trap) |
 | [godot-persistence](plugins/tang3cko-godot/skills/godot-persistence/) | Save systems: versioned binary + CRC32, atomic writes, backup rotation, sandboxing |
+| [unreal-core](plugins/tang3cko-unreal/skills/unreal-core/) | Naming, the reflection contract, pointer and validity rules, class selection ladder, module dependencies, logging and asserts |
+| [unreal-architecture](plugins/tang3cko-unreal/skills/unreal-architecture/) | Placement by authority and lifetime, subsystems, multicast delegates, replication, Core/Shell boundary, Game Feature plugins |
+| [unreal-testing](plugins/tang3cko-unreal/skills/unreal-testing/) | CQTest by default, the five-framework decision table, Humble Object, headless runs that fail on zero matches |
 | [game-design](plugins/tang3cko-core/skills/game-design/) | Sakurai / verb theory / Miyazaki design philosophies, concept organization |
 
 ### Skill structure
@@ -46,7 +50,7 @@ Every code-oriented skill follows the same contract:
 - **Self-Check** — a tracked phase: a checklist the agent must pass before presenting generated or edited code. It requires that the workflow-named references were actually Read and that each loaded reference's end-of-file Checklist was run — the Self-Check cannot be completed from SKILL.md alone
 - **Reference Files** — a "Load When" table: each row states the load trigger and what information exists only in that file. Every reference ends with a domain-specific `## Checklist` that the Self-Check delegates to
 
-(The reference-checklist contract applies to all code-oriented skills — unity-* and godot-*. game-design is a knowledge skill and exempt.)
+(The reference-checklist contract applies to all code-oriented skills — unity-*, godot-*, and unreal-*. game-design is a knowledge skill and exempt.)
 
 ---
 
@@ -58,9 +62,10 @@ In Claude Code, use the `/plugin` command:
 # Add marketplace
 /plugin marketplace add tang3cko/standards
 
-# Install what the project needs — tang3cko-core comes along with either
+# Install what the project needs — tang3cko-core comes along with any of them
 /plugin install tang3cko-unity@tang3cko-standards
 /plugin install tang3cko-godot@tang3cko-standards
+/plugin install tang3cko-unreal@tang3cko-standards
 
 # Or install the foundation on its own
 /plugin install tang3cko-core@tang3cko-standards

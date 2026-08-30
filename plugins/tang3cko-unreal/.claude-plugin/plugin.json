@@ -1,0 +1,14 @@
+{
+  "name": "tang3cko-unreal",
+  "description": "Tang3cko Unreal Engine standards — C++ naming and the reflection contract, pointer and validity rules, class selection, system placement by authority and lifetime, delegates and replication, and CQTest-first testing with headless runs",
+  "version": "1.0.0",
+  "author": {
+    "name": "Tang3cko",
+    "email": "tang3cko@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/tang3cko/standards",
+  "dependencies": [
+    "tang3cko-core"
+  ]
+}
