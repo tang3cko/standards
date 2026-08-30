@@ -42,6 +42,8 @@ TEST_COUNT_FLOOR_DIR=<project>/TestResults bash scripts/test.sh <project_path>
 
 Without `TEST_COUNT_FLOOR_DIR` none of this applies and the exit codes behave exactly as they did before the ratchet existed.
 
+**CI trap.** A fresh CI checkout has no floor file, so the first CI run exits 3 for a reason unrelated to the code. The tempting fix — `ESTABLISH_BASELINE=1` in the pipeline — re-records the floor on every run and silently disables the check forever. Never put `ESTABLISH_BASELINE=1` in a pipeline definition. Carry the floor file across jobs in the CI cache, or leave the ratchet off in CI and keep it as a local guard; decide that when the CI system is chosen, not before.
+
 **Do not replace this with a hardcoded expected-minimum constant.** That was the earlier shape of the same idea, and the way it fails is on record: the constant arrived copied from a previous project, was never bumped, sat eleven tests below the real suite, and stopped catching anything long before anyone noticed. A floor that is written by observation cannot drift from what was observed.
 
 ---
