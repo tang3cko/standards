@@ -42,6 +42,22 @@ Why separate:
 - `WireScene` runs separately for scene-only re-wiring after manual asset edits
 - Failures are isolated to a single phase
 
+**Re-load asset handles after `OpenScene`.** An asset loaded with `AssetDatabase.LoadAssetAtPath` *before* `EditorSceneManager.OpenScene(..., OpenSceneMode.Single)` cannot be assigned into the scene that was opened afterwards: writing it to `SerializedProperty.objectReferenceValue` is ignored — no exception, no log — and reading the property back returns the old value, before `ApplyModifiedProperties` is even reached. The natural shape "collect the assets, then open the scene and wire them" therefore fails silently, and the setup editor exits 0 with a scene that references nothing. Checking that the assets exist may happen before `OpenScene`; the handles that are actually assigned must be loaded after it. (Observed on Unity 6000.3.11f1; a `PanelSettings` reference on a `UIDocument` shipped unset this way while every test stayed green, because the preview scene the tests used never went through `OpenScene`.)
+
+```csharp
+public static void WireScene()
+{
+    EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+    // Load AFTER OpenScene — a handle obtained before this line will not stick.
+    var panelSettings = AssetDatabase.LoadAssetAtPath<PanelSettings>(PanelSettingsPath);
+    var so = new SerializedObject(document);
+    so.FindProperty("m_PanelSettings").objectReferenceValue = panelSettings;
+    so.ApplyModifiedProperties();
+}
+```
+
+Serialized field names are not always the `m_`-prefixed form: `UIDocument` exposes `m_PanelSettings` but `sourceAsset` (not `m_SourceAsset`). `FindProperty` returns null on a wrong name, so count and report null lookups (`ReferenceFailureCount`) instead of letting the assignment vanish.
+
 ### Idempotence
 
 Both phases must be safe to re-run. Each `Find` / `Load` / `CreateXxx` call must check existence first.
@@ -125,6 +141,7 @@ private const string LanternBasePrefabPath = "Assets/_Project/Prefabs/Environmen
 
 - [ ] Work is split into `BuildAssets()` (assets only, no scene mutation) and `WireScene()` (scene only, no asset creation)
 - [ ] Every `Find`/`Load`/`Create` checks existence first — running the setup twice produces zero duplicates
+- [ ] Every asset handle assigned into a scene is loaded *after* the `OpenScene` call that opened it, and `FindProperty` nulls are counted and reported rather than silently skipped
 - [ ] A `PrefabStructureTest` calls `BuildAssets()` in `OneTimeSetUp`, asserts on the prefab tree, and verifies double-call idempotence
 - [ ] Expected setup warnings are suppressed via a scoped `ILogHandler` filtering by log prefix — never global `filterLogType`
 - [ ] Asset and scene paths live in `private const string` at the top of the editor class

@@ -124,7 +124,7 @@ Each file below is the only place its listed content exists — SKILL.md deliber
 |------|-----------|
 | references/naming.md | Any identifier decision beyond the Naming table above. Only source for: event/EventChannel field naming (`on`/`On` + past tense), `RuntimeSetSO` suffix, boolean-prefix rules for parameters and properties |
 | references/code-organization.md | Creating files/directories, choosing namespaces, consuming UPM packages, or any editor API use inside runtime classes. Only source for: Runtime/Editor Boundary patterns A–D, Pattern C's five conditions, AssetDatabase allow/escalate table, SO Serializer pattern, private UPM package vendoring |
-| references/editor-tooling.md | Writing any `[MenuItem]` setup/scaffolding editor. Only source for: `BuildAssets()`/`WireScene()` phase split, idempotence requirements, scoped log suppression, prefab structure test pattern |
+| references/editor-tooling.md | Writing any `[MenuItem]` setup/scaffolding editor. Only source for: `BuildAssets()`/`WireScene()` phase split, the load-after-`OpenScene` rule for handles assigned into a scene, idempotence requirements, scoped log suppression, prefab structure test pattern |
 | references/comments.md | Adding XML docs, `[Header]`/`[Tooltip]` attributes, or deciding whether to comment. Only source for: when-NOT-to-document rules, TODO/FIXME/NOTE conventions |
 | references/error-handling.md | Writing null checks, try-catch, logging, or `OnValidate()` bodies. Only source for: try-catch patterns for file I/O and `Resources.Load`, log-level guidance, Assert usage |
 | references/input-system.md | Any Input System work. Only source for: full `InputReaderSO` implementation, action-map organization and switching, EventChannel bridge, mock-input testing pattern |
