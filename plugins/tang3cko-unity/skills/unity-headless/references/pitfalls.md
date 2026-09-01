@@ -64,7 +64,7 @@ A run ends with `watchdog: Unity pid N still running after Ts - killing it` and 
 
 ### Why the script does not clean them up
 
-Unity puts each helper in its own process group, so neither `kill <pid>` nor `kill -- -<pgid>` reaches them (measured on Puzzle_003, 2026-07-28: after a group kill all four helpers survived as orphans). The obvious fix — sweep the machine for processes matching a helper-name pattern — was tried there and shipped with an empty pattern that matched every process; it SIGKILLed the whole machine four times. The watchdog therefore kills exactly the pid it started, and the orphans are an accepted cost.
+Unity puts each helper in its own process group, so neither `kill <pid>` nor `kill -- -<pgid>` reaches them (measured on Puzzle_003, 2026-07-28: after a group kill all four helpers survived as orphans). How many survive varies with when the kill lands: on Action_006 with Unity 6000.3.11f1 (2026-09-02, `UNITY_TEST_TIMEOUT=5` fired during asset refresh) only `UnityAutoQuitter` remained, the Licensing Client and Package Manager exited on their own, and the very next `test.sh` run passed 457/457 — a SIGKILLed Editor left the project reusable in that case. The obvious fix — sweep the machine for processes matching a helper-name pattern — was tried there and shipped with an empty pattern that matched every process; it SIGKILLed the whole machine four times. The watchdog therefore kills exactly the pid it started, and the orphans are an accepted cost.
 
 ### Solution
 

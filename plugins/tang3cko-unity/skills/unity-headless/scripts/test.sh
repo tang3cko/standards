@@ -21,6 +21,9 @@
 # 1800); it kills only that pid - see lib_batchmode_lock.sh for what may be
 # left behind.
 #
+# Output: <project>/TestResults/<platform>.xml and <platform>.log. Gitignore
+# TestResults/ in the project.
+#
 # Optional test-count ratchet, off unless TEST_COUNT_FLOOR_DIR is set:
 #   TEST_COUNT_FLOOR_DIR=<dir>   keep a per-platform, per-filter high-water mark
 #                                of the test count there, and fail a later run
@@ -60,9 +63,13 @@ PROJECT_PATH="$(cd "$PROJECT_PATH" 2>/dev/null && pwd)" || {
 
 UNITY_EXE="$(resolve_unity_executable "$PROJECT_PATH")" || exit 1
 
-RESULTS_XML="${PROJECT_PATH}/TestResults.xml"
-LOG_FILE="${PROJECT_PATH}/test.log"
-rm -f "$RESULTS_XML"
+# Under TestResults/, not the project root: one directory to gitignore, one
+# file per platform so an EditMode run does not overwrite a PlayMode report.
+OUT_DIR="${PROJECT_PATH}/TestResults"
+RESULTS_XML="${OUT_DIR}/${TEST_PLATFORM}.xml"
+LOG_FILE="${OUT_DIR}/${TEST_PLATFORM}.log"
+mkdir -p "$OUT_DIR"
+rm -f "$RESULTS_XML" "$LOG_FILE"
 
 # No -quit here, deliberately. Combined with -runTests the editor quits before
 # the run produces anything: measured 2026-08-19 on Action_006 with Unity

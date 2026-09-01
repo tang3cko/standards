@@ -33,6 +33,12 @@ PASSED=0
 FAILED=0
 BG_PIDS=()
 
+# Every background stand-in has its stdout/stderr sent to /dev/null. Without
+# that, a `sleep` grandchild that outlives its parent keeps this script's
+# stdout pipe open, and `selftest_batchmode.sh | tail` blocks until the sleep
+# ends - the same shape as the repro-script hang guard bug in Operations
+# CBF6C0BD. Measured here 2026-09-02: 4 minutes and counting under a pipe,
+# 35 s on a terminal.
 cleanup() {
   local p
   for p in "${BG_PIDS[@]:-}"; do
@@ -67,7 +73,7 @@ case "$FAKE_MODE" in
   build)
     exit 0 ;;
   hang)
-    bash -c 'sleep 600; true' unity-headless-selftest-child "$FAKE_STATE" &
+    bash -c 'sleep 600; true' unity-headless-selftest-child "$FAKE_STATE" >/dev/null 2>&1 &
     echo "$!" > "$FAKE_STATE/child"
     sleep 600 ;;
 esac
@@ -81,7 +87,7 @@ export UNITY_WATCHDOG_POLL=1
 export FAKE_STATE="$WORK"
 
 reset_state() {
-  rm -f "$WORK/invoked" "$WORK/child" "$PROJECT/TestResults.xml"
+  rm -f "$WORK/invoked" "$WORK/child" "$PROJECT"/TestResults/*
   [ -d "$LOCKDIR" ] && { rm -f "$LOCKDIR/owner"; rmdir "$LOCKDIR" 2>/dev/null; }
   return 0
 }
@@ -161,7 +167,7 @@ FAKE_MODE=build run_case "build.sh: clean exit 0 and releases the lock" 0 check_
 # An Editor with this project open: comm is the Editor executable path (via
 # exec -a) and argv carries the Hub's lowercase -projectpath.
 reset_state
-(exec -a "$FAKE_UNITY" bash -c 'sleep 600; true' unity-headless-selftest-editor -projectpath "$PROJECT") &
+(exec -a "$FAKE_UNITY" bash -c 'sleep 600; true' unity-headless-selftest-editor -projectpath "$PROJECT") >/dev/null 2>&1 &
 BG_PIDS+=("$!")
 sleep 0.3
 FAKE_MODE=pass run_case "test.sh: refuses while an Editor has the project open" 2 check_editor_refused "${TEST_SH[@]}"
@@ -172,7 +178,7 @@ kill "${BG_PIDS[-1]}" 2>/dev/null; wait "${BG_PIDS[-1]}" 2>/dev/null; unset 'BG_
 # count - the separator rule in project_is_open.
 reset_state
 mkdir -p "${PROJECT}2"
-(exec -a "$FAKE_UNITY" bash -c 'sleep 600; true' unity-headless-selftest-editor -projectpath "${PROJECT}2") &
+(exec -a "$FAKE_UNITY" bash -c 'sleep 600; true' unity-headless-selftest-editor -projectpath "${PROJECT}2") >/dev/null 2>&1 &
 BG_PIDS+=("$!")
 sleep 0.3
 FAKE_MODE=pass run_case "test.sh: an Editor on a sibling path prefix does not block" 0 check_happy "${TEST_SH[@]}"
@@ -181,7 +187,7 @@ kill "${BG_PIDS[-1]}" 2>/dev/null; wait "${BG_PIDS[-1]}" 2>/dev/null; unset 'BG_
 # A decoy: our path and -projectPath in argv, but the executable is plain bash.
 # This is the Unity Hub shape that the old pgrep -f check mistook for an Editor.
 reset_state
-bash -c 'sleep 600; true' unity-headless-selftest-decoy "$FAKE_UNITY" -projectPath "$PROJECT" &
+bash -c 'sleep 600; true' unity-headless-selftest-decoy "$FAKE_UNITY" -projectPath "$PROJECT" >/dev/null 2>&1 &
 BG_PIDS+=("$!")
 sleep 0.3
 FAKE_MODE=pass run_case "test.sh: a non-Editor process naming the project does not block" 0 check_happy "${TEST_SH[@]}"
@@ -197,7 +203,7 @@ FAKE_MODE=pass UNITY_LOCK_WAIT=2 run_case "test.sh: a lock held by a live pid is
 # answer is the lock wait, not the open-Editor refusal.
 reset_state
 mkdir -p "$LOCKDIR"; printf 'selftest pid=%s\n' "$$" > "$LOCKDIR/owner"
-(exec -a "$FAKE_UNITY" bash -c 'sleep 600; true' unity-headless-selftest-editor -projectPath "$PROJECT") &
+(exec -a "$FAKE_UNITY" bash -c 'sleep 600; true' unity-headless-selftest-editor -projectPath "$PROJECT") >/dev/null 2>&1 &
 BG_PIDS+=("$!")
 sleep 0.3
 FAKE_MODE=pass UNITY_LOCK_WAIT=2 run_case "test.sh: a live lock plus a batchmode Editor is waited on, not refused as an open Editor" 2 check_lock_exhausted "${TEST_SH[@]}"

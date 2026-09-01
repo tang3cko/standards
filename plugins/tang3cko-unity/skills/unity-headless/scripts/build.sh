@@ -44,7 +44,10 @@ PROJECT_PATH="$(cd "$PROJECT_PATH" 2>/dev/null && pwd)" || {
 
 UNITY_EXE="$(resolve_unity_executable "$PROJECT_PATH")" || exit 1
 
-LOG_FILE="${PROJECT_PATH}/build.log"
+# Same directory test.sh writes to, so a project gitignores one path for all
+# headless output instead of a stray build.log at its root.
+mkdir -p "${PROJECT_PATH}/TestResults"
+LOG_FILE="${PROJECT_PATH}/TestResults/build.log"
 
 # -quit stays here: nothing else ends an -executeMethod run (unlike -runTests,
 # which exits on its own). See references/testing.md step 3 for the measurement.
