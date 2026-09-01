@@ -34,7 +34,7 @@ Update status as you progress: `in_progress` when starting, `completed` when don
 
 ## Core Rules (always apply)
 
-1. **Editor state is mutually exclusive with batchmode** — a Unity project has a single lock (`Temp/UnityLockfile` / OS-level file lock). `-batchmode` execution requires the Editor for this project to be **closed**; `unity-mcp` requires the Editor to be **open and running**. Never attempt both against the same project directory at once — `scripts/test.sh` and `scripts/build.sh` both check for a running Editor process and refuse to proceed if one is found. If the task also involves live-Editor compile checking, that's `unity-mcp`'s job, not this skill's — sequence them (close Editor -> batchmode -> reopen Editor), don't interleave.
+1. **Editor state is mutually exclusive with batchmode** — a Unity project has a single lock (`Temp/UnityLockfile` / OS-level file lock). `-batchmode` execution requires the Editor for this project to be **closed**; `unity-mcp` requires the Editor to be **open and running**. Never attempt both against the same project directory at once. The scripts enforce this rather than trust it: `scripts/test.sh` and `scripts/build.sh` exit 2 without starting Unity when an Editor has the project open, take a per-project lock so two headless runs queue instead of racing, and kill an Editor that outlives its watchdog ceiling (`lib_batchmode_lock.sh`). If the task also involves live-Editor compile checking, that's `unity-mcp`'s job, not this skill's — sequence them (close Editor -> batchmode -> reopen Editor), don't interleave.
 2. **Use the bundled scripts, don't reimplement them** — `scripts/test.sh` and `scripts/build.sh` already handle version detection (`ProjectVersion.txt`), per-OS executable resolution, `-nographics`/`-logFile` flags, and lock checking. Writing a fresh inline invocation reintroduces bugs these scripts already avoid.
 3. **Parse output, don't trust the exit code alone** — Unity documents no common exit-code contract; it can exit 0 with test failures still present in the result XML, and exit nonzero for licensing/environment failures unrelated to the tests/build. Both scripts already do this parsing and print a clear summary — read it rather than re-deriving pass/fail from the raw Bash exit code.
 4. **Verify, don't assume, build success** — a build entry point that doesn't call `EditorApplication.Exit(1)` on failure will exit 0 even when `BuildPipeline.BuildPlayer` failed (`assets/BuildScript.cs.template` already does this — keep it when customizing). When the task calls for a launch smoke test, confirm the player actually starts (see `references/verification.md`).
@@ -46,8 +46,8 @@ Identify the task type and follow the matching path. The workflow steps below na
 ### Running headless EditMode/PlayMode tests
 
 1. Run: `bash ${CLAUDE_SKILL_DIR}/scripts/test.sh <project_path> [test_filter] [test_platform]` (argument semantics: `references/testing.md`)
-2. Read the printed `Total/Passed/Failed/Skipped` summary and any `FAIL:` lines
-3. If setup fails (no result XML, lock error), load `references/pitfalls.md`
+2. Read the printed `Total/Passed/Failed/Skipped` summary and any `FAIL:` lines. Exit 1 means the suite ran and failed; exit 2 means it never ran (Editor open, lock wait exhausted, watchdog kill, no XML, zero tests) — report them as different outcomes
+3. If setup fails (exit 2, no result XML, lock error), load `references/pitfalls.md`
 4. Run the Self-Check below
 
 ### Running a headless player build
@@ -89,9 +89,11 @@ Each file is the only place its listed content exists — the table rows are tri
 
 | File | Purpose |
 |------|---------|
-| scripts/test.sh | Run headless tests end-to-end: lock check, version detection, invocation, XML summary |
-| scripts/build.sh | Run a headless player build end-to-end: lock check, version detection, invocation |
+| scripts/test.sh | Run headless tests end-to-end: Editor check, lock, version detection, watchdogged invocation, XML summary |
+| scripts/build.sh | Run a headless player build end-to-end: Editor check, lock, version detection, watchdogged invocation |
 | scripts/verify_player_log.sh | Check a `Player.log` for clean startup |
 | scripts/summarize_test_results.py | NUnit result XML parser used internally by `test.sh` |
-| scripts/lib_resolve_unity.sh | Shared version-detection/lock-check helpers, sourced by `test.sh`/`build.sh` |
+| scripts/lib_resolve_unity.sh | Shared version detection (`UNITY_PATH` override) and open-Editor detection, sourced by `test.sh`/`build.sh` |
+| scripts/lib_batchmode_lock.sh | Per-project batchmode lock with stale reclaim, and the watchdog; its header lists the `UNITY_LOCK_*` / `UNITY_WATCHDOG_POLL` tunables and what a watchdog kill leaves behind |
+| scripts/selftest_batchmode.sh | Runs the lock/Editor-detection/watchdog paths against a stand-in Unity, one PASS/FAIL line per case. Run it after touching either lib file |
 | assets/BuildScript.cs.template | Editor build entry point to copy into the target project and customize |

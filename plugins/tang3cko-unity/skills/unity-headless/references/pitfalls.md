@@ -8,7 +8,9 @@ Common failure modes when running Unity from the CLI, and how to diagnose them.
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| Batchmode hangs or fails immediately with a lock error | Editor (or another batchmode process) already has the project open | Close the Editor / wait for the other process; see Editor-state boundary below |
+| Script exits 2 before Unity starts: "a Unity Editor has ... open" | Editor already has the project open | Close the Editor; see Editor-state boundary below |
+| Script prints "waiting for batchmode lock", or exits 2 with "could not take the batchmode lock" | Another headless run against the same project is in progress (or a stale lock — reclaimed automatically once its holder is gone) | Let it finish, or raise `UNITY_LOCK_WAIT`; see Pitfall 1 |
+| Script exits 2 with "watchdog ... killing it" | Unity never finished within `UNITY_TEST_TIMEOUT` / `UNITY_BUILD_TIMEOUT` | Read the log tail; check for orphaned helper processes (Pitfall 4) |
 | Compile errors like `CS0246: type or namespace not found` on packages that clearly exist | Orphaned Licensing Client from a different Unity version can't resolve entitlements, breaking package resolution | Kill stray Licensing Client processes, re-login via Unity Hub |
 | A literal-scan / diff check flags an absolute local path inside the pdb | `pdb` debug directory records the build machine's absolute path by design | Expected; exclude from failure criteria, don't chase it as a leak |
 | `unity-mcp` calls fail while a headless script is also mid-run | Both trying to hold the same project simultaneously | Sequence them — never run concurrently against the same project path |
@@ -34,18 +36,45 @@ Running `scripts/test.sh` or `scripts/build.sh` while the Unity Editor has the s
 
 ### Diagnosis
 
-Both bundled scripts already run this check via `check_editor_running` in `scripts/lib_resolve_unity.sh` and refuse to start if it detects a match — this is a best-effort `pgrep`/`ps` scan, not a guarantee (a just-closed Editor can still hold the OS-level file lock briefly after the process check would report clear):
+Both bundled scripts run `project_is_open` (`scripts/lib_resolve_unity.sh`) before anything else and exit 2 if it matches. It identifies Editors by executable path (`ps -o comm`), and only then reads those pids' arguments for a `-projectpath <this project>` (case-insensitive, separator-terminated):
 
 ```bash
-# what check_editor_running does under the hood
-ps aux | grep -i "[U]nity.*-projectPath.*$(basename "$PROJECT_PATH")"
+# what project_is_open does under the hood
+ps -Ao pid=,comm= | awk '/\/Unity\.app\/Contents\/MacOS\/Unity$/ { print $1 }'   # Editor pids
+ps -p <pid> -o args=                                                              # which project each holds
 ```
 
-If the script refuses to start, don't bypass the check — it's catching Core Rule 1.
+It deliberately does **not** use `pgrep -f 'Unity.*-projectPath'`. Unity Hub keeps `-projectPath <project>` in its own argv after launching an Editor and stays resident after that Editor closes, so the command-line match reported a lock that nobody held and a batchmode run waited forever (Puzzle_003, 2026-07-28). Still best-effort in one direction: a just-closed Editor can hold the OS-level file lock briefly after its process is gone.
+
+Two headless runs against the same project are serialized by a `mkdir` lock (`scripts/lib_batchmode_lock.sh`), one per project path under `${TMPDIR:-/tmp}/unity-headless/`. The second run prints `waiting for batchmode lock` and polls; a lock whose `owner` pid is dead is reclaimed at once, and a lock directory with no `owner` file (holder killed between `mkdir` and the write) is reclaimed after `UNITY_LOCK_GRACE` seconds (30). Set `UNITY_LOCKDIR` to move it, `UNITY_LOCK_WAIT` to change the 900 s ceiling. Giving up is exit 2 — the run never happened, and the lock is left where it was.
+
+If the script refuses to start, don't bypass the check and don't `rmdir` a lock by hand while its owner pid is alive — it's catching Core Rule 1.
 
 ### Solution
 
-Close the Editor for this project (or wait for any other batchmode run against it to finish), then re-run the same script. This is Core Rule 1 in `SKILL.md`.
+Close the Editor for this project (or wait for the other batchmode run to finish — the script does this on its own within `UNITY_LOCK_WAIT`), then re-run the same script. This is Core Rule 1 in `SKILL.md`.
+
+---
+
+## Pitfall 4: Watchdog Kill Leaves Unity Helpers Behind
+
+### Problem
+
+A run ends with `watchdog: Unity pid N still running after Ts - killing it` and exit 2. Afterwards `ps` shows `Unity.Licensing.Client`, `UnityPackageManager`, `Unity.ILPP.Runner`, or `UnityAutoQuitter` still alive with `ppid=1`, and the next run may hit Pitfall 2's `[Licensing::Module] Error: Access token is unavailable`.
+
+### Why the script does not clean them up
+
+Unity puts each helper in its own process group, so neither `kill <pid>` nor `kill -- -<pgid>` reaches them (measured on Puzzle_003, 2026-07-28: after a group kill all four helpers survived as orphans). The obvious fix — sweep the machine for processes matching a helper-name pattern — was tried there and shipped with an empty pattern that matched every process; it SIGKILLed the whole machine four times. The watchdog therefore kills exactly the pid it started, and the orphans are an accepted cost.
+
+### Solution
+
+List and remove the orphans by hand, checking each pid before killing it:
+
+```bash
+ps -Ao pid,ppid,args | grep -i '[U]nity' | grep -v selftest
+```
+
+Only kill processes whose argv shows they belong to this project's Editor run (e.g. a `Unity.Licensing.Client` under a `ppid` of 1 that appeared at the time of the kill). Other projects' Editors and a human's open Editor live on the same machine.
 
 ---
 
@@ -107,7 +136,8 @@ Exclude debug-directory / pdb-path matches from failure criteria in any artifact
 ## Checklist
 
 - [ ] The symptom was matched against the Summary table before improvising a fix
-- [ ] The scripts' lock check was never bypassed — the Editor was closed (or the other batchmode run finished) before retrying
+- [ ] The scripts' lock check was never bypassed — the Editor was closed (or the other batchmode run finished) before retrying, and no lock directory with a live owner was removed by hand
+- [ ] After a watchdog kill, orphaned Unity helper processes were listed and removed individually — never by a name-pattern sweep
 - [ ] For `CS0246`-in-batchmode-only symptoms: a stray Licensing Client process was checked for, and the log was read *above* the first `CS0246` for the real licensing/entitlement error
 - [ ] pdb debug-directory path findings were treated as expected toolchain behavior, not reported as defects or leaks
 - [ ] `unity-mcp` and batchmode were sequenced against the project, never run concurrently

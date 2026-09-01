@@ -48,6 +48,8 @@ bash ${CLAUDE_SKILL_DIR}/scripts/build.sh <project_path> BuildScript.BuildReleas
 
 The `ExecuteMethod` argument is a passthrough — the same `build.sh` drives dev smoke builds and release builds by selecting which static method to invoke. `build.sh` itself only reports the process exit code; that's why the entry point's own `EditorApplication.Exit(1)` matters (see above) and why the next step is always artifact verification.
 
+Exit 2 is reserved for "the build never ran": an Editor had the project open, another headless run held the lock past `UNITY_LOCK_WAIT`, or the watchdog killed Unity at `UNITY_BUILD_TIMEOUT` (default 3600 s). Any other nonzero code is Unity's own. The lock and watchdog are shared with `test.sh` — `references/pitfalls.md` Pitfalls 1 and 4 cover them.
+
 ---
 
 ## References
