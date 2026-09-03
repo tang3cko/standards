@@ -11,6 +11,13 @@ Tang3cko's Unity UI standards: UI Toolkit by default (UXML/USS, BEM), uGUI only 
 cannot go, accessibility in every path. The Core Rules below are always in force; the naming rules,
 size minimums, and billboard math live in references/.
 
+The mechanics of each UI system are Unity's job, not this skill's: the official `ui-uitk` and
+`ui-ugui` skills (Unity-Technologies/skills) carry USS restrictions, UXML rules, PanelSettings,
+runtime binding, custom elements, Canvas/Layout Group/anchoring setup, and interaction readiness.
+Load the official skill for the chosen system alongside this one. Where the two disagree, this
+skill wins — the override tables at the top of each reference list every known conflict (default
+system, `name` casing, directory layout).
+
 Two things decide most reviews: USS classes that skip BEM, and a world-space decision made without
 first checking the project's Unity version — World Space UI Toolkit requires 6.2+.
 
@@ -37,7 +44,7 @@ Update status as you progress: `in_progress` when starting, `completed` when don
 
 ## Core Rules (always apply)
 
-1. **UI Toolkit is the default for new UI** — UXML structure, USS styling, BEM naming convention. On Unity 6.2+ this includes World Space UI (shipped in 6.2, matured through 6.5's Panel Renderer)
+1. **UI Toolkit is the default for new UI** — UXML structure, USS styling, BEM naming convention. On Unity 6.2+ this includes World Space UI (shipped in 6.2, matured through 6.5's Panel Renderer). This overrides the official `ui` router, which defaults new runtime UI to uGUI
 2. **uGUI only where UI Toolkit can't go** — projects pinned to Unity 6000.0/6000.1 needing world-space UI, or existing uGUI systems being extended
 3. **Accessibility always** — minimum font sizes, contrast ratios, scalable layouts (`references/accessibility.md`)
 4. **BEM naming is mandatory in USS** — `block__element--modifier`; no generic global classes, no deep nesting
@@ -48,7 +55,7 @@ Identify the task type and follow the matching path. Load `accessibility.md` in 
 
 ### Building new UI
 
-1. Pick the UI system from the UI System Decision below and load its reference
+1. Pick the UI system from the UI System Decision below and load its reference plus the matching official skill (`ui-uitk` or `ui-ugui`)
 2. Load `accessibility.md` for font size and contrast requirements
 3. Generate UI code following the loaded standards
 4. Run the Self-Check below before presenting
@@ -88,6 +95,6 @@ Verify every file you wrote or changed. If any check fails, fix it first — do 
 
 | File | Load When |
 |------|-----------|
-| references/ui-toolkit.md | Any UI Toolkit work (build, review, or question). Only place with: full BEM/UXML naming rules, design-token structure, Panel Settings + flexbox patterns, 6.2–6.5 version specifics (world space, Panel Renderer, Advanced Text Generator), and the UIDocument/project-wide-InputActionAsset input-kill pitfall |
-| references/ugui.md | Any uGUI world-space work (Unity 6000.0/6000.1, or extending existing uGUI). Only place with: billboard LookAt math, Camera.main caching, Canvas.enabled show/hide, TextMeshPro rule, EventSystem pitfall |
+| references/ui-toolkit.md | Any UI Toolkit work (build, review, or question), together with the official `ui-uitk` skill. Only place with: the override table against `ui-uitk`, full BEM/UXML naming rules, design-token naming, Panel Settings default + `flex-basis` rule, EventChannel controller pattern, directory layout, 6.2–6.5 version specifics (world space, Panel Renderer, Advanced Text Generator), and the UIDocument/project-wide-InputActionAsset input-kill pitfall |
+| references/ugui.md | Any uGUI world-space work (Unity 6000.0/6000.1, or extending existing uGUI), together with the official `ui-ugui` skill. Only place with: the override table against `ui-ugui`, the when-to-use list, billboard LookAt math, Camera.main caching, Canvas.enabled show/hide, EventChannel-driven template |
 | references/accessibility.md | Every path, before writing or judging any text/color styling. Only place with: per-platform font minimums (console 26px / PC 18px at 1080p, DPI-scaled mobile), 4.5:1 contrast, 200% resize, line-length limits |

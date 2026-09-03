@@ -1,8 +1,20 @@
 # uGUI (World Space UI)
 
-World Space UI patterns with uGUI: billboards, health bars, and EventChannel integration.
+Tang3cko's uGUI conventions for the one case uGUI is still used: world-space UI on projects that cannot use UI Toolkit world-space panels.
+
+Canvas setup, CanvasScaler, Layout Groups, RectTransform anchoring, ScrollRect, TextMeshPro essentials import, and interaction readiness (EventSystem, GraphicRaycaster, Raycast Target) are covered by Unity's official `ui-ugui` skill (Unity-Technologies/skills). Do not restate them here. This file holds only what Tang3cko decides differently or additionally, and where the two disagree, this file wins.
 
 > **Version note**: Unity 6.2+ supports World Space UI natively in UI Toolkit (Panel Renderer in 6.5 improves it further). On 6.2+ projects, prefer UI Toolkit for new world-space UI — use this file for projects pinned to Unity 6000.0/6000.1 or when extending existing uGUI systems.
+
+---
+
+## Overrides of the official `ui-ugui` defaults
+
+| Topic | Official `ui-ugui` default | Tang3cko |
+|-------|----------------------------|----------|
+| Default runtime system | uGUI when the user has no preference | **UI Toolkit**; uGUI only for the cases below |
+| Prefab layout | Feature folders (`Assets/UI/Inventory/`) | `Assets/_Project/Prefabs/UI/<Feature>/`, scripts under `Assets/_Project/Scripts/UI/<Feature>/` |
+| Updating UI state | Not prescribed | EventChannel subscription in `OnEnable`/`OnDisable`; never per-frame polling |
 
 ---
 
@@ -26,7 +38,9 @@ World Space UI patterns with uGUI: billboards, health bars, and EventChannel int
 
 ---
 
-## Basic Template
+## World Space Template
+
+`Camera.main` cached once in `Start`; billboard in `LateUpdate` with the rotation-based form; show/hide via `Canvas.enabled`; state via EventChannel; text via `TextMeshProUGUI`.
 
 ```csharp
 using UnityEngine;
@@ -36,16 +50,18 @@ using Tang3cko.ReactiveSO;
 
 namespace ProjectName.UI
 {
-    public class WorldSpaceUI : MonoBehaviour
+    public class HealthBarUI : MonoBehaviour
     {
         [Header("Event Channels")]
         [SerializeField] private FloatEventChannelSO onHealthChanged;
 
         [Header("UI References")]
         [SerializeField] private Canvas canvas;
+        [SerializeField] private Image fillImage;
         [SerializeField] private TextMeshProUGUI healthText;
 
         [Header("Settings")]
+        [SerializeField] private float maxHealth = 100f;
         [SerializeField] private bool enableBillboard = true;
 
         private Camera mainCamera;
@@ -58,6 +74,7 @@ namespace ProjectName.UI
                 canvas.renderMode = RenderMode.WorldSpace;
                 canvas.worldCamera = mainCamera;
             }
+            UpdateHealth(maxHealth);
         }
 
         private void OnEnable()
@@ -83,10 +100,14 @@ namespace ProjectName.UI
             }
         }
 
-        private void UpdateHealth(float health)
+        private void UpdateHealth(float currentHealth)
         {
+            float fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
+            if (fillImage != null)
+                fillImage.fillAmount = fillAmount;
             if (healthText != null)
-                healthText.text = $"HP: {health:F0}";
+                healthText.text = $"HP: {currentHealth:F0}";
+            canvas.enabled = fillAmount < 1f;
         }
 
 #if UNITY_EDITOR
@@ -106,25 +127,7 @@ namespace ProjectName.UI
 
 ## Billboard Pattern
 
-### Why LateUpdate?
-
-Use `LateUpdate` to ensure billboard happens after camera movement:
-
-```csharp
-// Good: Billboard after camera moves
-private void LateUpdate()
-{
-    ApplyBillboard();
-}
-
-// Bad: Billboard before camera moves (jittery)
-private void Update()
-{
-    ApplyBillboard();
-}
-```
-
-### Common issues
+Billboard in `LateUpdate`, after the camera has moved for the frame; doing it in `Update` jitters.
 
 ```csharp
 // Bad: UI appears backwards
@@ -139,20 +142,7 @@ transform.LookAt(
 
 ---
 
-## Performance Optimization
-
-### Cache camera reference
-
-```csharp
-// Good: Cache in Start
-private Camera mainCamera;
-private void Start() { mainCamera = Camera.main; }
-
-// Bad: Query every frame
-private void LateUpdate() { Camera cam = Camera.main; }
-```
-
-### Use Canvas.enabled for show/hide
+## Show / Hide
 
 ```csharp
 // Good: Enable/disable canvas
@@ -163,132 +153,11 @@ private void HideUI() => canvas.enabled = false;
 private void HideUI() => Destroy(gameObject);
 ```
 
-### Event-driven updates
-
-```csharp
-// Good: Update only when EventChannel fires
-private void OnEnable() { onHealthChanged.OnEventRaised += UpdateHealth; }
-
-// Bad: Update every frame
-private void Update() { healthText.text = $"HP: {enemy.CurrentHealth:F0}"; }
-```
-
----
-
-## TextMeshPro
-
-### Always use TextMeshPro
-
-```csharp
-// Good
-using TMPro;
-[SerializeField] private TextMeshProUGUI nameText;
-
-// Bad (deprecated)
-using UnityEngine.UI;
-[SerializeField] private Text nameText;
-```
-
-| Feature | TextMeshPro | Unity Text |
-|---------|-------------|------------|
-| Quality | High (SDF) | Low (bitmap) |
-| Performance | Better | Worse |
-| Rich Text | Full | Limited |
-| Status | Recommended | Deprecated |
-
----
-
-## Health Bar Example
-
-```csharp
-public class HealthBarUI : MonoBehaviour
-{
-    [Header("Event Channels")]
-    [SerializeField] private FloatEventChannelSO onHealthChanged;
-
-    [Header("UI References")]
-    [SerializeField] private Canvas canvas;
-    [SerializeField] private Image fillImage;
-
-    [Header("Settings")]
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private Color fullHealthColor = Color.green;
-    [SerializeField] private Color lowHealthColor = Color.red;
-
-    private Camera mainCamera;
-
-    private void Start()
-    {
-        mainCamera = Camera.main;
-        if (canvas != null)
-        {
-            canvas.renderMode = RenderMode.WorldSpace;
-            canvas.worldCamera = mainCamera;
-        }
-        UpdateHealthBar(maxHealth);
-    }
-
-    private void OnEnable()
-    {
-        if (onHealthChanged != null)
-            onHealthChanged.OnEventRaised += UpdateHealthBar;
-    }
-
-    private void OnDisable()
-    {
-        if (onHealthChanged != null)
-            onHealthChanged.OnEventRaised -= UpdateHealthBar;
-    }
-
-    private void UpdateHealthBar(float currentHealth)
-    {
-        if (fillImage == null) return;
-        float fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
-        fillImage.fillAmount = fillAmount;
-        fillImage.color = Color.Lerp(lowHealthColor, fullHealthColor, fillAmount);
-        canvas.enabled = fillAmount < 1f;
-    }
-}
-```
-
----
-
-## Common Pitfalls
-
-### Forgetting to unsubscribe
-
-```csharp
-// Bad: Memory leak
-private void OnEnable()
-{
-    onHealthChanged.OnEventRaised += UpdateHealth;
-}
-// OnDisable missing!
-
-// Good
-private void OnDisable()
-{
-    onHealthChanged.OnEventRaised -= UpdateHealth;
-}
-```
-
-### Missing EventSystem
-
-```
-Scene without EventSystem:
-├── Canvas
-│   └── Button (doesn't work!)
-
-Scene with EventSystem:
-├── Canvas
-│   └── Button (works!)
-└── EventSystem
-```
-
 ---
 
 ## References
 
+- Official `ui-ugui` skill (Unity-Technologies/skills) — Canvas, CanvasScaler, Layout Groups, anchoring, ScrollRect, TMP essentials, interaction readiness
 - [ui-toolkit.md](ui-toolkit.md) - UI Toolkit for screen-space UI
 - [accessibility.md](accessibility.md) - Font size requirements
 - See `unity-architecture` skill for EventChannel integration
@@ -305,4 +174,4 @@ Run against every uGUI file written or reviewed with this reference loaded:
 - [ ] Billboarding runs in `LateUpdate` using the rotation-based form, not `LookAt(camera.position)`
 - [ ] Every `OnEnable` EventChannel subscription has a matching `OnDisable` unsubscription
 - [ ] Show/hide uses `Canvas.enabled`, not Destroy/Instantiate; updates are event-driven, not per-frame polling
-- [ ] Text uses `TextMeshProUGUI` (not `UnityEngine.UI.Text`) and interactive UI has an EventSystem in the scene
+- [ ] Text uses `TextMeshProUGUI` (not `UnityEngine.UI.Text`); EventSystem/GraphicRaycaster/Raycast Target per the official `ui-ugui` interaction-readiness list

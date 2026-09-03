@@ -1,8 +1,22 @@
 # UI Toolkit
 
-UI Toolkit patterns: BEM naming, design tokens, USS responsive design, and C# controllers.
+Tang3cko's UI Toolkit conventions: BEM naming, design-token naming, the EventChannel controller, and the input-kill pitfall.
+
+The mechanics of UI Toolkit — USS restrictions and brevity, UXML file rules, PanelSettings setup, flexible layouts, transitions, 9-slice, runtime data binding, custom elements, Painter2D, manipulators — are covered by Unity's official `ui-uitk` skill (Unity-Technologies/skills). Do not restate them here. This file holds only what Tang3cko decides differently or additionally, and where the two disagree, this file wins.
 
 > **Version notes**: World Space UI Toolkit shipped in Unity 6.2 — UI elements can be positioned, rotated, and scaled alongside 3D objects, replacing the old "world space = uGUI" rule for 6.2+ projects. Unity 6.5 adds **Panel Renderer** (supersedes `UIDocument` — same functionality plus better world-space compatibility; a migration guide exists) and makes the **Advanced Text Generator** the default text system. Unity 6.3 adds the UI Test Framework package and USS CSS-style filters (blur/grayscale). All BEM/UXML/USS conventions in this file apply to both screen-space and world-space panels.
+
+---
+
+## Overrides of the official `ui-uitk` defaults
+
+| Topic | Official `ui-uitk` default | Tang3cko |
+|-------|----------------------------|----------|
+| UXML `name` attribute | camelCase (`submitButton`) | **PascalCase** (`SubmitButton`) — matches the C# `root.Q<T>("SubmitButton")` call site |
+| USS class naming | kebab-case, project patterns first | kebab-case **BEM** (`block__element--modifier`), mandatory |
+| File layout | Feature folders (`Assets/UI/Inventory/`) | `Assets/_Project/UI/{UXML,USS}/<Feature>/` + `Assets/_Project/Scripts/UI/<Feature>/` (see Directory Structure) |
+| Default runtime system | uGUI when the user has no preference | **UI Toolkit** for all new UI (world space too on 6.2+); uGUI only per `SKILL.md`'s decision table |
+| C# scripts | Only when requested, in the UXML folder | Controllers subscribe via EventChannel (see C# Controller Pattern), live under `Scripts/UI/` |
 
 ---
 
@@ -58,118 +72,60 @@ public void ShowSuccess()
 
 ---
 
-## UXML Structure
+## UXML Naming
 
-### File template
+- **name attribute**: PascalCase (for C# queries)
+- **class attribute**: kebab-case BEM; always include the base class alongside a modifier
 
 ```xml
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
-    <!-- Reference USS files -->
     <Style src="../../USS/Common.uss" />
     <Style src="../../USS/QuestUI.uss" />
 
-    <!-- Root container -->
-    <ui:VisualElement name="QuestProgressPanel" class="quest-progress__panel">
-        <ui:Label name="QuestNameText" class="quest-progress__title" text="Quest Name" />
-        <ui:Label name="ProgressText" class="quest-progress__progress" text="0/5" />
+    <ui:VisualElement name="QuestResultPanel" class="quest-result__panel">
+        <ui:Label name="TitleText" class="quest-result__title" />
+        <ui:Label name="StatusText" class="quest-result__status quest-result__status--success" />
     </ui:VisualElement>
 </ui:UXML>
-```
-
-### Naming conventions
-
-- **name attribute**: PascalCase (for C# queries)
-- **class attribute**: kebab-case with BEM
-
-```xml
-<ui:VisualElement name="QuestResultPanel" class="quest-result__panel">
-    <ui:Label name="StatusText" class="quest-result__status" />
-</ui:VisualElement>
-```
-
-### UXML example
-
-```xml
-<!-- Always include both base class and modifier -->
-<ui:VisualElement class="quest-result__panel">
-    <ui:Label class="quest-result__title" />
-    <ui:Label class="quest-result__status quest-result__status--success" />
-</ui:VisualElement>
 ```
 
 ---
 
 ## Design Tokens
 
-### Common.uss structure
+Tokens live in `Common.uss` under `:root`, named `--category-name-variant`; component USS never hardcodes a color, font size, spacing, or radius.
 
 ```css
 :root {
-    /* Color Tokens */
     --color-primary: #FFD700;
     --color-primary-hover: #FFA500;
-    --color-success: #32CD32;
-    --color-danger: #FF6347;
-    --color-background: rgba(0, 0, 0, 0.8);
-    --color-text: #FFFFFF;
     --color-text-muted: rgba(255, 255, 255, 0.5);
-
-    /* Font Size Tokens */
     --font-size-large: 24px;
-    --font-size-medium: 18px;
-    --font-size-small: 18px;
-
-    /* Spacing Tokens */
     --padding-large: 16px;
-    --padding-medium: 12px;
-    --padding-small: 8px;
-
-    /* Border Tokens */
-    --border-radius: 4px;
     --border-radius-large: 8px;
-
-    /* Animation Tokens */
     --transition-fast: 0.1s;
-    --transition-normal: 0.3s;
 }
-```
 
-### Token usage
-
-```css
-/* Good: Use tokens */
+/* Good */
 .quest-result__status--success {
     color: var(--color-success);
     font-size: var(--font-size-large);
-    margin-bottom: var(--padding-large);
 }
 
-/* Bad: Hardcoded values */
+/* Bad: hardcoded values in component USS */
 .quest-result__status--success {
     color: #32CD32;
     font-size: 24px;
-    margin-bottom: 16px;
 }
 ```
 
-### Naming pattern
-
-```
---category-name-variant: value;
-
-Examples:
---color-primary
---color-primary-hover
---font-size-large
---padding-button
---border-radius-large
-```
+Platform- and resolution-specific font-size tokens are defined in `accessibility.md`.
 
 ---
 
-## USS Responsive Design
+## Layout Defaults
 
-### Panel Settings
+Panel Settings for a PC-landscape project:
 
 ```yaml
 m_ScaleMode: 2                    # Scale With Screen Size
@@ -178,54 +134,15 @@ m_ScreenMatchMode: 0              # Match Width Or Height
 m_Match: 0                        # Match width (PC landscape)
 ```
 
-### Flexbox patterns
+Panels size with `%` plus `min-`/`max-` constraints, never a bare fixed width. Equal distribution needs `flex-basis: 0` next to `flex-grow: 1` — `flex-grow` alone distributes only the leftover space.
 
 ```css
-/* Equal distribution */
-.column {
-    flex-grow: 1;
-    flex-basis: 0;     /* Required for true equal distribution */
-}
-
-/* Responsive panel */
-.quest-board__panel {
-    width: 80%;
-    max-width: 1200px;
-    min-width: 400px;
-    height: 80%;
-    max-height: 900px;
-    align-self: center;
-}
-
-/* Flexbox alignment */
-.container {
-    flex-direction: row;           /* row | column */
-    justify-content: center;       /* flex-start | center | flex-end | space-between */
-    align-items: center;           /* stretch | flex-start | center | flex-end */
-}
-```
-
-### Anti-patterns
-
-```css
-/* Bad: Fixed pixel sizes */
-.quest-board__panel {
-    width: 1200px;
-}
-
-/* Good: Responsive with constraints */
 .quest-board__panel {
     width: 80%;
     max-width: 1200px;
     min-width: 400px;
 }
 
-/* Bad: flex-grow without flex-basis */
-.column {
-    flex-grow: 1;
-}
-
-/* Good: Guaranteed equal distribution */
 .column {
     flex-grow: 1;
     flex-basis: 0;
@@ -235,6 +152,8 @@ m_Match: 0                        # Match width (PC landscape)
 ---
 
 ## C# Controller Pattern
+
+Controllers receive state through EventChannels (`unity-architecture`), never by polling. Element queries are typed, cached once in `OnEnable`, and null-checked; re-querying per update is a violation.
 
 ```csharp
 using UnityEngine;
@@ -261,10 +180,13 @@ namespace ProjectName.UI
         {
             var root = uiDocument.rootVisualElement;
 
-            // Query by name attribute
             progressText = root.Q<Label>("ProgressText");
+            if (progressText == null)
+            {
+                Debug.LogError($"[{GetType().Name}] ProgressText not found in UXML", this);
+                return;
+            }
 
-            // Subscribe to EventChannels
             onProgressUpdated.OnEventRaised += HandleProgressUpdated;
         }
 
@@ -278,52 +200,6 @@ namespace ProjectName.UI
             progressText.text = $"{progress}/5";
         }
     }
-}
-```
-
-### Element query best practices
-
-```csharp
-// Good: Type-safe query
-Label titleLabel = root.Q<Label>("TitleLabel");
-Button okButton = root.Q<Button>("OKButton");
-
-// Bad: Untyped query
-VisualElement titleLabel = root.Q("TitleLabel");
-
-// Query with null check
-if (progressText == null)
-{
-    Debug.LogError($"[{GetType().Name}] ProgressText not found in UXML", this);
-    return;
-}
-```
-
----
-
-## Performance Tips
-
-### Cache element references
-
-```csharp
-// Good: Cache in OnEnable
-private Label statusText;
-
-private void OnEnable()
-{
-    statusText = root.Q<Label>("StatusText");
-}
-
-private void UpdateStatus(string status)
-{
-    statusText.text = status;
-}
-
-// Bad: Query every time
-private void UpdateStatus(string status)
-{
-    var statusText = root.Q<Label>("StatusText"); // Expensive!
-    statusText.text = status;
 }
 ```
 
@@ -400,6 +276,7 @@ Reference: https://tang3cko.com/posts/unity-inputactionasset-uidocument-scene-tr
 
 ## References
 
+- Official `ui-uitk` skill (Unity-Technologies/skills) — USS restrictions, UXML rules, PanelSettings, binding, custom elements, Painter2D, manipulators
 - [accessibility.md](accessibility.md) - Font size and contrast requirements
 - See `unity-core` skill for general naming conventions
 - See `unity-architecture` skill for EventChannel integration with UI
@@ -414,5 +291,6 @@ Run against every UXML/USS/C# file written or reviewed with this reference loade
 - [ ] UXML `name` attributes are PascalCase (for C# queries); `class` attributes are kebab-case BEM
 - [ ] Colors, font sizes, spacing, and radii use `var(--token)` from Common.uss — no hardcoded values in component USS
 - [ ] Panels size responsively (`%` with `min-/max-` constraints); `flex-grow: 1` is paired with `flex-basis: 0` wherever equal distribution is intended
-- [ ] C# element queries are typed (`root.Q<Label>(...)`), cached in `OnEnable`, and null-checked — never re-queried per update
+- [ ] C# element queries are typed (`root.Q<Label>(...)`), cached in `OnEnable`, and null-checked — never re-queried per update; state arrives via EventChannel, not polling
+- [ ] Files sit under `Assets/_Project/UI/{UXML,USS}/` and `Assets/_Project/Scripts/UI/`, not the official skill's feature-folder default
 - [ ] Gameplay input does not share the project-wide InputActionAsset with UI Toolkit if the last UIDocument panel can be disposed (input-kill pitfall above)

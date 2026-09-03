@@ -9,6 +9,8 @@ allowed-tools: Read Glob Grep Bash(bash:*) Write Edit TaskCreate TaskUpdate Task
 
 Set up and debug Editor-non-resident (CLI/CI) Unity test execution and player builds, following Tang3cko standards proven on ReactiveSO. Generalized for any Unity game project — not a specific sample's build.
 
+Installing editors, creating projects, licensing, and driving a live Editor through the Pipeline package are the official `unity-cli` skill's job (Unity-Technologies/skills); this skill only runs tests and player builds against an already-installed Editor.
+
 **This skill ships working scripts — invoke them, don't reimplement their logic.** Version detection, OS resolution, project-lock checking, and result parsing are all handled by `scripts/`. The only things you write per-project are the pieces that are inherently project-specific: the `BuildScript.cs` entry point (scene list, output path, scripting backend) and the `Player.log` path (depends on company/product name).
 
 ## Phase Tracking

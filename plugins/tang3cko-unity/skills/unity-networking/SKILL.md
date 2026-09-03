@@ -114,7 +114,7 @@ Identify the task type and follow the matching path.
 | Megabyte-scale blob | Out-of-band (HTTP/CDN) | references/sync-mechanisms.md |
 | Late-join custom state | NetworkBehaviour.OnSynchronize | references/sync-mechanisms.md |
 
-Scope: these rules assume the classic client-server (host) topology. NGO 2.x also offers a distributed authority topology (Multiplayer Services session owner, authority follows object ownership) — the size/frequency rules still apply per authority, but "server validates" becomes "authority validates"; see the scope note in `references/sync-mechanisms.md`.
+Scope: these rules assume the classic client-server (host) topology. NGO 2.x also offers a distributed authority topology (Multiplayer Services session owner, authority follows object ownership) — the size/frequency rules still apply per authority, but "server validates" becomes "authority validates"; see the scope note in `references/sync-mechanisms.md`. Sessions, lobbies, matchmaking, Relay, and dedicated-server hosting are the official `setup-multiplayer-services` skill's territory (Unity-Technologies/skills), not this one's.
 
 ## Self-Check (before presenting generated/edited code)
 
