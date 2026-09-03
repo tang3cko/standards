@@ -25,6 +25,61 @@
     {
       "name": "tang3cko-core",
       "source": "tang3cko-core"
+    },
+    {
+      "name": "unity-official-ui",
+      "description": "Unity official `ui` router skill: detects the project's UI system and routes to UI Toolkit / uGUI / IMGUI",
+      "source": {
+        "source": "git-subdir",
+        "url": "Unity-Technologies/skills",
+        "path": "skills/ui",
+        "ref": "main",
+        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+      }
+    },
+    {
+      "name": "unity-official-ui-uitk",
+      "description": "Unity official UI Toolkit skill: UXML/USS authoring, USS restrictions, PanelSettings, runtime binding, custom elements, Painter2D",
+      "source": {
+        "source": "git-subdir",
+        "url": "Unity-Technologies/skills",
+        "path": "skills/ui-uitk",
+        "ref": "main",
+        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+      }
+    },
+    {
+      "name": "unity-official-ui-ugui",
+      "description": "Unity official uGUI skill: Canvas, CanvasScaler, Layout Groups, RectTransform anchoring, interaction readiness",
+      "source": {
+        "source": "git-subdir",
+        "url": "Unity-Technologies/skills",
+        "path": "skills/ui-ugui",
+        "ref": "main",
+        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+      }
+    },
+    {
+      "name": "unity-official-cli",
+      "description": "Unity official CLI skill: install editors, create/open projects, licensing, build/test, drive a live Editor via the Pipeline package",
+      "source": {
+        "source": "git-subdir",
+        "url": "Unity-Technologies/skills",
+        "path": "skills/unity-cli",
+        "ref": "main",
+        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+      }
+    },
+    {
+      "name": "unity-official-multiplayer-services",
+      "description": "Unity official Multiplayer Services skill: sessions, lobbies, matchmaking, Relay, dedicated servers",
+      "source": {
+        "source": "git-subdir",
+        "url": "Unity-Technologies/skills",
+        "path": "skills/setup-multiplayer-services",
+        "ref": "main",
+        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+      }
     }
   ]
 }

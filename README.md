@@ -14,8 +14,13 @@ Shared coding standards and Claude Code skills for Tang3cko projects, distribute
 | `tang3cko-godot` | Godot 4.x + .NET: naming/structure, Godot-free simulation core, testing, animation retargeting, headless CLI, save/persistence |
 | `tang3cko-unreal` | Unreal Engine C++: naming and the reflection contract, pointers and validity, class selection, placement by authority and lifetime, delegates and replication, CQTest-first testing with headless runs |
 | `tang3cko-core` | Engine-agnostic foundation: Sakurai / verb theory / Miyazaki design philosophies, concept organization |
+| `unity-official-ui`, `unity-official-ui-uitk`, `unity-official-ui-ugui`, `unity-official-cli`, `unity-official-multiplayer-services` | Unity's official skills, pulled straight from [Unity-Technologies/skills](https://github.com/Unity-Technologies/skills): UI router, UI Toolkit, uGUI, Unity CLI, multiplayer services |
 
 `tang3cko-unity`, `tang3cko-godot`, and `tang3cko-unreal` declare `tang3cko-core` as a dependency, so installing any of them pulls it in.
+
+`tang3cko-unity` assumes the `unity-official-*` plugins are installed too: `unity-official-ui-uitk` / `unity-official-ui-ugui` carry the UI mechanics, `unity-official-cli` the editor and project management, `unity-official-multiplayer-services` the sessions layer. The Tang3cko skills hold only the conventions that differ from or add to those, and say so where they override an official default. The official repository ships no `marketplace.json`, which is why each skill is listed here as its own plugin of this marketplace rather than as a marketplace of its own.
+
+Each `unity-official-*` plugin is pinned to a commit `sha` in `.claude-plugin/marketplace.json` rather than tracking `Unity-Technologies/skills` at `HEAD`. When upstream moves, Renovate opens a PR bumping the sha with a link to the upstream compare view; merging it is a manual review step where someone reads that diff before accepting it. Skills load namespaced under their plugin, e.g. `/unity-official-ui-uitk:ui-uitk`, and the bare `/ui-uitk` also works as long as no other installed skill uses that same name.
 
 ### Skills
 
@@ -69,6 +74,13 @@ In Claude Code, use the `/plugin` command:
 
 # Or install the foundation on its own
 /plugin install tang3cko-core@tang3cko-standards
+
+# Unity projects also want Unity's official skills, served through this marketplace
+/plugin install unity-official-ui@tang3cko-standards
+/plugin install unity-official-ui-uitk@tang3cko-standards
+/plugin install unity-official-ui-ugui@tang3cko-standards
+/plugin install unity-official-cli@tang3cko-standards
+/plugin install unity-official-multiplayer-services@tang3cko-standards
 ```
 
 A plugin activates immediately when that is safe (Claude Code 2.1.221 and later); otherwise run `/reload-plugins`.
