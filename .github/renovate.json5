@@ -1,0 +1,31 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["github>tang3cko/renovate-config:default.json5"],
+
+  // Unity-Technologies/skills pin in .claude-plugin/marketplace.json
+  customManagers: [
+    {
+      customType: "regex",
+      description: "Marketplace plugin sources pinned to a commit sha (git-subdir url + sha)",
+      managerFilePatterns: ["/^\\.claude-plugin\\/marketplace\\.json$/"],
+      matchStrings: [
+        '"url":\\s*"(?<depName>[^"/]+/[^"/]+)"[^}]*"sha":\\s*"(?<currentDigest>[0-9a-f]{40})"',
+      ],
+      currentValueTemplate: "main",
+      packageNameTemplate: "https://github.com/{{{depName}}}",
+      datasourceTemplate: "git-refs",
+      versioningTemplate: "git",
+    },
+  ],
+  packageRules: [
+    {
+      // The shared preset automerges digest updates; the upstream diff needs a human.
+      matchDatasources: ["git-refs"],
+      groupName: "Unity-Technologies/skills",
+      automerge: false,
+      prBodyNotes: [
+        "Upstream diff: [`{{{currentDigestShort}}}` → `{{{newDigestShort}}}`](https://github.com/{{{depName}}}/compare/{{{currentDigest}}}...{{{newDigest}}})",
+      ],
+    },
+  ],
+}
