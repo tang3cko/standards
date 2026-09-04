@@ -10,7 +10,7 @@ Shared coding standards and Claude Code skills for Tang3cko projects, distribute
 
 | Plugin | Contents |
 |--------|----------|
-| `tang3cko-unity` | Unity: naming, ScriptableObject architecture, async/performance, testing, UI, NGO networking, MCP compile checks, headless test/build |
+| `tang3cko-unity` | Unity: naming, ScriptableObject architecture, async/performance, testing, UI, NGO networking, headless test/build |
 | `tang3cko-godot` | Godot 4.x + .NET: naming/structure, Godot-free simulation core, testing, animation retargeting, headless CLI, save/persistence |
 | `tang3cko-unreal` | Unreal Engine C++: naming and the reflection contract, pointers and validity, class selection, placement by authority and lifetime, delegates and replication, CQTest-first testing with headless runs |
 | `tang3cko-core` | Engine-agnostic foundation: Sakurai / verb theory / Miyazaki design philosophies, concept organization |
@@ -32,7 +32,6 @@ Each `unity-official-*` plugin is pinned to a commit `sha` in `.claude-plugin/ma
 | [unity-testing](plugins/tang3cko-unity/skills/unity-testing/) | Humble Object, Edit Mode vs Play Mode, NUnit, test doubles, asmdef |
 | [unity-ui](plugins/tang3cko-unity/skills/unity-ui/) | UI Toolkit (UXML/USS, BEM, world-space on 6.2+), uGUI, accessibility |
 | [unity-networking](plugins/tang3cko-unity/skills/unity-networking/) | NGO 2.x: payload sizing, delivery selection, snapshot streaming |
-| [unity-mcp](plugins/tang3cko-unity/skills/unity-mcp/) | Compile verification via the official Unity MCP bridge (Editor open) |
 | [unity-headless](plugins/tang3cko-unity/skills/unity-headless/) | Headless test/build execution via batchmode (Editor closed) |
 | [godot-core](plugins/tang3cko-godot/skills/godot-core/) | Godot 4.x + .NET: naming, structure, export/NodePath gotchas, Resource-based decoupling |
 | [godot-architecture](plugins/tang3cko-godot/skills/godot-architecture/) | Godot-free simulation core: SimEvent pull feed, notify APIs, dt substep |
