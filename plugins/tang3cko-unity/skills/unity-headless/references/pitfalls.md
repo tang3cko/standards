@@ -13,16 +13,21 @@ Common failure modes when running Unity from the CLI, and how to diagnose them.
 | Script exits 2 with "watchdog ... killing it" | Unity never finished within `UNITY_TEST_TIMEOUT` / `UNITY_BUILD_TIMEOUT` | Read the log tail; check for orphaned helper processes (Pitfall 4) |
 | Compile errors like `CS0246: type or namespace not found` on packages that clearly exist | Orphaned Licensing Client from a different Unity version can't resolve entitlements, breaking package resolution | Kill stray Licensing Client processes, re-login via Unity Hub |
 | A literal-scan / diff check flags an absolute local path inside the pdb | `pdb` debug directory records the build machine's absolute path by design | Expected; exclude from failure criteria, don't chase it as a leak |
-| `unity-mcp` calls fail while a headless script is also mid-run | Both trying to hold the same project simultaneously | Sequence them — never run concurrently against the same project path |
+| `unity command` calls fail while a headless script is also mid-run | Both trying to hold the same project simultaneously | Sequence them — never run concurrently against the same project path |
+| `com.unity.pipeline` won't compile; Editor console floods with `MetadataReader could not be found` | `com.unity.ai.assistant` and `com.unity.pipeline` both installed — the former bundles System.Reflection.Metadata 10.0, which wins Unity's duplicate-assembly resolution over Pipeline's 8.0 and breaks Pipeline's compile, leaving no reachable Pipeline server | Uninstall `com.unity.ai.assistant`; the two packages cannot coexist |
+| `unity status` shows no Editor for a project that is actually open | `unity status` only lists GUI Editors | Check a batchmode-resident Editor with `unity command editor_status` instead |
+| `unity test` reports success (exit 0, `success:true`) but nothing actually ran | A filter matched zero tests — the CLI's official `unity test` has the same zero-tests-is-not-a-pass defect this skill's own batchmode scripts already guard against | Don't trust the exit code / `success` field alone; confirm the reported test count is nonzero |
 
 ---
 
-## Editor-Open/Closed Boundary (unity-mcp vs. this skill)
+## Editor-Open/Closed Boundary (official unity CLI vs. this skill)
 
 Unity holds a single project-level lock (`Temp/UnityLockfile` plus an OS-level advisory lock on most platforms). Only one Unity process — Editor UI or batchmode — can hold a given project directory at a time.
 
-- **`unity-mcp`** talks to a **running** Editor via its MCP bridge. It requires the Editor to be open.
+- **The official `unity` CLI's Pipeline path** (`unity command eval|run_tests|console|editor_play|editor_stop|screenshot`; see `unity-official-cli:unity-cli`) talks to a **running** Editor through `com.unity.pipeline`. It requires the Editor to be open. Check readiness with `unity status` (GUI Editors only) or `unity command editor_status` (also covers a batchmode-resident Editor).
 - **This skill (`unity-headless`)** runs Unity via `-batchmode`, which requires the Editor for that project to be **closed**. Launching batchmode against a project the Editor already has open fails fast (lock error), it does not queue or wait.
+
+`com.unity.ai.assistant` (which bundles the older, retired Unity MCP server) and `com.unity.pipeline` cannot both be installed: the former's System.Reflection.Metadata 10.0 wins duplicate-assembly resolution over Pipeline's 8.0, breaking Pipeline's compile — symptom is 200+ `MetadataReader could not be found` errors in Pipeline's IlInterpreter and no reachable Pipeline server. Uninstall `com.unity.ai.assistant` before relying on the Pipeline path.
 
 When a task needs both (e.g. "check compile errors live, then produce a CI build"): **sequence them**, don't interleave — close the Editor before batchmode, reopen it afterward if live editing resumes. Never attempt to hold both against the same project path at once.
 
@@ -140,4 +145,5 @@ Exclude debug-directory / pdb-path matches from failure criteria in any artifact
 - [ ] After a watchdog kill, orphaned Unity helper processes were listed and removed individually — never by a name-pattern sweep
 - [ ] For `CS0246`-in-batchmode-only symptoms: a stray Licensing Client process was checked for, and the log was read *above* the first `CS0246` for the real licensing/entitlement error
 - [ ] pdb debug-directory path findings were treated as expected toolchain behavior, not reported as defects or leaks
-- [ ] `unity-mcp` and batchmode were sequenced against the project, never run concurrently
+- [ ] The official `unity` CLI's Pipeline path and batchmode were sequenced against the project, never run concurrently
+- [ ] A zero-tests result from `unity test` was not reported as a pass — it reports success (exit 0, `success:true`) on a filter that matched nothing, the same defect this skill's own zero-tests-is-not-a-pass rule guards against in batchmode
