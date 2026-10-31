@@ -34,7 +34,7 @@
         "url": "Unity-Technologies/skills",
         "path": "skills/ui",
         "ref": "main",
-        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+        "sha": "089bedebab64e9e75943b19a364c7aec2162a7e7"
       }
     },
     {
@@ -45,7 +45,7 @@
         "url": "Unity-Technologies/skills",
         "path": "skills/ui-uitk",
         "ref": "main",
-        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+        "sha": "089bedebab64e9e75943b19a364c7aec2162a7e7"
       }
     },
     {
@@ -56,7 +56,7 @@
         "url": "Unity-Technologies/skills",
         "path": "skills/ui-ugui",
         "ref": "main",
-        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+        "sha": "089bedebab64e9e75943b19a364c7aec2162a7e7"
       }
     },
     {
@@ -67,7 +67,7 @@
         "url": "Unity-Technologies/skills",
         "path": "skills/unity-cli",
         "ref": "main",
-        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+        "sha": "089bedebab64e9e75943b19a364c7aec2162a7e7"
       }
     },
     {
@@ -78,7 +78,7 @@
         "url": "Unity-Technologies/skills",
         "path": "skills/setup-multiplayer-services",
         "ref": "main",
-        "sha": "87fac23d66a1f44f5e06c2935eccce0b40b9715a"
+        "sha": "089bedebab64e9e75943b19a364c7aec2162a7e7"
       }
     }
   ]
